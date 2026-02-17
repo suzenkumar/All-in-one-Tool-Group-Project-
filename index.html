@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Student AI Tools - 150+ AI-Powered Academic Tools for Students | Free Study Assistant</title>
+<meta name="description" content="Unlock academic excellence with 150+ AI tools. Free PPT maker, resume builder, essay generator, code assistant, math solver & more. Trusted by 50,000+ students worldwide. Start free today!">
+<meta name="keywords" content="student ai tools, ai tools for students, free ai study tools, ppt maker, resume builder, essay generator, code assistant, math solver, homework help, academic ai, study assistant, plagiarism checker, citation generator, flashcard maker">
+<meta name="author" content="StudentAI Tools">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#0f0c29">
+<link rel="canonical" href="https://studentaitools.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studentaitools.com/">
+<meta property="og:title" content="Student AI Tools - 150+ AI-Powered Academic Tools">
+<meta property="og:description" content="Everything you need for academic success: PPT maker, resume builder, essay generator, math solver & more. Free for students!">
+<meta property="og:image" content="https://studentaitools.com/og-image.jpg">
+<meta property="og:site_name" content="StudentAI Tools">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@studentaitools">
+<meta name="twitter:title" content="Student AI Tools - 150+ AI-Powered Academic Tools">
+<meta name="twitter:description" content="Everything for academic success: AI PPT maker, resume builder, essay generator, math solver & more. Free for students!">
+<meta name="twitter:image" content="https://studentaitools.com/twitter-image.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "StudentAI Tools",
+  "url": "https://studentaitools.com",
+  "description": "150+ AI-powered academic tools for students.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "12847" },
+  "author": { "@type": "Organization", "name": "StudentAI Tools", "url": "https://studentaitools.com" }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --cyan: #00fff0;
+  --purple: #6a00ff;
+  --pink: #ff0080;
+  --bg-dark: #080618;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-card-hover: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
+  --border-glow: rgba(0,255,240,0.35);
+  --text-muted: rgba(255,255,255,0.6);
+  --glow-sm: 0 0 20px rgba(0,255,240,0.4);
+  --glow-md: 0 0 40px rgba(0,255,240,0.5);
+  --glow-lg: 0 20px 60px rgba(0,255,240,0.35);
+  --radius: 18px;
+  --radius-lg: 28px;
+  --ff-display: 'Syne', sans-serif;
+  --ff-body: 'Space Grotesk', sans-serif;
+  --ff-mono: 'JetBrains Mono', monospace;
+  --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--ff-body);
+  background: var(--bg-dark);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+}
+
+/* ===== ANIMATED MESH BACKGROUND ===== */
+.bg-mesh {
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(106,0,255,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 80%, rgba(0,255,240,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 40% at 50% 50%, rgba(255,0,128,0.08) 0%, transparent 60%),
+    #080618;
+  z-index: -3;
+  animation: meshShift 20s ease-in-out infinite alternate;
+}
+@keyframes meshShift {
+  0%   { filter: hue-rotate(0deg); }
+  50%  { filter: hue-rotate(30deg); }
+  100% { filter: hue-rotate(-15deg); }
+}
+
+.bg-grid {
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,240,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,240,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: -2; pointer-events: none;
+}
+#particles { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+.particle { position: absolute; border-radius: 50%; animation: floatUp linear infinite; opacity: 0; }
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+}
+
+/* ===== SKIP LINK ===== */
+.skip-link {
+  position: absolute; top: -999px; left: -999px;
+  background: var(--cyan); color: #000;
+  padding: 10px 20px; font-weight: 700;
+  border-radius: 8px; z-index: 9999; text-decoration: none;
+}
+.skip-link:focus { top: 20px; left: 20px; }
+
+/* ===== NAVBAR ===== */
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 6%;
+  position: fixed; inset: 0 0 auto;
+  z-index: 100;
+  backdrop-filter: blur(24px);
+  background: rgba(8,6,24,0.7);
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+.navbar.scrolled {
+  padding: 13px 6%;
+  background: rgba(8,6,24,0.95);
+  border-color: var(--border-glow);
+}
+.logo {
+  font-family: var(--ff-display);
+  font-size: 1.5rem; font-weight: 800;
+  letter-spacing: -0.5px; cursor: pointer;
+  flex-shrink: 0;
+}
+.logo span { color: var(--cyan); text-shadow: var(--glow-sm); }
+.logo em {
+  font-style: normal; font-size: 0.5rem; font-weight: 500;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  padding: 3px 8px; border-radius: 20px; margin-left: 8px;
+  vertical-align: middle; letter-spacing: 1px; text-transform: uppercase;
+}
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a {
+  text-decoration: none; color: rgba(255,255,255,0.8);
+  font-weight: 500; font-size: 0.88rem; letter-spacing: 0.3px;
+  position: relative; transition: var(--transition);
+  white-space: nowrap;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  transition: width 0.3s ease; border-radius: 2px;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-cta {
+  padding: 9px 22px;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  border-radius: 50px; color: #fff !important; font-weight: 600 !important;
+  box-shadow: var(--glow-sm); transition: var(--transition) !important;
+}
+.nav-cta:hover { transform: translateY(-2px) !important; box-shadow: var(--glow-md) !important; }
+.nav-cta::after { display: none !important; }
+
+.hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 6px; z-index: 300; position: relative; }
+.hamburger span { width: 22px; height: 2px; background: var(--cyan); border-radius: 2px; transition: var(--transition); display: block; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 130px 6% 80px;
+  position: relative;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,255,240,0.1); border: 1px solid rgba(0,255,240,0.25);
+  border-radius: 50px; padding: 8px 18px; font-size: 0.8rem;
+  color: var(--cyan); letter-spacing: 0.5px; margin-bottom: 28px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-badge span { width: 8px; height: 8px; background: var(--cyan); border-radius: 50%; animation: blink 1.5s infinite; }
+
+/* ===== NORMALIZED HEADING SIZES ===== */
+.hero h1 {
+  font-family: var(--ff-display);
+  font-size: 3rem;        /* FIXED: was clamp(2.6rem, 6vw, 5.2rem) */
+  font-weight: 800; line-height: 1.15;
+  letter-spacing: -1.5px;
+  margin-bottom: 22px;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+.hero h1 .grad {
+  background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--purple) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero h1 .grad2 {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero p {
+  font-size: 1.05rem;     /* FIXED: was clamp(1rem, 2vw, 1.2rem) */
+  color: rgba(255,255,255,0.75); max-width: 640px; margin: 0 auto 38px;
+  line-height: 1.75; animation: fadeUp 0.8s ease 0.4s both;
+}
+.hero-buttons {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.6s both;
+}
+
+.section-title {
+  font-family: var(--ff-display);
+  font-size: 2.2rem;      /* FIXED: was clamp(1.9rem, 4vw, 3rem) */
+  font-weight: 800; line-height: 1.2;
+  letter-spacing: -0.8px; margin-bottom: 14px;
+}
+.section-title .g {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.section-label {
+  display: inline-block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--cyan); font-weight: 600; margin-bottom: 12px;
+}
+.section-desc {
+  color: var(--text-muted); font-size: 0.97rem;
+  max-width: 560px; line-height: 1.7; margin-bottom: 52px;
+}
+.section-header { text-align: center; }
+.section-header .section-desc { margin-left: auto; margin-right: auto; }
+section { padding: 90px 6%; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 32px; border-radius: 50px;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  color: #fff; text-decoration: none; font-weight: 600;
+  font-size: 0.93rem; letter-spacing: 0.3px;
+  border: none; cursor: pointer;
+  box-shadow: 0 8px 30px rgba(106,0,255,0.4);
+  transition: var(--transition); position: relative; overflow: hidden; white-space: nowrap;
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.btn:hover::before { opacity: 1; }
+.btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 45px rgba(106,0,255,0.55); }
+.btn:active { transform: translateY(0) scale(0.99); }
+.btn-outline {
+  background: transparent; border: 1.5px solid rgba(0,255,240,0.4);
+  color: rgba(255,255,255,0.9); box-shadow: none;
+}
+.btn-outline:hover { background: rgba(0,255,240,0.08); border-color: var(--cyan); box-shadow: var(--glow-sm); }
+.btn-sm { padding: 9px 20px; font-size: 0.84rem; }
+
+/* ===== TRUST BAR ===== */
+.trust-bar {
+  padding: 20px 6%;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.trust-bar-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: 32px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;
+}
+.trust-item { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.55); font-size: 0.84rem; }
+.trust-item i { color: var(--cyan); font-size: 0.95rem; }
+.trust-item strong { color: rgba(255,255,255,0.9); }
+
+/* ===== STATS ===== */
+.stats { background: rgba(255,255,255,0.02); }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 22px; max-width: 1200px; margin: 0 auto;
+}
+.stat-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px 24px;
+  text-align: center; position: relative; overflow: hidden; transition: var(--transition);
+}
+.stat-card::before {
+  content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 80%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0; transition: opacity 0.4s;
+}
+.stat-card:hover { transform: translateY(-6px); background: var(--bg-card-hover); border-color: var(--border-glow); }
+.stat-card:hover::before { opacity: 1; }
+.stat-number {
+  font-family: var(--ff-display); font-size: 2.8rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  line-height: 1; margin-bottom: 8px;
+}
+.stat-suffix { font-size: 1.3rem; }
+.stat-label { color: var(--text-muted); font-size: 0.88rem; font-weight: 500; }
+
+/* ===== SEARCH BAR ===== */
+.search-section { display: flex; justify-content: center; margin-bottom: 24px; }
+.tool-search-wrap {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.05); border: 1.5px solid var(--border-glow);
+  border-radius: 50px; padding: 11px 18px; gap: 11px;
+  width: 100%; max-width: 600px; transition: var(--transition);
+}
+.tool-search-wrap:focus-within { background: rgba(0,255,240,0.07); border-color: var(--cyan); box-shadow: var(--glow-sm); }
+.tool-search-wrap i { color: var(--cyan); font-size: 0.95rem; }
+#toolSearch {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: #fff; font-size: 0.93rem; font-family: var(--ff-body);
+}
+#toolSearch::placeholder { color: var(--text-muted); }
+.search-clear {
+  background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.5);
+  border-radius: 50%; width: 22px; height: 22px; cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  font-size: 0.73rem; transition: var(--transition);
+}
+.search-clear.visible { display: flex; }
+.search-clear:hover { background: rgba(255,0,128,0.2); color: var(--pink); }
+
+/* ===== FILTER TABS ===== */
+.filter-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin: 0 0 44px;
+}
+.filter-tab {
+  padding: 7px 18px; border-radius: 50px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  color: rgba(255,255,255,0.65); font-size: 0.84rem; font-weight: 500;
+  cursor: pointer; transition: var(--transition); font-family: var(--ff-body);
+}
+.filter-tab:hover { border-color: var(--border-glow); color: var(--cyan); }
+.filter-tab.active {
+  background: linear-gradient(135deg, rgba(106,0,255,0.25), rgba(0,255,240,0.15));
+  border-color: var(--cyan); color: var(--cyan);
+}
+
+/* ===== TOOLS GRID ===== */
+.tools-section { padding-top: 70px; }
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px; max-width: 1400px; margin: 0 auto;
+}
+.tool-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 22px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: var(--transition); display: flex; flex-direction: column; gap: 12px;
+}
+.tool-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,240,0.06), rgba(106,0,255,0.06));
+  opacity: 0; transition: opacity 0.35s;
+}
+.tool-card:hover { transform: translateY(-8px) scale(1.01); border-color: var(--border-glow); box-shadow: var(--glow-lg); }
+.tool-card:hover::after { opacity: 1; }
+.tool-card.hidden { display: none; }
+
+.tool-badge {
+  position: absolute; top: 13px; right: 13px;
+  padding: 3px 11px; border-radius: 20px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; z-index: 2;
+}
+.badge-popular { background: linear-gradient(135deg, var(--purple), var(--cyan)); }
+.badge-new { background: linear-gradient(135deg, #00c853, #00e5ff); color: #000; }
+.badge-hot { background: linear-gradient(135deg, var(--pink), #ff6b00); }
+.badge-free { background: linear-gradient(135deg, #ffd600, #ff6b00); color: #000; }
+.badge-ai { background: linear-gradient(135deg, #6200ea, var(--pink)); }
+
+.tool-icon {
+  width: 54px; height: 54px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+.tool-card h3 { font-family: var(--ff-display); font-size: 1rem; font-weight: 700; color: #fff; position: relative; z-index: 1; }
+.tool-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; position: relative; z-index: 1; flex: 1; }
+.tool-tags { display: flex; gap: 5px; flex-wrap: wrap; position: relative; z-index: 1; }
+.tool-tag {
+  font-size: 0.69rem; padding: 3px 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; color: var(--text-muted);
+}
+.tool-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px; border-top: 1px solid var(--border); position: relative; z-index: 1;
+}
+.tool-rating { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; }
+.tool-rating i { color: #ffd600; font-size: 0.73rem; }
+.tool-rating span { color: var(--text-muted); }
+.tool-use-btn {
+  font-size: 0.76rem; padding: 5px 13px;
+  background: rgba(0,255,240,0.1); border: 1px solid rgba(0,255,240,0.2);
+  border-radius: 20px; color: var(--cyan);
+  cursor: pointer; transition: var(--transition); font-family: var(--ff-body); font-weight: 500;
+}
+.tool-use-btn:hover { background: rgba(0,255,240,0.18); border-color: var(--cyan); transform: scale(1.05); }
+
+.no-results { text-align: center; padding: 60px 20px; grid-column: 1 / -1; display: none; }
+.no-results i { font-size: 2.8rem; color: var(--text-muted); margin-bottom: 14px; display: block; }
+.no-results p { color: var(--text-muted); font-size: 0.97rem; }
+
+/* ===== FEATURES ===== */
+.features { background: rgba(255,255,255,0.02); }
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 26px; max-width: 1400px; margin: 0 auto;
+}
+.feature-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 38px 32px;
+  transition: var(--transition); position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0; transition: opacity 0.4s;
+}
+.feature-card:hover { transform: translateY(-8px); border-color: var(--border-glow); box-shadow: var(--glow-md); }
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 60px; height: 60px; border-radius: 16px;
+  background: linear-gradient(135deg, rgba(106,0,255,0.3), rgba(0,255,240,0.2));
+  border: 1px solid rgba(0,255,240,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; margin-bottom: 20px;
+}
+.feature-card h3 { font-family: var(--ff-display); font-size: 1.1rem; font-weight: 700; color: var(--cyan); margin-bottom: 11px; }
+.feature-card p { color: var(--text-muted); line-height: 1.7; font-size: 0.88rem; }
+
+/* ===== DEMO ===== */
+.demo-section { padding: 90px 6%; text-align: center; }
+.demo-container {
+  max-width: 880px; margin: 0 auto;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border-glow);
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+.demo-header {
+  background: rgba(255,255,255,0.04); padding: 13px 18px;
+  display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--border);
+}
+.demo-dot { width: 11px; height: 11px; border-radius: 50%; }
+.dot-red { background: #ff5f57; } .dot-yellow { background: #ffbd2e; } .dot-green { background: #28ca41; }
+.demo-title-bar { flex: 1; text-align: center; font-size: 0.78rem; color: var(--text-muted); }
+.demo-body { padding: 36px; }
+.demo-tabs {
+  display: flex; gap: 7px; margin-bottom: 28px;
+  background: rgba(255,255,255,0.04); padding: 5px; border-radius: 11px;
+  width: fit-content; margin: 0 auto 28px;
+}
+.demo-tab {
+  padding: 8px 18px; border-radius: 8px; font-size: 0.84rem; cursor: pointer;
+  font-family: var(--ff-body); background: transparent; border: none;
+  color: var(--text-muted); transition: var(--transition); font-weight: 500;
+}
+.demo-tab.active { background: linear-gradient(135deg, var(--purple), var(--cyan)); color: #fff; }
+.demo-content { display: none; text-align: left; }
+.demo-content.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+.demo-prompt {
+  background: rgba(106,0,255,0.15); border: 1px solid rgba(106,0,255,0.3);
+  border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; font-size: 0.88rem; color: rgba(255,255,255,0.9);
+}
+.demo-prompt label { display: block; font-size: 0.7rem; color: var(--purple); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
+.demo-output {
+  background: rgba(0,255,240,0.06); border: 1px solid rgba(0,255,240,0.2);
+  border-radius: 12px; padding: 18px; font-size: 0.86rem; line-height: 1.7;
+  color: rgba(255,255,255,0.85); min-height: 110px; position: relative;
+}
+.demo-output label { display: block; font-size: 0.7rem; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600; }
+.demo-output .cursor { display: inline-block; width: 2px; height: 1em; background: var(--cyan); animation: blink 1s infinite; vertical-align: text-bottom; }
+.code-block {
+  background: #0d1117; border-radius: 8px; padding: 14px;
+  font-family: var(--ff-mono); font-size: 0.8rem; color: #e6edf3;
+  overflow-x: auto; border: 1px solid rgba(255,255,255,0.06);
+}
+.code-block .kw{color:#ff7b72;} .code-block .fn{color:#d2a8ff;} .code-block .str{color:#a5d6ff;} .code-block .cm{color:#6e7681;font-style:italic;}
+.math-output { font-family: var(--ff-mono); }
+.math-step { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.86rem; }
+.math-step:last-child { border: none; color: var(--cyan); font-weight: 600; }
+
+/* ===== PROGRESS ===== */
+.progress-section { background: rgba(255,255,255,0.02); }
+.progress-widget {
+  max-width: 880px; margin: 0 auto;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 36px;
+}
+.progress-widget h3 { font-family: var(--ff-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 26px; display: flex; align-items: center; gap: 11px; }
+.subject-bars { display: flex; flex-direction: column; gap: 18px; }
+.subject-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.subject-name { font-size: 0.88rem; font-weight: 500; }
+.subject-pct { font-size: 0.83rem; color: var(--cyan); font-family: var(--ff-mono); }
+.bar-track { height: 7px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 10px; transition: width 1.5s cubic-bezier(0.4,0,0.2,1); width: 0; }
+.streak-row {
+  display: flex; gap: 7px; margin-top: 26px;
+  padding-top: 22px; border-top: 1px solid var(--border); flex-wrap: wrap;
+}
+.streak-day {
+  flex: 1; min-width: 38px; height: 38px; border-radius: 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; color: var(--text-muted); flex-direction: column; gap: 2px; transition: var(--transition);
+}
+.streak-day.done { background: linear-gradient(135deg, rgba(0,255,240,0.15), rgba(106,0,255,0.15)); border-color: rgba(0,255,240,0.3); color: var(--cyan); }
+.streak-day i { font-size: 0.8rem; }
+
+/* ===== LEADERBOARD ===== */
+.leaderboard-widget {
+  max-width: 680px; margin: 0 auto;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.lb-header {
+  background: linear-gradient(135deg, rgba(106,0,255,0.2), rgba(0,255,240,0.1));
+  padding: 18px 26px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.lb-header h3 { font-family: var(--ff-display); font-size: 1.05rem; font-weight: 700; }
+.lb-row { display: flex; align-items: center; gap: 14px; padding: 14px 26px; border-bottom: 1px solid var(--border); transition: var(--transition); }
+.lb-row:hover { background: rgba(255,255,255,0.03); }
+.lb-row:last-child { border: none; }
+.lb-rank { width: 30px; text-align: center; font-family: var(--ff-display); font-weight: 800; font-size: 1.05rem; }
+.rank-1{color:#ffd600;} .rank-2{color:#c0c0c0;} .rank-3{color:#cd7f32;}
+.lb-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 700; flex-shrink: 0; }
+.lb-info { flex: 1; }
+.lb-name { font-size: 0.88rem; font-weight: 600; }
+.lb-school { font-size: 0.73rem; color: var(--text-muted); }
+.lb-points { font-family: var(--ff-mono); font-size: 0.88rem; color: var(--cyan); font-weight: 600; text-align: right; }
+.lb-points span { display: block; font-size: 0.68rem; color: var(--text-muted); }
+
+/* ===== TIMER ===== */
+.timer-section { background: rgba(255,255,255,0.02); }
+.timer-widget {
+  max-width: 480px; margin: 0 auto;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 36px; text-align: center;
+}
+.timer-modes {
+  display: flex; gap: 7px; justify-content: center;
+  background: rgba(255,255,255,0.03); padding: 5px; border-radius: 11px;
+  width: fit-content; margin: 0 auto 32px;
+}
+.timer-mode {
+  padding: 7px 16px; border-radius: 8px; font-size: 0.8rem;
+  cursor: pointer; background: transparent; border: none;
+  color: var(--text-muted); transition: var(--transition); font-family: var(--ff-body); font-weight: 500;
+}
+.timer-mode.active { background: linear-gradient(135deg, var(--purple), var(--cyan)); color: #fff; }
+.timer-circle { position: relative; width: 190px; height: 190px; margin: 0 auto 28px; }
+.timer-svg { transform: rotate(-90deg); }
+.timer-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
+.timer-progress {
+  fill: none; stroke: url(#timerGrad); stroke-width: 8; stroke-linecap: round;
+  stroke-dasharray: 565; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear;
+}
+.timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.timer-display {
+  font-family: var(--ff-display); font-size: 2.8rem; font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg, #fff, var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.timer-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+.timer-controls { display: flex; gap: 11px; justify-content: center; align-items: center; }
+.timer-btn {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 0.95rem; transition: var(--transition);
+}
+.timer-btn:hover { background: rgba(0,255,240,0.1); border-color: var(--cyan); transform: scale(1.08); }
+.timer-btn-main { width: 60px; height: 60px; font-size: 1.2rem; background: linear-gradient(135deg, var(--purple), var(--cyan)); border-color: transparent; box-shadow: var(--glow-sm); }
+.timer-sessions { margin-top: 22px; display: flex; gap: 7px; justify-content: center; }
+.session-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid var(--border); transition: var(--transition); }
+.session-dot.done { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+
+/* ===== RESOURCES ===== */
+.resources-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px; max-width: 1200px; margin: 0 auto;
+}
+.resource-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 30px 26px;
+  transition: var(--transition); cursor: pointer; display: flex; flex-direction: column; gap: 12px;
+}
+.resource-card:hover { transform: translateY(-6px); border-color: var(--border-glow); box-shadow: var(--glow-md); }
+.resource-emoji { font-size: 2.2rem; }
+.resource-card h3 { font-family: var(--ff-display); font-size: 1rem; font-weight: 700; color: var(--cyan); }
+.resource-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; flex: 1; }
+.resource-arrow { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; color: var(--cyan); font-weight: 500; }
+
+/* ===== TESTIMONIALS ===== */
+.testimonials { background: rgba(255,255,255,0.02); }
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 22px; max-width: 1200px; margin: 0 auto;
+}
+.testimonial-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px; transition: var(--transition); position: relative;
+}
+.testimonial-card:hover { transform: translateY(-6px); border-color: var(--border-glow); }
+.stars { color: #ffd600; font-size: 0.84rem; margin-bottom: 12px; letter-spacing: 2px; }
+.testimonial-text { font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.8); margin-bottom: 20px; }
+.testimonial-author { display: flex; align-items: center; gap: 11px; }
+.author-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 700; flex-shrink: 0; }
+.author-name { font-size: 0.88rem; font-weight: 600; color: #fff; }
+.author-role { font-size: 0.73rem; color: var(--text-muted); }
+.verified { display: inline-flex; align-items: center; gap: 4px; font-size: 0.68rem; color: var(--cyan); margin-top: 3px; }
+
+/* ===== FAQ ===== */
+.faq-container { max-width: 820px; margin: 0 auto; }
+.faq-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.3s; }
+.faq-item:hover { border-color: var(--border-glow); }
+.faq-q { padding: 20px 26px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; font-size: 0.93rem; transition: var(--transition); gap: 16px; }
+.faq-q:hover { color: var(--cyan); }
+.faq-q i { transition: transform 0.35s; color: var(--cyan); flex-shrink: 0; }
+.faq-a { padding: 0 26px; max-height: 0; overflow: hidden; transition: all 0.4s ease; opacity: 0; }
+.faq-a.open { max-height: 280px; padding: 0 26px 20px; opacity: 1; }
+.faq-a p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; }
+
+
+/* ===== CONTACT ===== */
+.contact-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px; max-width: 960px; margin: 0 auto 44px;
+}
+.contact-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px 26px; text-align: center; transition: var(--transition);
+}
+.contact-card:hover { transform: translateY(-6px); border-color: var(--border-glow); }
+.contact-card i { font-size: 2.2rem; color: var(--cyan); margin-bottom: 14px; display: block; }
+.contact-card h4 { font-family: var(--ff-display); font-size: 0.97rem; font-weight: 700; color: var(--cyan); margin-bottom: 7px; }
+.contact-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; }
+
+/* ===== NEWSLETTER ===== */
+.newsletter {
+  background: linear-gradient(135deg, rgba(106,0,255,0.15), rgba(0,255,240,0.1));
+  border: 1px solid var(--border-glow); border-radius: var(--radius-lg);
+  padding: 50px 44px; text-align: center; max-width: 660px; margin: 0 auto;
+}
+.newsletter h3 { font-family: var(--ff-display); font-size: 1.7rem; font-weight: 800; margin-bottom: 11px; }
+.newsletter p { color: var(--text-muted); margin-bottom: 26px; font-size: 0.93rem; }
+.newsletter-form { display: flex; gap: 11px; max-width: 460px; margin: 0 auto; flex-wrap: wrap; }
+.newsletter-form input {
+  flex: 1; min-width: 200px;
+  background: rgba(255,255,255,0.07); border: 1.5px solid var(--border-glow);
+  border-radius: 50px; padding: 12px 20px; color: #fff; font-size: 0.88rem;
+  outline: none; font-family: var(--ff-body); transition: var(--transition);
+}
+.newsletter-form input:focus { border-color: var(--cyan); background: rgba(0,255,240,0.07); }
+.newsletter-form input::placeholder { color: var(--text-muted); }
+
+/* ===== FOOTER ===== */
+footer { background: rgba(0,0,0,0.5); border-top: 1px solid var(--border); padding: 56px 6% 28px; }
+.footer-top {
+  display: grid; grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: 36px; margin-bottom: 44px;
+}
+.footer-brand p { color: var(--text-muted); font-size: 0.84rem; line-height: 1.7; margin-top: 13px; max-width: 260px; }
+.footer-col h5 { font-weight: 700; font-size: 0.82rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px; }
+.footer-col a { display: block; text-decoration: none; color: var(--text-muted); font-size: 0.84rem; margin-bottom: 9px; transition: var(--transition); }
+.footer-col a:hover { color: var(--cyan); padding-left: 5px; }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 24px; border-top: 1px solid var(--border); gap: 18px; flex-wrap: wrap;
+}
+.social-links { display: flex; gap: 9px; }
+.social-link {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 0.82rem; text-decoration: none; transition: var(--transition);
+}
+.social-link:hover { background: linear-gradient(135deg, var(--purple), var(--cyan)); border-color: transparent; color: #fff; transform: translateY(-3px); box-shadow: var(--glow-sm); }
+.copyright { font-size: 0.8rem; color: var(--text-muted); }
+
+/* ===== CHATBOT ===== */
+.chatbot-toggle {
+  position: fixed; bottom: 26px; right: 26px;
+  width: 62px; height: 62px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  border: none; cursor: pointer; box-shadow: 0 8px 32px rgba(106,0,255,0.5);
+  z-index: 1000; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); animation: pulseBtn 3s infinite;
+}
+@keyframes pulseBtn {
+  0%,100%{box-shadow:0 8px 32px rgba(106,0,255,0.5);}
+  50%{box-shadow:0 8px 50px rgba(0,255,240,0.6),0 0 0 12px rgba(0,255,240,0.05);}
+}
+.chatbot-toggle:hover { transform: scale(1.1) rotate(8deg); }
+.chatbot-toggle i { font-size: 1.7rem; color: #fff; transition: transform 0.3s; }
+.chatbot-toggle.open i { transform: rotate(90deg); }
+.chat-badge {
+  position: absolute; top: -3px; right: -3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--pink); color: #fff; font-size: 0.68rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  animation: badgeBounce 1.5s infinite;
+}
+@keyframes badgeBounce{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+.chatbot-container {
+  position: fixed; bottom: 106px; right: 26px;
+  width: 380px; height: 560px; max-height: calc(100vh - 130px);
+  background: rgba(10,8,30,0.98); backdrop-filter: blur(32px);
+  border: 1.5px solid var(--border-glow); border-radius: var(--radius-lg);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,255,240,0.05);
+  transform: scale(0.85) translateY(20px); transform-origin: bottom right;
+  opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 999; display: flex; flex-direction: column; overflow: hidden;
+}
+.chatbot-container.open { transform: scale(1) translateY(0); opacity: 1; visibility: visible; }
+.chat-header {
+  background: linear-gradient(135deg, rgba(106,0,255,0.7), rgba(0,255,240,0.5));
+  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.chat-header-info { display: flex; align-items: center; gap: 11px; }
+.chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 0 20px rgba(0,255,240,0.4); }
+.chat-header h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 2px; }
+.chat-status { font-size: 0.7rem; display: flex; align-items: center; gap: 5px; opacity: 0.85; }
+.online-dot { width: 7px; height: 7px; background: #00e676; border-radius: 50%; animation: blink 1.5s infinite; }
+.chat-close { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.15); border: none; color: #fff; cursor: pointer; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+.chat-close:hover { background: rgba(255,255,255,0.25); transform: rotate(90deg); }
+.chat-messages { flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.25); }
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 4px; }
+.msg { display: flex; gap: 9px; animation: msgIn 0.3s ease; }
+@keyframes msgIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.msg.user { flex-direction: row-reverse; }
+.msg-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.88rem; flex-shrink: 0; }
+.msg.bot .msg-avatar { background: linear-gradient(135deg, var(--cyan), var(--purple)); }
+.msg.user .msg-avatar { background: linear-gradient(135deg, var(--purple), var(--pink)); }
+.msg-bubble { max-width: 75%; padding: 11px 15px; border-radius: 16px; font-size: 0.83rem; line-height: 1.55; position: relative; }
+.msg.bot .msg-bubble { background: rgba(0,255,240,0.1); border: 1px solid rgba(0,255,240,0.2); border-bottom-left-radius: 4px; color: rgba(255,255,255,0.9); }
+.msg.user .msg-bubble { background: linear-gradient(135deg, rgba(106,0,255,0.3), rgba(0,255,240,0.15)); border: 1px solid rgba(106,0,255,0.35); border-bottom-right-radius: 4px; }
+.msg-time { font-size: 0.66rem; color: rgba(255,255,255,0.35); margin-top: 4px; display: block; }
+.typing-dots { display: flex; gap: 5px; padding: 3px 0; }
+.typing-dot { width: 7px; height: 7px; background: var(--cyan); border-radius: 50%; animation: typeBounce 1.3s infinite; }
+.typing-dot:nth-child(2){animation-delay:0.15s;} .typing-dot:nth-child(3){animation-delay:0.3s;}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
+.quick-replies { padding: 11px 16px; display: flex; gap: 7px; overflow-x: auto; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); }
+.quick-replies::-webkit-scrollbar { height: 3px; }
+.quick-reply { padding: 5px 12px; border-radius: 20px; font-size: 0.76rem; white-space: nowrap; background: rgba(0,255,240,0.08); border: 1px solid rgba(0,255,240,0.2); color: var(--cyan); cursor: pointer; transition: var(--transition); font-family: var(--ff-body); }
+.quick-reply:hover { background: rgba(0,255,240,0.18); transform: translateY(-2px); }
+.chat-input-row { padding: 14px 16px; display: flex; gap: 9px; align-items: center; background: rgba(0,0,0,0.35); border-top: 1px solid var(--border); }
+.chat-input { flex: 1; background: rgba(255,255,255,0.07); border: 1.5px solid rgba(0,255,240,0.2); border-radius: 24px; padding: 9px 16px; color: #fff; font-size: 0.85rem; outline: none; font-family: var(--ff-body); transition: var(--transition); }
+.chat-input:focus { border-color: var(--cyan); background: rgba(0,255,240,0.07); }
+.chat-input::placeholder { color: rgba(255,255,255,0.35); }
+.chat-send { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--cyan)); border: none; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: var(--transition); box-shadow: 0 4px 16px rgba(106,0,255,0.4); }
+.chat-send:hover { transform: scale(1.1) rotate(10deg); box-shadow: var(--glow-sm); }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);} }
+@keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== BACK TO TOP ===== */
+.back-to-top {
+  position: fixed; bottom: 26px; left: 26px;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+  color: var(--cyan); cursor: pointer; font-size: 0.95rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); opacity: 0; visibility: hidden; z-index: 500;
+}
+.back-to-top.visible { opacity: 1; visibility: visible; }
+.back-to-top:hover { background: rgba(0,255,240,0.1); border-color: var(--cyan); transform: translateY(-4px); }
+
+/* ===========================================
+   RESPONSIVE BREAKPOINTS (FULLY OVERHAULED)
+   =========================================== */
+
+/* Large Desktops — 1200px+ (default above) */
+
+/* Medium Desktops — up to 1200px */
+@media (max-width: 1200px) {
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .tools-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+}
+
+/* Tablets — up to 1024px */
+@media (max-width: 1024px) {
+  .navbar { padding: 18px 5%; }
+  section { padding: 80px 5%; }
+  .hero { padding: 120px 5% 70px; }
+  .hero h1 { font-size: 2.5rem; }
+  .section-title { font-size: 2rem; }
+  .demo-section { padding: 80px 5%; }
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 0.84rem; }
+}
+
+/* Tablets Portrait & Large Phones — up to 768px */
+@media (max-width: 768px) {
+  body { font-size: 15px; }
+
+  /* Navbar mobile */
+  .navbar { padding: 16px 5%; }
+  .navbar.scrolled { padding: 12px 5%; }
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(8,6,24,0.98);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 32px; z-index: 200;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 1.2rem; font-weight: 600; }
+  .hamburger { display: flex; position: relative; z-index: 300; }
+
+  /* Hero */
+  .hero { padding: 100px 5% 60px; min-height: auto; padding-top: 110px; }
+  .hero h1 { font-size: 2rem; letter-spacing: -1px; }
+  .hero p { font-size: 0.97rem; }
+  .hero-buttons { gap: 12px; }
+  .hero-buttons .btn { padding: 12px 24px; font-size: 0.88rem; }
+
+  /* Sections */
+  section { padding: 64px 5%; }
+  .demo-section { padding: 64px 5%; }
+  .section-title { font-size: 1.7rem; letter-spacing: -0.5px; }
+  .section-desc { font-size: 0.92rem; margin-bottom: 38px; }
+
+  /* Trust bar */
+  .trust-bar-inner { gap: 16px; }
+  .trust-item { font-size: 0.8rem; }
+
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .stat-number { font-size: 2.2rem; }
+
+  /* Tools grid */
+  .tools-grid { grid-template-columns: 1fr; gap: 16px; }
+  .search-section { padding: 0; }
+
+  /* Filter tabs */
+  .filter-tabs { gap: 7px; }
+  .filter-tab { padding: 6px 14px; font-size: 0.8rem; }
+
+  /* Features */
+  .feature-grid { grid-template-columns: 1fr; gap: 18px; }
+  .feature-card { padding: 28px 24px; }
+
+  /* Demo */
+  .demo-body { padding: 20px 18px; }
+  .demo-tabs { flex-wrap: wrap; width: 100%; justify-content: center; }
+  .code-block { font-size: 0.72rem; }
+
+  /* Progress */
+  .progress-widget { padding: 26px 20px; }
+  .streak-row { gap: 5px; }
+  .streak-day { min-width: 30px; height: 34px; font-size: 0.62rem; }
+
+  /* Timer */
+  .timer-widget { padding: 28px 20px; }
+  .timer-circle { width: 170px; height: 170px; }
+  .timer-display { font-size: 2.4rem; }
+
+  /* Resources */
+  .resources-grid { grid-template-columns: 1fr; }
+
+  /* Testimonials */
+  .testimonials-grid { grid-template-columns: 1fr; }
+
+  /* Pricing */
+
+  /* Contact */
+  .contact-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* Newsletter */
+  .newsletter { padding: 32px 22px; }
+  .newsletter h3 { font-size: 1.4rem; }
+  .newsletter-form { flex-direction: column; gap: 10px; }
+  .newsletter-form input { min-width: unset; width: 100%; }
+  .newsletter-form .btn { width: 100%; justify-content: center; }
+
+  /* Footer */
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-brand p { max-width: 100%; }
+  .footer-bottom { flex-direction: column; text-align: center; gap: 16px; }
+
+  /* Chatbot */
+  .chatbot-container {
+    width: calc(100% - 16px);
+    right: 8px; left: 8px;
+    bottom: 88px;
+    border-radius: 20px;
+  }
+  .chatbot-toggle { bottom: 18px; right: 18px; width: 54px; height: 54px; }
+
+  /* Leaderboard */
+  .lb-row { padding: 12px 16px; gap: 10px; }
+  .lb-points span { display: none; }
+
+  /* Back to top */
+  .back-to-top { bottom: 18px; left: 18px; width: 38px; height: 38px; }
+}
+
+/* Small Phones — up to 480px */
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.7rem; letter-spacing: -0.8px; }
+  .hero p { font-size: 0.93rem; }
+  .section-title { font-size: 1.5rem; }
+  .hero-badge { font-size: 0.75rem; padding: 7px 14px; }
+
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat-number { font-size: 1.9rem; }
+  .stat-card { padding: 24px 16px; }
+
+  .contact-grid { grid-template-columns: 1fr; }
+
+  .footer-top { grid-template-columns: 1fr; }
+
+
+  .tools-grid { grid-template-columns: 1fr; }
+
+  .demo-tabs .demo-tab { padding: 7px 12px; font-size: 0.78rem; }
+
+  .faq-q { font-size: 0.87rem; padding: 16px 18px; }
+  .faq-a.open { padding: 0 18px 16px; }
+
+  .timer-modes { flex-wrap: wrap; justify-content: center; }
+
+  .btn { padding: 12px 22px; font-size: 0.87rem; }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .hero-buttons .btn { width: 100%; max-width: 280px; justify-content: center; }
+}
+
+/* Very Small — up to 360px */
+@media (max-width: 360px) {
+  .hero h1 { font-size: 1.5rem; }
+  .section-title { font-size: 1.35rem; }
+  .navbar { padding: 14px 4%; }
+  section { padding: 54px 4%; }
+  .logo { font-size: 1.25rem; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="bg-mesh" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<!-- ===== NAVBAR ===== -->
+<header>
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="logo" onclick="scrollToTop()">
+      <span>All</span>IN<span>One</span>
+      <em>AI</em>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" class="active" aria-current="page">Home</a>
+      <a href="#tools">Tools</a>
+      <a href="#features">Features</a>
+      <a href="#demo">Live Demo</a>
+      <a href="#resources">Resources</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact" class="nav-cta">Get Started Free</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<main id="main-content">
+<section class="hero" id="home" aria-label="Hero section">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span></span> Trusted by 50,000+ Students Worldwide
+    </div>
+    <h1>
+      <span class="grad">The Ultimate AI Platform</span><br>
+      for <span class="grad2">Academic Success</span>
+    </h1>
+    <p>
+      150+ AI-powered tools for presentations, essays, coding, math, research, and more — all in one beautiful dashboard. Built for students who demand more.
+    </p>
+    <div class="hero-buttons">
+      <a href="#tools" class="btn">
+        <i class="fas fa-rocket" aria-hidden="true"></i>
+        Explore 150+ Tools
+      </a>
+      <a href="#demo" class="btn btn-outline">
+        <i class="fas fa-play" aria-hidden="true"></i>
+        Watch Demo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST BAR ===== -->
+<div class="trust-bar" role="complementary" aria-label="Trust indicators">
+  <div class="trust-bar-inner">
+    <div class="trust-item"><i class="fas fa-star" aria-hidden="true"></i><span><strong>4.9/5</strong> Rating</span></div>
+    <div class="trust-item"><i class="fas fa-users" aria-hidden="true"></i><span><strong>50K+</strong> Active Students</span></div>
+    <div class="trust-item"><i class="fas fa-tools" aria-hidden="true"></i><span><strong>150+</strong> AI Tools</span></div>
+    <div class="trust-item"><i class="fas fa-lock" aria-hidden="true"></i><span><strong>GDPR</strong> Compliant</span></div>
+    <div class="trust-item"><i class="fas fa-bolt" aria-hidden="true"></i><span><strong>99.9%</strong> Uptime</span></div>
+    <div class="trust-item"><i class="fas fa-shield-alt" aria-hidden="true"></i><span><strong>AES-256</strong> Encrypted</span></div>
+  </div>
+</div>
+
+<!-- ===== STATS ===== -->
+<section class="stats" aria-label="Platform statistics">
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-number" data-target="50000"><span class="count">0</span><span class="stat-suffix">+</span></div>
+      <div class="stat-label">Active Students</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number" data-target="150"><span class="count">0</span><span class="stat-suffix">+</span></div>
+      <div class="stat-label">AI-Powered Tools</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number" data-target="98"><span class="count">0</span><span class="stat-suffix">%</span></div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number" data-target="5"><span class="count">0</span><span class="stat-suffix">M+</span></div>
+      <div class="stat-label">Assignments Completed</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number" data-target="100"><span class="count">0</span><span class="stat-suffix">+</span></div>
+      <div class="stat-label">Languages Supported</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number" data-target="24"><span class="count">0</span><span class="stat-suffix">/7</span></div>
+      <div class="stat-label">Expert Support</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOOLS SECTION ===== -->
+<section class="tools-section" id="tools" aria-label="AI Tools catalog">
+  <div class="section-header">
+    <div class="section-label">🔧 AI Tool Suite</div>
+    <h2 class="section-title">150+ AI Tools for <span class="g">Every Subject</span></h2>
+    <p class="section-desc">From writing to coding, math to presentations — we have the right AI tool for every academic challenge.</p>
+  </div>
+
+  <div class="search-section">
+    <div class="tool-search-wrap">
+      <i class="fas fa-search" aria-hidden="true"></i>
+      <input type="text" id="toolSearch" placeholder="Search 150+ tools... (e.g. resume, math, code)" aria-label="Search tools" autocomplete="off">
+      <button class="search-clear" id="searchClear" aria-label="Clear search"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <div class="filter-tabs" role="tablist" aria-label="Tool categories">
+    <button class="filter-tab active" data-cat="all" role="tab" aria-selected="true">All Tools</button>
+    <button class="filter-tab" data-cat="writing" role="tab" aria-selected="false">✍️ Writing</button>
+    <button class="filter-tab" data-cat="code" role="tab" aria-selected="false">💻 Coding</button>
+    <button class="filter-tab" data-cat="math" role="tab" aria-selected="false">🧮 Math</button>
+    <button class="filter-tab" data-cat="document" role="tab" aria-selected="false">📄 Documents</button>
+    <button class="filter-tab" data-cat="study" role="tab" aria-selected="false">📚 Study</button>
+    <button class="filter-tab" data-cat="research" role="tab" aria-selected="false">🔬 Research</button>
+    <button class="filter-tab" data-cat="visual" role="tab" aria-selected="false">🎨 Visual</button>
+  </div>
+
+  <div class="tools-grid" id="toolsGrid">
+    <article class="tool-card reveal" data-cat="writing" data-name="essay generator writing paper">
+      <span class="tool-badge badge-hot">🔥 Hot</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#6a00ff,#00fff0)">✍️</div>
+      <h3>Essay Generator</h3>
+      <p>Generate high-quality essays with proper structure, arguments, and citations for any topic.</p>
+      <div class="tool-tags"><span class="tool-tag">APA</span><span class="tool-tag">MLA</span><span class="tool-tag">Chicago</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (2.1k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="writing" data-name="grammar checker writing spell punctuation">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#00c853,#00e5ff)">✅</div>
+      <h3>Grammar Checker</h3>
+      <p>Advanced AI grammar, style, and tone checking. Get a professional writing score instantly.</p>
+      <div class="tool-tags"><span class="tool-tag">AI-Powered</span><span class="tool-tag">Real-time</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.8k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="writing" data-name="paraphraser rewriter synonym">
+      <span class="tool-badge badge-new">New</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#ff6b00,#ffd600)">🔄</div>
+      <h3>AI Paraphraser</h3>
+      <p>Rewrite sentences and paragraphs intelligently while preserving meaning. 5 tone modes.</p>
+      <div class="tool-tags"><span class="tool-tag">5 Tones</span><span class="tool-tag">Anti-Detect</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (980)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="document" data-name="ppt presentation maker slides powerpoint">
+      <span class="tool-badge badge-popular">⭐ Popular</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#ff0080,#6a00ff)">📊</div>
+      <h3>PPT Maker</h3>
+      <p>Create stunning AI-designed presentations in under 60 seconds. 100+ professional themes.</p>
+      <div class="tool-tags"><span class="tool-tag">PPTX</span><span class="tool-tag">PDF</span><span class="tool-tag">Google Slides</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.4k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="document" data-name="resume builder cv job career">
+      <span class="tool-badge badge-new">✨ New</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#00e5ff,#6a00ff)">📄</div>
+      <h3>Resume Builder</h3>
+      <p>Build ATS-optimized resumes with AI suggestions. Land your dream internship or job.</p>
+      <div class="tool-tags"><span class="tool-tag">ATS-Friendly</span><span class="tool-tag">LinkedIn Export</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (2.7k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="document" data-name="pdf converter merge split compress">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#ff5f57,#ff9800)">📑</div>
+      <h3>PDF Converter</h3>
+      <p>Convert, merge, split, compress and edit PDFs with AI-powered tools. All in browser.</p>
+      <div class="tool-tags"><span class="tool-tag">Convert</span><span class="tool-tag">Merge</span><span class="tool-tag">Compress</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (1.5k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="code" data-name="code assistant programming debug python javascript">
+      <span class="tool-badge badge-ai">🤖 AI</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#00c853,#006064)">💻</div>
+      <h3>Code Assistant</h3>
+      <p>Debug, explain, generate code in 50+ languages. Get instant code reviews and refactoring help.</p>
+      <div class="tool-tags"><span class="tool-tag">Python</span><span class="tool-tag">JS</span><span class="tool-tag">50+ langs</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (4.1k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="code" data-name="algorithm visualizer data structures sorting">
+      <span class="tool-badge badge-new">New</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#00b4d8,#023e8a)">🔍</div>
+      <h3>Algorithm Visualizer</h3>
+      <p>Watch sorting, searching, and graph algorithms execute step-by-step with animated visuals.</p>
+      <div class="tool-tags"><span class="tool-tag">Interactive</span><span class="tool-tag">Animated</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (870)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="math" data-name="math solver calculator calculus algebra equations">
+      <span class="tool-badge badge-popular">⭐ Popular</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#7b2d00,#ff6b00)">🧮</div>
+      <h3>Math Solver</h3>
+      <p>Solve calculus, algebra, statistics, and more with detailed step-by-step explanations.</p>
+      <div class="tool-tags"><span class="tool-tag">Calculus</span><span class="tool-tag">Algebra</span><span class="tool-tag">Stats</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.8k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="math" data-name="graph plotter equation visualizer chart">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#6200ea,#aa00ff)">📈</div>
+      <h3>Graph Plotter</h3>
+      <p>Plot 2D and 3D mathematical functions interactively. Export high-quality graphs for papers.</p>
+      <div class="tool-tags"><span class="tool-tag">2D & 3D</span><span class="tool-tag">Export</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (760)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="study" data-name="flashcard generator notes memorize spaced repetition">
+      <span class="tool-badge badge-popular">⭐ Popular</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#ffd600,#ff6b00)">🎴</div>
+      <h3>Flashcard Generator</h3>
+      <p>Auto-create smart flashcards from any text or PDF with spaced repetition scheduling built-in.</p>
+      <div class="tool-tags"><span class="tool-tag">Spaced Rep</span><span class="tool-tag">PDF Import</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (2.2k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="study" data-name="quiz maker test practice exam generator">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#00bfa5,#1de9b6)">📝</div>
+      <h3>Quiz Maker</h3>
+      <p>Generate practice quizzes with instant grading and personalized performance analytics.</p>
+      <div class="tool-tags"><span class="tool-tag">Auto-Grade</span><span class="tool-tag">Analytics</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.4k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="study" data-name="study planner schedule timetable plan calendar">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#880e4f,#e91e8c)">🗓️</div>
+      <h3>Smart Study Planner</h3>
+      <p>AI-generated personalized study schedules based on your courses, deadlines, and learning style.</p>
+      <div class="tool-tags"><span class="tool-tag">AI-Adaptive</span><span class="tool-tag">Deadlines</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.1k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="research" data-name="research helper citation bibliography sources apa mla">
+      <span class="tool-badge badge-popular">⭐ Popular</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#00796b,#26c6da)">🔬</div>
+      <h3>Research Helper</h3>
+      <p>Find credible sources, generate citations in any style, and organize your literature review.</p>
+      <div class="tool-tags"><span class="tool-tag">APA</span><span class="tool-tag">MLA</span><span class="tool-tag">Harvard</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (2.9k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="research" data-name="plagiarism checker originality detect copy">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#b71c1c,#ff5252)">🛡️</div>
+      <h3>Plagiarism Checker</h3>
+      <p>Scan against 10+ billion sources. Get detailed similarity reports with highlighted matches.</p>
+      <div class="tool-tags"><span class="tool-tag">10B+ Sources</span><span class="tool-tag">Report PDF</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (2.5k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="visual" data-name="infographic maker diagram chart data visualization">
+      <span class="tool-badge badge-new">New</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#4a148c,#7b1fa2)">📊</div>
+      <h3>Infographic Maker</h3>
+      <p>Turn boring data into beautiful infographics and charts for reports and presentations.</p>
+      <div class="tool-tags"><span class="tool-tag">Charts</span><span class="tool-tag">Export PNG/SVG</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (690)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="visual" data-name="mind map brainstorm concept ideas notes organizer">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#1a237e,#3949ab)">🗺️</div>
+      <h3>Mind Map Creator</h3>
+      <p>Build interactive mind maps from notes or topics. Export for projects, essays, and brainstorms.</p>
+      <div class="tool-tags"><span class="tool-tag">Interactive</span><span class="tool-tag">AI-Suggest</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (840)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <article class="tool-card reveal" data-cat="study" data-name="ai tutor chat learn explain concept help">
+      <span class="tool-badge badge-ai">🤖 AI</span>
+      <div class="tool-icon" style="background:linear-gradient(135deg,#6a00ff,#ff0080)">🧠</div>
+      <h3>AI Tutor</h3>
+      <p>Get instant explanations for any concept in any subject. Like having a personal Socratic tutor 24/7.</p>
+      <div class="tool-tags"><span class="tool-tag">All Subjects</span><span class="tool-tag">Socratic Mode</span></div>
+      <div class="tool-footer">
+        <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (5.2k)</span></div>
+        <button class="tool-use-btn">Use Now →</button>
+      </div>
+    </article>
+    <div class="no-results" id="noResults" aria-live="polite">
+      <i class="fas fa-search-minus" aria-hidden="true"></i>
+      <p>No tools match your search. Try different keywords!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features" id="features" aria-label="Platform features">
+  <div class="section-header">
+    <div class="section-label">⚡ Why Choose Us</div>
+    <h2 class="section-title">Built Different. <span class="g">Built for Students.</span></h2>
+    <p class="section-desc">Every feature is engineered to help you learn faster, work smarter, and achieve more.</p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card reveal"><div class="feature-icon">🤖</div><h3>GPT-4 Powered Engine</h3><p>All tools run on the latest GPT-4 and Claude AI models, giving you the most accurate, intelligent, and context-aware academic assistance available anywhere.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">⚡</div><h3>Lightning Fast Processing</h3><p>Process documents, generate essays, solve math problems, and get AI insights in under 3 seconds on average, powered by our globally distributed edge network.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">🎓</div><h3>Academic Integrity Mode</h3><p>Our unique Academic Integrity Mode ensures all AI assistance is used as a learning tool, helping you understand concepts rather than just getting answers.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">🔒</div><h3>Bank-Level Security</h3><p>AES-256 encryption, GDPR compliance, and zero-knowledge architecture means your academic work is completely private and never used for AI training.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">🌐</div><h3>100+ Languages</h3><p>Write, study, and research in over 100 languages. Perfect for international students, multilingual assignments, and language learning coursework.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">📱</div><h3>Cross-Device Sync</h3><p>Start a project on your laptop and pick it up on your phone. Cloud sync keeps your work available everywhere, on any device, any time.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">🧠</div><h3>Adaptive Learning AI</h3><p>Our AI learns your writing style, subject preferences, and weaknesses over time, offering personalized suggestions that actually match how you study and write.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">👥</div><h3>Real-Time Collaboration</h3><p>Work on assignments, presentations, and research projects with your classmates in real time. Built-in version history and comment threads included.</p></div>
+    <div class="feature-card reveal"><div class="feature-icon">📊</div><h3>Progress Analytics</h3><p>Visual dashboards track your study streaks, tool usage, grades improvement, and learning velocity. See your academic growth over time.</p></div>
+  </div>
+</section>
+
+<!-- ===== LIVE DEMO ===== -->
+<section class="demo-section" id="demo" aria-label="Live AI demonstration">
+  <div class="section-header">
+    <div class="section-label">🎯 Live Demo</div>
+    <h2 class="section-title">See Our AI <span class="g">in Action</span></h2>
+    <p class="section-desc">Experience the power of our tools firsthand — no signup required.</p>
+  </div>
+  <div class="demo-container reveal">
+    <div class="demo-header">
+      <div class="demo-dot dot-red"></div><div class="demo-dot dot-yellow"></div><div class="demo-dot dot-green"></div>
+      <div class="demo-title-bar">StudentAI Tools — Live Preview</div>
+    </div>
+    <div class="demo-body">
+      <div class="demo-tabs">
+        <button class="demo-tab active" onclick="switchDemo('essay')">✍️ Essay</button>
+        <button class="demo-tab" onclick="switchDemo('code')">💻 Code</button>
+        <button class="demo-tab" onclick="switchDemo('math')">🧮 Math</button>
+      </div>
+      <div class="demo-content active" id="demo-essay">
+        <div class="demo-prompt"><label>STUDENT PROMPT</label>"Write an introduction paragraph about the impacts of social media on mental health for my psychology essay."</div>
+        <div class="demo-output"><label>AI OUTPUT</label><span id="essay-output"></span><span class="cursor" id="essay-cursor"></span></div>
+      </div>
+      <div class="demo-content" id="demo-code">
+        <div class="demo-prompt"><label>STUDENT PROMPT</label>"Write a Python function to find the longest common subsequence of two strings."</div>
+        <div class="demo-output"><label>AI OUTPUT</label>
+          <div class="code-block">
+<span class="cm"># Dynamic programming approach — O(n*m) time complexity</span>
+<span class="kw">def</span> <span class="fn">lcs</span>(s1: <span class="fn">str</span>, s2: <span class="fn">str</span>) -> <span class="fn">str</span>:
+    m, n = <span class="fn">len</span>(s1), <span class="fn">len</span>(s2)
+    dp = [[<span class="str">0</span>] * (n + <span class="str">1</span>) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(m + <span class="str">1</span>)]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="str">1</span>, m + <span class="str">1</span>):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="str">1</span>, n + <span class="str">1</span>):
+            <span class="kw">if</span> s1[i-<span class="str">1</span>] == s2[j-<span class="str">1</span>]:
+                dp[i][j] = dp[i-<span class="str">1</span>][j-<span class="str">1</span>] + <span class="str">1</span>
+            <span class="kw">else</span>:
+                dp[i][j] = <span class="fn">max</span>(dp[i-<span class="str">1</span>][j], dp[i][j-<span class="str">1</span>])
+    result = []
+    <span class="kw">while</span> m > <span class="str">0</span> <span class="kw">and</span> n > <span class="str">0</span>:
+        <span class="kw">if</span> s1[m-<span class="str">1</span>] == s2[n-<span class="str">1</span>]: result.<span class="fn">append</span>(s1[m-<span class="str">1</span>]); m -= <span class="str">1</span>; n -= <span class="str">1</span>
+        <span class="kw">elif</span> dp[m-<span class="str">1</span>][n] > dp[m][n-<span class="str">1</span>]: m -= <span class="str">1</span>
+        <span class="kw">else</span>: n -= <span class="str">1</span>
+    <span class="kw">return</span> <span class="str">''</span>.<span class="fn">join</span>(<span class="fn">reversed</span>(result))
+          </div>
+        </div>
+      </div>
+      <div class="demo-content" id="demo-math">
+        <div class="demo-prompt"><label>STUDENT PROMPT</label>"Solve: ∫ x² · e^x dx using integration by parts."</div>
+        <div class="demo-output math-output"><label>AI STEP-BY-STEP SOLUTION</label>
+          <div class="math-step">Using Integration by Parts: ∫u·dv = u·v − ∫v·du</div>
+          <div class="math-step"><strong>Step 1:</strong> Let u = x², dv = eˣ dx → du = 2x dx, v = eˣ</div>
+          <div class="math-step"><strong>Step 2:</strong> Apply IBP: x²eˣ − 2∫xeˣ dx</div>
+          <div class="math-step"><strong>Step 3:</strong> Second IBP: let u = x → xeˣ − ∫eˣ dx = xeˣ − eˣ</div>
+          <div class="math-step"><strong>Step 4:</strong> x²eˣ − 2(xeˣ − eˣ)</div>
+          <div class="math-step">✅ Final Answer: eˣ(x² − 2x + 2) + C</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== POMODORO TIMER ===== -->
+<section class="timer-section" id="timer" aria-label="Pomodoro study timer">
+  <div class="section-header">
+    <div class="section-label">⏱️ Focus Mode</div>
+    <h2 class="section-title">Built-In <span class="g">Pomodoro Timer</span></h2>
+    <p class="section-desc">Stay focused and avoid burnout with our scientifically-proven Pomodoro study timer.</p>
+  </div>
+  <div class="timer-widget reveal">
+    <div class="timer-modes">
+      <button class="timer-mode active" onclick="setTimer(25,'Pomodoro',this)">Pomodoro</button>
+      <button class="timer-mode" onclick="setTimer(5,'Short Break',this)">Short Break</button>
+      <button class="timer-mode" onclick="setTimer(15,'Long Break',this)">Long Break</button>
+    </div>
+    <div class="timer-circle">
+      <svg class="timer-svg" width="190" height="190" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6a00ff"/><stop offset="100%" stop-color="#00fff0"/>
+          </linearGradient>
+        </defs>
+        <circle class="timer-track" cx="100" cy="100" r="90"/>
+        <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="90"/>
+      </svg>
+      <div class="timer-center">
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-label" id="timerLabelText">Pomodoro</div>
+      </div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn" onclick="resetTimer()" aria-label="Reset timer"><i class="fas fa-redo"></i></button>
+      <button class="timer-btn timer-btn-main" id="timerPlayBtn" onclick="toggleTimer()" aria-label="Start or pause timer"><i class="fas fa-play" id="timerIcon"></i></button>
+      <button class="timer-btn" onclick="skipTimer()" aria-label="Skip to next session"><i class="fas fa-forward"></i></button>
+    </div>
+    <div class="timer-sessions" id="timerSessions" aria-label="Session progress">
+      <div class="session-dot" aria-label="Session 1"></div>
+      <div class="session-dot" aria-label="Session 2"></div>
+      <div class="session-dot" aria-label="Session 3"></div>
+      <div class="session-dot" aria-label="Session 4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRESS TRACKER ===== -->
+<section class="progress-section" id="progress" aria-label="Study progress tracker">
+  <div class="section-header">
+    <div class="section-label">📈 Track Your Growth</div>
+    <h2 class="section-title">Real-Time <span class="g">Progress Tracker</span></h2>
+    <p class="section-desc">See how far you've come. Visual dashboards that motivate you to keep going.</p>
+  </div>
+  <div class="progress-widget reveal">
+    <h3>📚 <span>Your Weekly Progress Dashboard</span></h3>
+    <div class="subject-bars">
+      <div class="subject-row"><div class="subject-info"><span class="subject-name">Mathematics</span><span class="subject-pct">87%</span></div><div class="bar-track"><div class="bar-fill" data-width="87" style="background:linear-gradient(90deg,#6a00ff,#00fff0)"></div></div></div>
+      <div class="subject-row"><div class="subject-info"><span class="subject-name">Computer Science</span><span class="subject-pct">92%</span></div><div class="bar-track"><div class="bar-fill" data-width="92" style="background:linear-gradient(90deg,#00c853,#00e5ff)"></div></div></div>
+      <div class="subject-row"><div class="subject-info"><span class="subject-name">Literature & Writing</span><span class="subject-pct">74%</span></div><div class="bar-track"><div class="bar-fill" data-width="74" style="background:linear-gradient(90deg,#ff0080,#ff9800)"></div></div></div>
+      <div class="subject-row"><div class="subject-info"><span class="subject-name">Research & Analysis</span><span class="subject-pct">65%</span></div><div class="bar-track"><div class="bar-fill" data-width="65" style="background:linear-gradient(90deg,#ffd600,#ff6b00)"></div></div></div>
+      <div class="subject-row"><div class="subject-info"><span class="subject-name">Physics</span><span class="subject-pct">78%</span></div><div class="bar-track"><div class="bar-fill" data-width="78" style="background:linear-gradient(90deg,#aa00ff,#d500f9)"></div></div></div>
+    </div>
+    <div class="streak-row" aria-label="7-day streak tracker">
+      <div class="streak-day done"><i class="fas fa-fire"></i><span>Mon</span></div>
+      <div class="streak-day done"><i class="fas fa-fire"></i><span>Tue</span></div>
+      <div class="streak-day done"><i class="fas fa-fire"></i><span>Wed</span></div>
+      <div class="streak-day done"><i class="fas fa-fire"></i><span>Thu</span></div>
+      <div class="streak-day done"><i class="fas fa-fire"></i><span>Fri</span></div>
+      <div class="streak-day"><i class="fas fa-circle"></i><span>Sat</span></div>
+      <div class="streak-day"><i class="fas fa-circle"></i><span>Sun</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEADERBOARD ===== -->
+<section style="padding:60px 6% 90px;" aria-label="Student leaderboard">
+  <div class="section-header">
+    <div class="section-label">🏆 Community</div>
+    <h2 class="section-title">Student <span class="g">Leaderboard</span></h2>
+    <p class="section-desc">Compete, collaborate, and celebrate academic achievements with students worldwide.</p>
+  </div>
+  <div class="leaderboard-widget reveal">
+    <div class="lb-header"><h3>🏅 Top Students This Week</h3><span style="font-size:0.78rem;color:var(--text-muted);">Updated daily</span></div>
+    <div class="lb-row"><div class="lb-rank rank-1">1</div><div class="lb-avatar" style="background:linear-gradient(135deg,#ffd600,#ff6b00)">A</div><div class="lb-info"><div class="lb-name">Alex Chen</div><div class="lb-school">MIT · Computer Science</div></div><div class="lb-points">12,840 pts<span>+340 today</span></div></div>
+    <div class="lb-row"><div class="lb-rank rank-2">2</div><div class="lb-avatar" style="background:linear-gradient(135deg,#9e9e9e,#e0e0e0)">S</div><div class="lb-info"><div class="lb-name">Sofia Martinez</div><div class="lb-school">Stanford · Biology</div></div><div class="lb-points">11,205 pts<span>+180 today</span></div></div>
+    <div class="lb-row"><div class="lb-rank rank-3">3</div><div class="lb-avatar" style="background:linear-gradient(135deg,#cd7f32,#ff9800)">J</div><div class="lb-info"><div class="lb-name">James Park</div><div class="lb-school">Harvard · Economics</div></div><div class="lb-points">10,660 pts<span>+220 today</span></div></div>
+    <div class="lb-row"><div class="lb-rank" style="color:var(--text-muted)">4</div><div class="lb-avatar" style="background:linear-gradient(135deg,#6a00ff,#00fff0)">P</div><div class="lb-info"><div class="lb-name">Priya Nair</div><div class="lb-school">Oxford · Mathematics</div></div><div class="lb-points">9,890 pts<span>+95 today</span></div></div>
+    <div class="lb-row"><div class="lb-rank" style="color:var(--text-muted)">5</div><div class="lb-avatar" style="background:linear-gradient(135deg,#ff0080,#6a00ff)">M</div><div class="lb-info"><div class="lb-name">Marco Rossi</div><div class="lb-school">ETH Zürich · Physics</div></div><div class="lb-points">9,540 pts<span>+115 today</span></div></div>
+  </div>
+</section>
+
+<!-- ===== RESOURCES ===== -->
+<section class="features" id="resources" style="background:rgba(255,255,255,0.02)" aria-label="Study resources">
+  <div class="section-header">
+    <div class="section-label">📚 Resources</div>
+    <h2 class="section-title">Everything You Need to <span class="g">Study Smarter</span></h2>
+    <p class="section-desc">Comprehensive tools and resources designed around how students actually learn.</p>
+  </div>
+  <div class="resources-grid">
+    <div class="resource-card reveal"><div class="resource-emoji">🧬</div><h3>Science Lab Simulator</h3><p>Run virtual chemistry, biology, and physics experiments. Perfect for understanding concepts and practicing for practical exams.</p><div class="resource-arrow"><i class="fas fa-arrow-right"></i> Explore</div></div>
+    <div class="resource-card reveal"><div class="resource-emoji">🌍</div><h3>Language Translator Pro</h3><p>Context-aware translation in 100+ languages with grammar explanations. Ideal for multilingual assignments and language courses.</p><div class="resource-arrow"><i class="fas fa-arrow-right"></i> Explore</div></div>
+    <div class="resource-card reveal"><div class="resource-emoji">📰</div><h3>Article Summarizer</h3><p>Paste any long article, research paper, or textbook chapter and get an intelligent structured summary in seconds.</p><div class="resource-arrow"><i class="fas fa-arrow-right"></i> Explore</div></div>
+    <div class="resource-card reveal"><div class="resource-emoji">🗣️</div><h3>Presentation Coach</h3><p>Practice your presentation with our AI coach that gives real-time feedback on pace, clarity, filler words, and confidence.</p><div class="resource-arrow"><i class="fas fa-arrow-right"></i> Explore</div></div>
+    <div class="resource-card reveal"><div class="resource-emoji">📓</div><h3>Smart Note-Taker</h3><p>Record lectures or paste notes. AI organizes them into structured summaries with key points, definitions, and action items.</p><div class="resource-arrow"><i class="fas fa-arrow-right"></i> Explore</div></div>
+    <div class="resource-card reveal"><div class="resource-emoji">🎧</div><h3>Audio to Text</h3><p>Transcribe lectures, podcasts, and recordings to text with 99% accuracy. Auto-highlight key concepts for easy review.</p><div class="resource-arrow"><i class="fas fa-arrow-right"></i> Explore</div></div>
+  </div>
+</section>
+
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials" aria-label="Student testimonials">
+  <div class="section-header">
+    <div class="section-label">⭐ Reviews</div>
+    <h2 class="section-title">Loved by <span class="g">50,000+ Students</span></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"This platform saved my thesis. The research helper and citation generator found sources I couldn't find anywhere else. My professor was genuinely impressed with my bibliography."</p><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#6a00ff,#00fff0)">S</div><div><div class="author-name">Sarah Johnson</div><div class="author-role">PhD Student · MIT</div><div class="verified"><i class="fas fa-check-circle"></i> Verified Student</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"The Code Assistant taught me more in 2 weeks than my entire semester of lectures. It doesn't just give you code — it explains WHY every line works. Absolutely essential."</p><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#00c853,#00e5ff)">M</div><div><div class="author-name">Michael Chen</div><div class="author-role">CS Sophomore · Stanford</div><div class="verified"><i class="fas fa-check-circle"></i> Verified Student</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"I built my entire final presentation using the PPT Maker in 20 minutes. Got an A. My classmates were asking what design tool I used. I said 'AI' and they were shocked."</p><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#ff0080,#6a00ff)">E</div><div><div class="author-name">Emily Rodriguez</div><div class="author-role">Business Major · Harvard</div><div class="verified"><i class="fas fa-check-circle"></i> Verified Student</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"As an international student, the language translation feature is a lifesaver. I can now confidently write essays in English knowing the AI catches any awkward phrasing. My grades went from B- to A."</p><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#ffd600,#ff6b00)">K</div><div><div class="author-name">Kim Yeon-Ji</div><div class="author-role">International Student · UCL</div><div class="verified"><i class="fas fa-check-circle"></i> Verified Student</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"The Pomodoro timer and progress tracker are my daily drivers. I've studied 40% more consistently since I started using the platform. Seeing that streak counter motivates me every single day."</p><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#00bfa5,#00fff0)">R</div><div><div class="author-name">Raj Patel</div><div class="author-role">Pre-Med · Yale</div><div class="verified"><i class="fas fa-check-circle"></i> Verified Student</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"The math solver is the most impressive thing I've ever seen. It solved a complex differential equation step-by-step in a way that finally made it click for me. My tutor costs $80/hour. This is $5/month."</p><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#aa00ff,#d500f9)">A</div><div><div class="author-name">Aisha Okafor</div><div class="author-role">Engineering · ETH Zürich</div><div class="verified"><i class="fas fa-check-circle"></i> Verified Student</div></div></div></div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq" aria-label="Frequently asked questions">
+  <div class="section-header">
+    <div class="section-label">❓ FAQ</div>
+    <h2 class="section-title">Common <span class="g">Questions Answered</span></h2>
+  </div>
+  <div class="faq-container">
+    <div class="faq-item reveal"><div class="faq-q"><span>How do I get started with StudentAI Tools?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Sign up for free — no credit card required. You'll instantly get access to our free tier with 10 tool uses per day. Students with a .edu or .ac email can verify for 50% off the Pro plan automatically.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>Is my data private and secure?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Absolutely. We use AES-256 encryption on all stored data, follow GDPR regulations, and operate on a zero-knowledge architecture. Your academic documents are never used to train any AI models and are auto-deleted after 30 days unless saved.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>Will AI-assisted work violate academic integrity policies?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Our tools are designed as learning aids, not shortcuts. We encourage using our Essay Generator for outlines and structure, our Code Assistant to understand logic, and our Math Solver to learn from step-by-step solutions. Always follow your institution's guidelines.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>How does the student discount verification work?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Sign up with your .edu or .ac.uk email address. We automatically verify your student status and apply the 50% discount instantly. If your institution doesn't use these domains, you can also upload a student ID photo for manual verification within 24 hours.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>Can I collaborate with classmates on group projects?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Yes! The Team Plan (from $19.99/month for 5 users) enables real-time document collaboration, shared flashcard decks, group quizzes, shared research libraries, and a group leaderboard. You can see who's editing what in real time, leave comments, and maintain full version history.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>What subjects and languages are supported?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>We support every major academic subject — STEM, humanities, business, law, medicine, arts, and more. Our language tools support 100+ languages for translation, grammar checking, and content generation. The Code Assistant supports 50+ programming languages.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>Is there a mobile app available?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Yes! Native iOS and Android apps are available for free download. They sync seamlessly with your web account and are fully featured, including the Pomodoro timer, flashcard review mode, and AI chat assistant — perfect for studying on the go.</p></div></div>
+    <div class="faq-item reveal"><div class="faq-q"><span>Can I cancel my subscription anytime?</span><i class="fas fa-chevron-down"></i></div><div class="faq-a"><p>Yes, cancel anytime with one click from your account settings. There are no cancellation fees, no contracts, and no tricks. If you cancel, you keep access until the end of your billing period, and we'll send you an export of all your saved work before deactivating.</p></div></div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section style="padding:56px 6% 90px;" aria-label="Newsletter signup">
+  <div class="newsletter reveal">
+    <h3>🎓 Get Weekly Study Tips & AI Tool Updates</h3>
+    <p>Join 50,000+ students who get free study guides, new tool announcements, and exclusive academic resources every week.</p>
+    <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+      <input type="email" placeholder="Enter your student email..." aria-label="Email address" required>
+      <button type="submit" class="btn btn-sm">Subscribe Free</button>
+    </form>
+    <p id="nlSuccess" style="margin-top:12px;color:var(--cyan);display:none;font-size:0.84rem;">✅ You're in! Check your inbox for a welcome gift.</p>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="features" id="contact" style="padding-top:72px;background:rgba(255,255,255,0.02);" aria-label="Contact and support">
+  <div class="section-header">
+    <div class="section-label">📬 Get in Touch</div>
+    <h2 class="section-title">We're Here <span class="g">24/7 for You</span></h2>
+    <p class="section-desc">Have questions? Need help? Our support team responds in under 2 hours, every day.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card reveal"><i class="fas fa-envelope" aria-hidden="true"></i><h4>Email Support</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="30434540405f42447043444554555e445159445f5f5c431e535f5d">[email&#160;protected]</a><br>Response in under 2 hours</p></div>
+    <div class="contact-card reveal"><i class="fas fa-comments" aria-hidden="true"></i><h4>Live Chat</h4><p>Instant help 24/7<br>Click the chat button →</p></div>
+    <div class="contact-card reveal"><i class="fas fa-headset" aria-hidden="true"></i><h4>Phone Support</h4><p>+1 (555) 123-4567<br>Mon–Fri · 9AM–9PM EST</p></div>
+    <div class="contact-card reveal"><i class="fab fa-discord" aria-hidden="true"></i><h4>Discord Community</h4><p>Join 12,000+ students<br>discord.gg/studentai</p></div>
+  </div>
+  <div style="text-align:center;margin-top:20px">
+    <a href="/cdn-cgi/l/email-protection#f1828481819e8385b182858495949f859098859e9e9d82df929e9c" class="btn"><i class="fas fa-paper-plane"></i> Contact Support Now</a>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer role="contentinfo">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo"><span>All</span>IN<span>One</span> <em>AI</em></div>
+      <p>The most comprehensive AI-powered academic tools platform. Built for students who refuse to be average.</p>
+    </div>
+    <div class="footer-col"><h5>Tools</h5><a href="#tools">Essay Generator</a><a href="#tools">PPT Maker</a><a href="#tools">Resume Builder</a><a href="#tools">Code Assistant</a><a href="#tools">Math Solver</a><a href="#tools">Plagiarism Checker</a></div>
+    <div class="footer-col"><h5>Platform</h5><a href="#features">Features</a><a href="#resources">Resources</a><a href="#demo">Live Demo</a><a href="#">Mobile App</a><a href="#">API Access</a></div>
+    <div class="footer-col"><h5>Company</h5><a href="#">About Us</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#contact">Contact</a></div>
+  </div>
+  <div class="footer-bottom">
+    <p class="copyright">© 2026 StudentAI Tools · Built for Students with ❤️ and AI 🚀</p>
+    <div class="social-links" aria-label="Social media links">
+      <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+      <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CHATBOT ===== -->
+<button class="chatbot-toggle" id="chatToggle" aria-label="Open AI assistant" aria-expanded="false">
+  <i class="fas fa-comment-dots"></i>
+  <span class="chat-badge" id="chatBadge">1</span>
+</button>
+<div class="chatbot-container" id="chatContainer" role="dialog" aria-label="AI Study Assistant" aria-modal="true">
+  <div class="chat-header">
+    <div class="chat-header-info"><div class="chat-avatar">🧠</div><div><h3>AI Study Assistant</h3><div class="chat-status"><span class="online-dot"></span> Online · Ready to help</div></div></div>
+    <button class="chat-close" id="chatClose" aria-label="Close chat"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot"><div class="msg-avatar">🤖</div><div class="msg-bubble">Hi there! 👋 I'm your AI Study Assistant. Ask me anything about our tools, pricing, homework help, or academic tips!<span class="msg-time">Just now</span></div></div>
+  </div>
+  <div class="quick-replies" role="list" aria-label="Quick reply options">
+    <button class="quick-reply" onclick="quickMsg('Show me all tools')">🔧 All Tools</button>
+    <button class="quick-reply" onclick="quickMsg('Help with homework')">📝 Homework</button>
+    <button class="quick-reply" onclick="quickMsg('Student pricing')">💰 Pricing</button>
+    <button class="quick-reply" onclick="quickMsg('PPT maker features')">📊 PPT Maker</button>
+    <button class="quick-reply" onclick="quickMsg('Study tips')">💡 Study Tips</button>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." aria-label="Chat message input" onkeypress="if(event.key==='Enter')sendMsg()">
+    <button class="chat-send" onclick="sendMsg()" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<button class="back-to-top" id="backTop" onclick="scrollToTop()" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ============ PARTICLES ============ */
+(function(){
+  const c=document.getElementById('particles');
+  const colors=['rgba(0,255,240,','rgba(106,0,255,','rgba(255,0,128,'];
+  for(let i=0;i<36;i++){
+    const p=document.createElement('div');
+    const size=Math.random()*5+2;
+    const col=colors[Math.floor(Math.random()*colors.length)];
+    Object.assign(p.style,{
+      position:'absolute',left:Math.random()*100+'%',
+      width:size+'px',height:size+'px',
+      background:col+(Math.random()*0.5+0.2)+')',
+      borderRadius:'50%',
+      animationDuration:(Math.random()*15+10)+'s',
+      animationDelay:(Math.random()*15)+'s',
+      animationName:'floatUp',
+      animationTimingFunction:'linear',
+      animationIterationCount:'infinite'
+    });
+    c.appendChild(p);
+  }
+})();
+
+/* ============ NAVBAR ============ */
+const navbar=document.getElementById('navbar');
+const hamburger=document.getElementById('hamburger');
+const navLinks=document.getElementById('navLinks');
+
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>60);
+  document.getElementById('backTop').classList.toggle('visible',window.scrollY>300);
+});
+
+hamburger.addEventListener('click',()=>{
+  const open=navLinks.classList.toggle('open');
+  hamburger.classList.toggle('open',open);
+  hamburger.setAttribute('aria-expanded',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>{
+  navLinks.classList.remove('open');
+  hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}));
+
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+
+/* ============ ACTIVE NAV ============ */
+const sections=document.querySelectorAll('section[id]');
+const navObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.nav-links a').forEach(a=>{
+        a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id);
+      });
+    }
+  });
+},{threshold:0.4});
+sections.forEach(s=>navObs.observe(s));
+
+/* ============ REVEAL ============ */
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*55);
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+/* ============ STATS COUNTER ============ */
+let statsAnimated=false;
+const statsObs=new IntersectionObserver(entries=>{
+  if(!statsAnimated&&entries[0].isIntersecting){
+    statsAnimated=true;
+    document.querySelectorAll('.stat-number').forEach(el=>{
+      const target=parseInt(el.dataset.target);
+      const counter=el.querySelector('.count');
+      const suffix=el.querySelector('.stat-suffix');
+      const suffixText=suffix?suffix.textContent:'';
+      let start=0;
+      const inc=target/80;
+      const timer=setInterval(()=>{
+        start+=inc;
+        if(start>=target){
+          if(suffix)suffix.textContent=suffixText;
+          counter.textContent=target.toLocaleString();
+          clearInterval(timer);
+        }else{
+          counter.textContent=Math.floor(start).toLocaleString();
+        }
+      },20);
+    });
+  }
+},{threshold:0.3});
+const statsSection=document.querySelector('.stats');
+if(statsSection)statsObs.observe(statsSection);
+
+/* ============ PROGRESS BARS ============ */
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.bar-fill').forEach(b=>{
+        setTimeout(()=>b.style.width=b.dataset.width+'%',200);
+      });
+      barObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+const progressWidget=document.querySelector('.progress-widget');
+if(progressWidget)barObs.observe(progressWidget);
+
+/* ============ TOOL SEARCH + FILTER ============ */
+const toolSearch=document.getElementById('toolSearch');
+const searchClear=document.getElementById('searchClear');
+const filterTabs=document.querySelectorAll('.filter-tab');
+const toolCards=document.querySelectorAll('.tool-card');
+const noResults=document.getElementById('noResults');
+let currentCat='all';
+
+function filterTools(){
+  const q=toolSearch.value.toLowerCase().trim();
+  searchClear.classList.toggle('visible',q.length>0);
+  let visible=0;
+  toolCards.forEach(card=>{
+    const cat=card.dataset.cat;
+    const name=card.dataset.name;
+    const catMatch=currentCat==='all'||cat===currentCat;
+    const qMatch=!q||name.includes(q)||card.querySelector('h3').textContent.toLowerCase().includes(q)||card.querySelector('p').textContent.toLowerCase().includes(q);
+    card.classList.toggle('hidden',!(catMatch&&qMatch));
+    if(catMatch&&qMatch)visible++;
+  });
+  noResults.style.display=visible===0?'block':'none';
+}
+toolSearch.addEventListener('input',filterTools);
+searchClear.addEventListener('click',()=>{toolSearch.value='';filterTools();});
+filterTabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    filterTabs.forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
+    tab.classList.add('active');tab.setAttribute('aria-selected','true');
+    currentCat=tab.dataset.cat;filterTools();
+  });
+});
+
+/* ============ FAQ ============ */
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const ans=q.nextElementSibling;
+    const icon=q.querySelector('i');
+    const isOpen=ans.classList.contains('open');
+    document.querySelectorAll('.faq-a.open').forEach(a=>{
+      a.classList.remove('open');
+      a.previousElementSibling.querySelector('i').style.transform='';
+    });
+    if(!isOpen){ans.classList.add('open');icon.style.transform='rotate(180deg)';}
+  });
+});
+
+/* ============ DEMO TABS ============ */
+function switchDemo(tab){
+  document.querySelectorAll('.demo-tab').forEach((t,i)=>{
+    const ids=['essay','code','math'];
+    t.classList.toggle('active',ids[i]===tab);
+    document.getElementById('demo-'+ids[i]).classList.toggle('active',ids[i]===tab);
+  });
+  if(tab==='essay')typeEssay();
+}
+const essayText=`In the digital age, social media platforms have become integral to the social fabric of adolescent and young adult life. While these platforms offer unprecedented opportunities for connection and self-expression, a growing body of psychological research suggests a complex and often troubling relationship between social media consumption and mental health outcomes. Studies published in the Journal of Adolescent Health (2023) indicate correlations between heavy social media use and elevated rates of anxiety, depression, and social comparison. This paper examines the multifaceted mechanisms through which social media impacts psychological wellbeing...`;
+let essayTimeout=null;
+function typeEssay(){
+  const el=document.getElementById('essay-output');
+  const cursor=document.getElementById('essay-cursor');
+  if(!el)return;
+  clearTimeout(essayTimeout);
+  el.textContent='';
+  let i=0;
+  function type(){
+    if(i<essayText.length){
+      el.textContent+=essayText[i++];
+      essayTimeout=setTimeout(type,18+Math.random()*12);
+    }else{
+      if(cursor)cursor.style.display='none';
+    }
+  }
+  if(cursor)cursor.style.display='inline-block';
+  type();
+}
+new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting)typeEssay();
+},{threshold:0.5}).observe(document.querySelector('.demo-container')||document.body);
+
+/* ============ POMODORO TIMER ============ */
+let timerTotal=25*60,timerRemaining=25*60,timerRunning=false,timerInterval=null,sessionsDone=0;
+const timerDisplay=document.getElementById('timerDisplay');
+const timerIcon=document.getElementById('timerIcon');
+const timerProgress=document.getElementById('timerProgress');
+const timerLabel=document.getElementById('timerLabelText');
+const CIRCUMFERENCE=2*Math.PI*90;
+
+function setTimer(mins,label,btn){
+  clearInterval(timerInterval);timerRunning=false;
+  timerTotal=mins*60;timerRemaining=timerTotal;
+  timerIcon.className='fas fa-play';timerLabel.textContent=label;
+  updateTimerDisplay();
+  document.querySelectorAll('.timer-mode').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timerRemaining/60);
+  const s=timerRemaining%60;
+  timerDisplay.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const pct=timerRemaining/timerTotal;
+  timerProgress.style.strokeDashoffset=CIRCUMFERENCE*(1-pct);
+}
+function toggleTimer(){
+  if(timerRunning){clearInterval(timerInterval);timerRunning=false;timerIcon.className='fas fa-play';}
+  else{
+    timerRunning=true;timerIcon.className='fas fa-pause';
+    timerInterval=setInterval(()=>{
+      if(timerRemaining>0){timerRemaining--;updateTimerDisplay();}
+      else{
+        clearInterval(timerInterval);timerRunning=false;timerIcon.className='fas fa-play';
+        if(sessionsDone<4){document.querySelectorAll('.session-dot')[sessionsDone].classList.add('done');sessionsDone++;}
+      }
+    },1000);
+  }
+}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerRemaining=timerTotal;timerIcon.className='fas fa-play';updateTimerDisplay();}
+function skipTimer(){clearInterval(timerInterval);timerRunning=false;timerRemaining=0;updateTimerDisplay();}
+updateTimerDisplay();
+
+/* ============ NEWSLETTER ============ */
+function handleNewsletter(e){e.preventDefault();document.getElementById('nlSuccess').style.display='block';e.target.reset();}
+
+/* ============ CHATBOT ============ */
+const chatToggle=document.getElementById('chatToggle');
+const chatContainer=document.getElementById('chatContainer');
+const chatClose=document.getElementById('chatClose');
+const chatMessages=document.getElementById('chatMessages');
+const chatInput=document.getElementById('chatInput');
+const chatBadge=document.getElementById('chatBadge');
+
+chatToggle.addEventListener('click',()=>{
+  const isOpen=chatContainer.classList.toggle('open');
+  chatToggle.classList.toggle('open',isOpen);
+  chatToggle.setAttribute('aria-expanded',isOpen);
+  if(isOpen){chatBadge.style.display='none';chatInput.focus();}
+});
+chatClose.addEventListener('click',()=>{
+  chatContainer.classList.remove('open');
+  chatToggle.classList.remove('open');
+  chatToggle.setAttribute('aria-expanded','false');
+});
+
+const responses={
+  'hello|hi|hey':'Hey there! 👋 How can I help you today?',
+  'tool|tools':'🔧 We have 150+ AI tools! Popular ones:\n\n• ✍️ Essay Generator\n• 📊 PPT Maker\n• 💻 Code Assistant\n• 🧮 Math Solver\n• 📄 Resume Builder\n\nSearch or filter them in the tools section above!',
+  'ppt|presentation|slides':'📊 Our PPT Maker creates full decks in 60 seconds with 100+ professional themes. Exports to PowerPoint, PDF & Google Slides!',
+  'price|pricing|cost|plan|discount':'💰 Plans:\n\n🆓 Free — $0/mo\n🎓 Student Pro — $4.99/mo (50% off with .edu)\n👥 Team — $19.99/mo (5 users)',
+  'code|coding|programming':'💻 Code Assistant supports 50+ languages including Python, JS, Java, C++, and more. Explains code, not just generates it!',
+  'math|calculus|algebra':'🧮 Math Solver handles Algebra, Calculus, Stats, Differential equations and more with full step-by-step solutions.',
+  'essay|writing|paper':'✍️ Essay Generator supports APA, MLA, Chicago, Harvard. Creates structured essays with proper citations instantly.',
+  'study|tips|focus':'📚 Use Pomodoro timer (25-min focus), create flashcards, take practice quizzes. All built into the platform!',
+  'homework|help|assignment':'📝 What subject? Math→Math Solver · Code→Code Assistant · Writing→Essay Generator · Research→Research Helper',
+  'safe|privacy|secure':'🔒 AES-256 encryption, GDPR compliant, zero-knowledge architecture. Your data is never used for AI training.',
+  'thanks|thank|awesome':'😊 You\'re welcome! Good luck with your studies! 💪',
+  'bye|goodbye':'👋 Goodbye and good luck! We\'re here 24/7 whenever you need us. 🎓'
+};
+
+function getResponse(msg){
+  const m=msg.toLowerCase();
+  for(const [keys,resp] of Object.entries(responses)){
+    if(keys.split('|').some(k=>m.includes(k)))return resp;
+  }
+  return "🤔 I'm not sure about that, but I'm here to help! Try asking about tools, pricing, homework help, or study tips. Or email support@studentaitools.com";
+}
+function addMsg(text,role){
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  div.innerHTML=`<div class="msg-avatar">${role==='bot'?'🤖':'👤'}</div><div class="msg-bubble">${text.replace(/\n/g,'<br>')}<span class="msg-time">${time}</span></div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+function showTyping(){
+  const d=document.createElement('div');
+  d.id='typing';d.className='msg bot';
+  d.innerHTML='<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+  chatMessages.appendChild(d);chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+function sendMsg(){
+  const val=chatInput.value.trim();
+  if(!val)return;
+  addMsg(val,'user');chatInput.value='';showTyping();
+  setTimeout(()=>{document.getElementById('typing')?.remove();addMsg(getResponse(val),'bot');},900+Math.random()*500);
+}
+function quickMsg(text){
+  addMsg(text,'user');showTyping();
+  setTimeout(()=>{document.getElementById('typing')?.remove();addMsg(getResponse(text),'bot');},800);
+}
+
+/* ============ SMOOTH SCROLL ============ */
+</script>
+</body>
+</html>
