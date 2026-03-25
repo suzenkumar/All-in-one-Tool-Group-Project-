@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>(ALL IN ONE) — Live Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Toolbar ── -->
+<div id="toolbar">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    All<span>In One</span>
+  </div>
+
+  <div class="toolbar-sep"></div>
+
+  <button class="tb-btn tb-btn-run" id="runBtn">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 1.5L10 6 2 10.5V1.5Z"/></svg>
+    Run
+  </button>
+
+  <button class="tb-btn tb-btn-ghost" id="refreshBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Refresh
+  </button>
+
+  <div class="toolbar-right">
+    <div class="status-dot"></div>
+    <button class="tb-btn tb-btn-ghost" id="fullBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      Fullscreen
+    </button>
+    <button class="tb-btn tb-btn-danger" id="clearBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      Clear
+    </button>
+  </div>
+</div>
+
+<!-- ── Workspace ── -->
+<div id="workspace">
+
+  <!-- Editors panel -->
+  <div id="editorsPanel">
+
+    <!-- Tab bar (small screens) -->
+    <div class="tab-bar">
+      <div class="tab active active-html" data-tab="html">
+        <span class="tab-dot dot-html"></span> HTML
+        <span class="tab-line-count" id="html-lines">1 line</span>
+      </div>
+      <div class="tab" data-tab="css">
+        <span class="tab-dot dot-css"></span> CSS
+        <span class="tab-line-count" id="css-lines">1 line</span>
+      </div>
+      <div class="tab" data-tab="js">
+        <span class="tab-dot dot-js"></span> JS
+        <span class="tab-line-count" id="js-lines">1 line</span>
+      </div>
+    </div>
+
+    <div class="editors-wrap">
+
+      <!-- HTML -->
+      <div class="editor-section active" id="sec-html">
+        <div class="editor-label label-html">
+          <span class="tab-dot dot-html"></span> HTML
+          <span class="label-lines" id="html-lines-label">1 line</span>
+        </div>
+        <div class="code-area">
+          <div class="line-numbers" id="html-ln">1</div>
+          <textarea id="html-code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+      </div>
+
+      <!-- CSS -->
+      <div class="editor-section" id="sec-css">
+        <div class="editor-label label-css">
+          <span class="tab-dot dot-css"></span> CSS
+          <span class="label-lines" id="css-lines-label">1 line</span>
+        </div>
+        <div class="code-area">
+          <div class="line-numbers" id="css-ln">1</div>
+          <textarea id="css-code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+      </div>
+
+      <!-- JS -->
+      <div class="editor-section" id="sec-js">
+        <div class="editor-label label-js">
+          <span class="tab-dot dot-js"></span> JavaScript
+          <span class="label-lines" id="js-lines-label">1 line</span>
+        </div>
+        <div class="code-area">
+          <div class="line-numbers" id="js-ln">1</div>
+          <textarea id="js-code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Resize handle -->
+  <div id="resizeHandle"></div>
+
+  <!-- Preview -->
+  <div id="previewPanel">
+    <div class="preview-header">
+      <div class="preview-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="margin-right:6px;vertical-align:middle"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Preview
+      </div>
+      <div class="preview-btns">
+        <button class="prev-btn" id="fullBtn2" title="Fullscreen">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        </button>
+        <button class="prev-btn" id="refreshBtn2" title="Refresh">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="frameWrap">
+      <iframe id="output" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
+      <div id="previewEmpty">
+        <div class="empty-icon">💻</div>
+        <div class="empty-text">Start typing to see your preview</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
