@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeWise — GPA Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c28;
+    --border: #2a2a3d;
+    --accent: #7c6af7;
+    --accent2: #f7c56a;
+    --accent3: #6af7c5;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --danger: #f76a6a;
+    --school-color: #6af7c5;
+    --college-color: #7c6af7;
+    --uni-color: #f7c56a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(124,106,247,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(247,197,106,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(106,247,197,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    padding: 48px 0 32px;
+    text-align: center;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #e8e8f0 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .tagline {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Tab Switcher */
+  .tab-switcher {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 5px;
+    margin: 32px auto 40px;
+    max-width: 480px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tab-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 12px;
+  }
+
+  .tab-btn.school { --tc: var(--school-color); }
+  .tab-btn.college { --tc: var(--college-color); }
+  .tab-btn.university { --tc: var(--uni-color); }
+
+  .tab-btn::before { background: color-mix(in srgb, var(--tc) 15%, transparent); }
+
+  .tab-btn.active {
+    color: var(--tc);
+    background: color-mix(in srgb, var(--tc) 12%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tc) 30%, transparent);
+  }
+
+  .tab-btn:hover:not(.active) { color: var(--text); }
+  .tab-btn:hover::before { opacity: 1; }
+
+  .tab-icon { margin-right: 6px; }
+
+  /* Calculator Panel */
+  .calc-panel {
+    display: none;
+    animation: fadeIn 0.4s ease both;
+  }
+  .calc-panel.active { display: block; }
+
+  /* Scale Info Bar */
+  .scale-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 24px;
+    font-size: 0.82rem;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .scale-label { color: var(--muted); font-weight: 500; }
+
+  .scale-items { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+
+  .scale-item {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* Subject Entry Table */
+  .subjects-header {
+    display: grid;
+    grid-template-columns: 1fr 120px 120px 44px;
+    gap: 10px;
+    padding: 0 4px 10px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .subjects-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .subject-row {
+    display: grid;
+    grid-template-columns: 1fr 120px 120px 44px;
+    gap: 10px;
+    align-items: center;
+    animation: slideIn 0.3s ease both;
+  }
+
+  .input-field {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,106,247,0.15);
+  }
+
+  .input-field::placeholder { color: var(--muted); }
+
+  select.input-field {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237070a0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  .remove-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .remove-btn:hover { background: rgba(247,106,106,0.1); border-color: var(--danger); color: var(--danger); }
+
+  /* Add Button */
+  .add-row-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 13px;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .add-row-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(124,106,247,0.05);
+  }
+
+  /* Result Card */
+  .result-section {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--panel-color, var(--accent)), transparent);
+  }
+
+  .result-card:hover { transform: translateY(-2px); }
+
+  .result-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .result-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--panel-color, var(--accent));
+    transition: all 0.4s ease;
+  }
+
+  .result-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* GPA Meter */
+  .meter-card {
+    grid-column: 1 / -1;
+    padding: 20px 24px;
+  }
+
+  .meter-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .meter-bar-bg {
+    height: 10px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .meter-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+    position: relative;
+  }
+
+  .meter-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 24px;
+    background: rgba(255,255,255,0.3);
+    filter: blur(6px);
+  }
+
+  .grade-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 99px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--panel-color, var(--accent)) 15%, transparent);
+    color: var(--panel-color, var(--accent));
+    border: 1px solid color-mix(in srgb, var(--panel-color, var(--accent)) 30%, transparent);
+    transition: all 0.3s;
+  }
+
+  /* Calculate Button */
+  .calc-btn {
+    margin-top: 24px;
+    width: 100%;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--accent2)));
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .calc-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.3s;
+  }
+
+  .calc-btn:hover::before { background: rgba(255,255,255,0.1); }
+  .calc-btn:active { transform: scale(0.98); }
+
+  .calc-btn-school { background: linear-gradient(135deg, #1a7a60, #6af7c5); }
+  .calc-btn-college { background: linear-gradient(135deg, #4a3aaa, #7c6af7); }
+  .calc-btn-university { background: linear-gradient(135deg, #7a5a1a, #f7c56a); }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 32px 0;
+  }
+
+  /* Tip Box */
+  .tip-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 20px;
+    font-size: 0.84rem;
+    color: var(--muted);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .tip-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* Animations */
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:none; } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes slideIn { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:none; } }
+  @keyframes pop { 0%,100% { transform:scale(1); } 50% { transform:scale(1.06); } }
+
+  .pop { animation: pop 0.3s ease; }
+
+  footer {
+    text-align: center;
+    padding: 40px 0 32px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 560px) {
+    .subjects-header { grid-template-columns: 1fr 90px 90px 36px; }
+    .subject-row { grid-template-columns: 1fr 90px 90px 36px; }
+    .result-section { grid-template-columns: 1fr; }
+    .meter-card { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">GradeWise</div>
+    <div class="tagline">GPA Calculator · School · College · University</div>
+  </header>
+
+  <div class="tab-switcher">
+    <button class="tab-btn school active" onclick="switchTab('school')">
+      <span class="tab-icon">🏫</span>School
+    </button>
+    <button class="tab-btn college" onclick="switchTab('college')">
+      <span class="tab-icon">🎓</span>College
+    </button>
+    <button class="tab-btn university" onclick="switchTab('university')">
+      <span class="tab-icon">🏛️</span>University
+    </button>
+  </div>
+
+  <!-- SCHOOL PANEL -->
+  <div id="panel-school" class="calc-panel active">
+    <div class="scale-bar">
+      <span class="scale-label">Grading Scale:</span>
+      <div class="scale-items">
+        <span class="scale-item" style="background:rgba(106,247,197,0.1);color:#6af7c5;">A+ = 4.0</span>
+        <span class="scale-item" style="background:rgba(106,247,197,0.08);color:#6af7c5;">A = 4.0</span>
+        <span class="scale-item" style="background:rgba(106,247,197,0.06);color:#6af7c5;">B = 3.0</span>
+        <span class="scale-item" style="background:rgba(106,247,197,0.04);color:#6af7c5;">C = 2.0</span>
+        <span class="scale-item" style="background:rgba(106,247,197,0.02);color:#6af7c5;">D = 1.0</span>
+        <span class="scale-item" style="background:rgba(247,106,106,0.08);color:#f76a6a;">F = 0.0</span>
+      </div>
+    </div>
+
+    <div class="subjects-header">
+      <div>Subject Name</div><div>Grade</div><div>Credits</div><div></div>
+    </div>
+    <div class="subjects-list" id="school-list"></div>
+    <button class="add-row-btn" onclick="addRow('school')">
+      <span>＋</span> Add Subject
+    </button>
+
+    <button class="calc-btn calc-btn-school" onclick="calculate('school')">
+      Calculate GPA
+    </button>
+
+    <div class="result-section" id="school-results" style="display:none">
+      <div class="result-card" style="--panel-color: var(--school-color)">
+        <div class="result-label">Your GPA</div>
+        <div class="result-value" id="school-gpa">—</div>
+        <div class="result-sub">out of 4.0</div>
+      </div>
+      <div class="result-card" style="--panel-color: var(--school-color)">
+        <div class="result-label">Letter Grade</div>
+        <div class="result-value" id="school-letter" style="font-size:2rem;margin-top:8px;">—</div>
+        <div class="result-sub" id="school-remark">—</div>
+      </div>
+      <div class="result-card meter-card" style="--panel-color: var(--school-color)">
+        <div class="meter-label-row">
+          <span class="result-label" style="margin:0">GPA Progress</span>
+          <span class="grade-badge" id="school-badge">—</span>
+        </div>
+        <div class="meter-bar-bg"><div class="meter-bar-fill" id="school-meter"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:0.75rem;color:var(--muted)">
+          <span>0.0</span><span>1.0</span><span>2.0</span><span>3.0</span><span>4.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span>School GPA uses a standard 4.0 scale. Most schools consider 3.0+ as good standing, and 3.7+ as honor roll. Add multiple subjects for a weighted average.</span>
+    </div>
+  </div>
+
+  <!-- COLLEGE PANEL -->
+  <div id="panel-college" class="calc-panel">
+    <div class="scale-bar">
+      <span class="scale-label">Grading Scale:</span>
+      <div class="scale-items">
+        <span class="scale-item" style="background:rgba(124,106,247,0.1);color:#7c6af7;">O = 10</span>
+        <span class="scale-item" style="background:rgba(124,106,247,0.08);color:#7c6af7;">A+ = 9</span>
+        <span class="scale-item" style="background:rgba(124,106,247,0.06);color:#7c6af7;">A = 8</span>
+        <span class="scale-item" style="background:rgba(124,106,247,0.04);color:#7c6af7;">B+ = 7</span>
+        <span class="scale-item" style="background:rgba(124,106,247,0.02);color:#7c6af7;">B = 6</span>
+        <span class="scale-item" style="background:rgba(124,106,247,0.02);color:#7c6af7;">C = 5</span>
+        <span class="scale-item" style="background:rgba(247,106,106,0.08);color:#f76a6a;">F = 0</span>
+      </div>
+    </div>
+
+    <div class="subjects-header">
+      <div>Subject Name</div><div>Grade</div><div>Credits</div><div></div>
+    </div>
+    <div class="subjects-list" id="college-list"></div>
+    <button class="add-row-btn" onclick="addRow('college')">
+      <span>＋</span> Add Subject
+    </button>
+
+    <button class="calc-btn calc-btn-college" onclick="calculate('college')">
+      Calculate CGPA
+    </button>
+
+    <div class="result-section" id="college-results" style="display:none">
+      <div class="result-card" style="--panel-color: var(--college-color)">
+        <div class="result-label">Your CGPA</div>
+        <div class="result-value" id="college-gpa">—</div>
+        <div class="result-sub">out of 10.0</div>
+      </div>
+      <div class="result-card" style="--panel-color: var(--college-color)">
+        <div class="result-label">Grade Class</div>
+        <div class="result-value" id="college-letter" style="font-size:1.3rem;margin-top:8px;">—</div>
+        <div class="result-sub" id="college-remark">—</div>
+      </div>
+      <div class="result-card meter-card" style="--panel-color: var(--college-color)">
+        <div class="meter-label-row">
+          <span class="result-label" style="margin:0">CGPA Progress</span>
+          <span class="grade-badge" id="college-badge">—</span>
+        </div>
+        <div class="meter-bar-bg"><div class="meter-bar-fill" id="college-meter" style="background:linear-gradient(90deg,var(--college-color),#c06af7)"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:0.75rem;color:var(--muted)">
+          <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span>College CGPA uses a 10-point scale (common in India). Outstanding (O) = 10, followed by A+ = 9, A = 8, B+ = 7, B = 6, C = 5. Above 7.5 is typically First Class with Distinction.</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY PANEL -->
+  <div id="panel-university" class="calc-panel">
+    <div class="scale-bar">
+      <span class="scale-label">Grading Scale:</span>
+      <div class="scale-items">
+        <span class="scale-item" style="background:rgba(247,197,106,0.1);color:#f7c56a;">A+ = 4.0</span>
+        <span class="scale-item" style="background:rgba(247,197,106,0.08);color:#f7c56a;">A = 4.0</span>
+        <span class="scale-item" style="background:rgba(247,197,106,0.06);color:#f7c56a;">A− = 3.7</span>
+        <span class="scale-item" style="background:rgba(247,197,106,0.05);color:#f7c56a;">B+ = 3.3</span>
+        <span class="scale-item" style="background:rgba(247,197,106,0.04);color:#f7c56a;">B = 3.0</span>
+        <span class="scale-item" style="background:rgba(247,197,106,0.03);color:#f7c56a;">B− = 2.7</span>
+        <span class="scale-item" style="background:rgba(247,197,106,0.02);color:#f7c56a;">C+ = 2.3</span>
+        <span class="scale-item" style="background:rgba(247,106,106,0.08);color:#f76a6a;">F = 0.0</span>
+      </div>
+    </div>
+
+    <div class="subjects-header">
+      <div>Course Name</div><div>Grade</div><div>Credits</div><div></div>
+    </div>
+    <div class="subjects-list" id="university-list"></div>
+    <button class="add-row-btn" onclick="addRow('university')">
+      <span>＋</span> Add Course
+    </button>
+
+    <button class="calc-btn calc-btn-university" onclick="calculate('university')">
+      Calculate GPA
+    </button>
+
+    <div class="result-section" id="university-results" style="display:none">
+      <div class="result-card" style="--panel-color: var(--uni-color)">
+        <div class="result-label">Your GPA</div>
+        <div class="result-value" id="university-gpa">—</div>
+        <div class="result-sub">out of 4.0</div>
+      </div>
+      <div class="result-card" style="--panel-color: var(--uni-color)">
+        <div class="result-label">Latin Honor</div>
+        <div class="result-value" id="university-letter" style="font-size:1rem;margin-top:10px;">—</div>
+        <div class="result-sub" id="university-remark">—</div>
+      </div>
+      <div class="result-card meter-card" style="--panel-color: var(--uni-color)">
+        <div class="meter-label-row">
+          <span class="result-label" style="margin:0">GPA Progress</span>
+          <span class="grade-badge" id="university-badge">—</span>
+        </div>
+        <div class="meter-bar-bg"><div class="meter-bar-fill" id="university-meter" style="background:linear-gradient(90deg,#c08a1a,var(--uni-color))"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:0.75rem;color:var(--muted)">
+          <span>0.0</span><span>1.0</span><span>2.0</span><span>3.0</span><span>4.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span>University GPA uses a 4.0 scale with +/− modifiers. Summa Cum Laude: 3.9+, Magna Cum Laude: 3.7+, Cum Laude: 3.5+. Weighted by credit hours per course.</span>
+    </div>
+  </div>
+
+</div>
+
+<footer>GradeWise · Built with ♥ · Your grades, beautifully calculated</footer>
+
+<script>
+const gradeScales = {
+  school: {
+    options: ['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','F'],
+    points: {'A+':4.0,'A':4.0,'A-':3.7,'B+':3.3,'B':3.0,'B-':2.7,'C+':2.3,'C':2.0,'C-':1.7,'D+':1.3,'D':1.0,'F':0.0},
+    maxGPA: 4.0,
+  },
+  college: {
+    options: ['O','A+','A','B+','B','C','P','F'],
+    points: {'O':10,'A+':9,'A':8,'B+':7,'B':6,'C':5,'P':4,'F':0},
+    maxGPA: 10.0,
+  },
+  university: {
+    options: ['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'],
+    points: {'A+':4.0,'A':4.0,'A-':3.7,'B+':3.3,'B':3.0,'B-':2.7,'C+':2.3,'C':2.0,'C-':1.7,'D+':1.3,'D':1.0,'D-':0.7,'F':0.0},
+    maxGPA: 4.0,
+  }
+};
+
+const placeholders = {
+  school: ['Mathematics','English','Science','History','Art','Physical Education'],
+  college: ['Data Structures','Calculus','Physics','Chemistry','Engineering Drawing','Communication'],
+  university: ['Algorithms','Linear Algebra','Thermodynamics','Economics','Research Methods','Statistics']
+};
+
+let rowCount = { school: 0, college: 0, university: 0 };
+
+function getGradeOptions(type) {
+  return gradeScales[type].options.map(g => `<option value="${g}">${g}</option>`).join('');
+}
+
+function addRow(type, name='', grade='', credits='') {
+  const list = document.getElementById(`${type}-list`);
+  const id = rowCount[type]++;
+  const ph = placeholders[type][id % placeholders[type].length];
+  const row = document.createElement('div');
+  row.className = 'subject-row';
+  row.id = `${type}-row-${id}`;
+  row.innerHTML = `
+    <input type="text" class="input-field" placeholder="${ph}" value="${name}">
+    <select class="input-field">${getGradeOptions(type)}</select>
+    <input type="number" class="input-field" placeholder="3" min="1" max="6" value="${credits}" step="1">
+    <button class="remove-btn" onclick="removeRow('${type}','${type}-row-${id}')">×</button>
+  `;
+  if (grade) row.querySelector('select').value = grade;
+  list.appendChild(row);
+}
+
+function removeRow(type, rowId) {
+  const row = document.getElementById(rowId);
+  if (row) row.remove();
+}
+
+function calculate(type) {
+  const list = document.getElementById(`${type}-list`);
+  const rows = list.querySelectorAll('.subject-row');
+  const scale = gradeScales[type];
+  let totalPoints = 0, totalCredits = 0;
+
+  rows.forEach(row => {
+    const grade = row.querySelector('select').value;
+    const credits = parseFloat(row.querySelector('input[type=number]').value) || 1;
+    const pts = scale.points[grade] ?? 0;
+    totalPoints += pts * credits;
+    totalCredits += credits;
+  });
+
+  if (totalCredits === 0) { alert('Please add at least one subject.'); return; }
+
+  const gpa = (totalPoints / totalCredits).toFixed(2);
+  const pct = (gpa / scale.maxGPA) * 100;
+
+  document.getElementById(`${type}-gpa`).textContent = gpa;
+  document.getElementById(`${type}-gpa`).classList.add('pop');
+  setTimeout(() => document.getElementById(`${type}-gpa`).classList.remove('pop'), 400);
+
+  const { letter, remark } = getLetterGrade(type, parseFloat(gpa));
+  document.getElementById(`${type}-letter`).textContent = letter;
+  document.getElementById(`${type}-remark`).textContent = remark;
+  document.getElementById(`${type}-badge`).textContent = `${gpa} / ${scale.maxGPA}`;
+  document.getElementById(`${type}-meter`).style.width = `${Math.min(pct, 100)}%`;
+
+  const results = document.getElementById(`${type}-results`);
+  results.style.display = 'grid';
+  results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function getLetterGrade(type, gpa) {
+  if (type === 'school' || type === 'university') {
+    if (gpa >= 3.9) return { letter: 'A+', remark: 'Summa Cum Laude 🏆' };
+    if (gpa >= 3.7) return { letter: 'A', remark: 'Magna Cum Laude ⭐' };
+    if (gpa >= 3.5) return { letter: 'A−', remark: 'Cum Laude 🎖️' };
+    if (gpa >= 3.0) return { letter: 'B+', remark: 'Good Standing 👍' };
+    if (gpa >= 2.7) return { letter: 'B', remark: 'Above Average' };
+    if (gpa >= 2.3) return { letter: 'B−', remark: 'Average' };
+    if (gpa >= 2.0) return { letter: 'C', remark: 'Satisfactory' };
+    if (gpa >= 1.0) return { letter: 'D', remark: 'Needs Improvement' };
+    return { letter: 'F', remark: 'Failing' };
+  }
+  // College (10-point scale)
+  if (gpa >= 9.0) return { letter: 'O', remark: 'Outstanding 🏆' };
+  if (gpa >= 8.0) return { letter: 'A+', remark: 'Excellent ⭐' };
+  if (gpa >= 7.0) return { letter: 'A', remark: 'Very Good 🎖️' };
+  if (gpa >= 6.0) return { letter: 'B+', remark: 'First Class 👍' };
+  if (gpa >= 5.5) return { letter: 'B', remark: 'Second Class' };
+  if (gpa >= 5.0) return { letter: 'C', remark: 'Pass Class' };
+  return { letter: 'F', remark: 'Fail — Needs Improvement' };
+}
+
+function switchTab(type) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab-btn.${type}`).classList.add('active');
+  document.getElementById(`panel-${type}`).classList.add('active');
+}
+
+// Initialize with 3 rows each
+['school', 'college', 'university'].forEach(type => {
+  addRow(type); addRow(type); addRow(type);
+});
+</script>
+</body>
+</html>

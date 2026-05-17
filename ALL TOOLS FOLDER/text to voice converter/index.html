@@ -1,0 +1,1077 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VoiceCraft TTS — Playlist Edition</title>
+<style>
+:root {
+  --bg:      #0d0f1a;
+  --surface: #141728;
+  --surface2:#1c2035;
+  --surface3:#222640;
+  --border:  #2a2f4a;
+  --accent:  #6c63ff;
+  --accent2: #00d4ff;
+  --accent3: #ff6584;
+  --text:    #e8eaf6;
+  --muted:   #8892b0;
+  --success: #00e5a0;
+  --warning: #ffb347;
+  --danger:  #ff6584;
+  --radius:  14px;
+  --shadow:  0 8px 32px rgba(0,0,0,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ── FOCUS OVERLAY ── */
+#focusOverlay{display:none;position:fixed;inset:0;background:rgba(5,7,15,0.93);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;}
+#focusOverlay.active{display:flex;}
+#focusBox{width:min(820px,92vw);background:var(--surface);border:1px solid var(--accent);border-radius:20px;padding:36px;box-shadow:0 0 70px rgba(108,99,255,0.3);position:relative;}
+#focusClose{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;transition:color .2s;}
+#focusClose:hover{color:var(--accent3);}
+#focusLabel{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;}
+#focusQueueInfo{font-size:13px;color:var(--warning);margin-bottom:16px;font-weight:600;}
+#focusTextScroll{max-height:240px;overflow-y:auto;line-height:2.1;font-size:20px;scroll-behavior:smooth;}
+#focusTextScroll::-webkit-scrollbar{width:4px;}
+#focusTextScroll::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px;}
+.focus-progress-wrap{margin-top:18px;background:var(--border);border-radius:6px;height:5px;overflow:hidden;}
+#focusProgress{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .3s;border-radius:6px;}
+
+/* ── HEADER ── */
+header{background:linear-gradient(135deg,#141728,#1a1f38);border-bottom:1px solid var(--border);padding:16px 28px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);}
+.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.logo-text h1{font-size:19px;font-weight:700;}
+.logo-text p{font-size:11px;color:var(--muted);}
+.header-badges{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:.5px;}
+.b-purple{background:rgba(108,99,255,.2);color:var(--accent);border:1px solid var(--accent);}
+.b-cyan{background:rgba(0,212,255,.15);color:var(--accent2);border:1px solid var(--accent2);}
+.b-green{background:rgba(0,229,160,.15);color:var(--success);border:1px solid var(--success);}
+
+/* ── MAIN LAYOUT ── */
+.main{display:grid;grid-template-columns:1fr 320px 300px;gap:18px;padding:20px 24px;max-width:1600px;margin:0 auto;}
+@media(max-width:1200px){.main{grid-template-columns:1fr 300px;}}
+@media(max-width:800px){.main{grid-template-columns:1fr;}}
+
+/* ── PANELS ── */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
+.panel-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:13px;display:flex;align-items:center;gap:8px;}
+.panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.panel-title .dot-warn{background:var(--warning);}
+.panel-title .dot-green{background:var(--success);}
+.panel-title .pill{margin-left:auto;font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(108,99,255,.2);color:var(--accent);font-weight:700;letter-spacing:0;}
+
+/* ── CANVAS ── */
+#waveCanvas{width:100%;height:76px;background:rgba(0,0,0,.3);border-radius:10px;display:block;border:1px solid var(--border);}
+
+/* ── TEXTAREA ── */
+#textInput{width:100%;min-height:140px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;line-height:1.8;padding:12px 14px;resize:vertical;transition:border-color .2s;font-family:inherit;}
+#textInput:focus{outline:none;border-color:var(--accent);}
+
+/* ── ETR STRIP ── */
+#etrStrip{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(0,212,255,.08));border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
+.etr-item{display:flex;flex-direction:column;gap:1px;}
+.etr-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.etr-value{font-size:20px;font-weight:700;color:var(--accent2);}
+.etr-unit{font-size:10px;color:var(--muted);}
+#langBadge{margin-left:auto;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;background:rgba(0,229,160,.15);color:var(--success);border:1px solid var(--success);}
+
+/* ── SLIDERS ── */
+.slider-row{display:flex;flex-direction:column;gap:7px;}
+.slider-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);}
+.slider-label strong{color:var(--text);}
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;border-radius:4px;background:var(--border);outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(108,99,255,.6);}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:9px 16px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;letter-spacing:.3px;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;box-shadow:0 4px 18px rgba(108,99,255,.4);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(108,99,255,.55);}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.btn-danger{background:rgba(255,101,132,.15);color:var(--accent3);border:1px solid var(--accent3);}
+.btn-danger:hover{background:rgba(255,101,132,.28);}
+.btn-success{background:rgba(0,229,160,.14);color:var(--success);border:1px solid var(--success);}
+.btn-success:hover{background:rgba(0,229,160,.26);}
+.btn-warn{background:rgba(255,179,71,.14);color:var(--warning);border:1px solid var(--warning);}
+.btn-warn:hover{background:rgba(255,179,71,.26);}
+.btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important;}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px;}
+
+/* ── VOICE SELECT ── */
+select{width:100%;padding:9px 12px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238892b0' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+select:focus{outline:none;border-color:var(--accent);
+const voiceSelect = document.querySelector('select'); // Your dropdown
+let voices = [];
+
+function populateVoiceList() {
+  // Get the available voices from the browser
+  voices = window.speechSynthesis.getVoices();
+  
+  // Clear the existing options
+  voiceSelect.innerHTML = '';
+
+  voices.forEach((voice) => {
+    const option = document.createElement('option');
+    
+    // THE FIX: Use the specific tag format you requested
+    option.textContent = `${voice.name} (${voice.lang})`;
+    
+    // Optional: Add attributes to help the code find the voice later
+    option.setAttribute('data-lang', voice.lang);
+    option.setAttribute('data-name', voice.name);
+    
+    voiceSelect.appendChild(option);
+  });
+}
+
+// Execute when voices are loaded
+window.speechSynthesis.onvoiceschanged = populateVoiceList;
+}}
+
+/* ── PRESETS ── */
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.preset-btn{padding:9px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:11px;cursor:pointer;text-align:left;transition:all .2s;}
+.preset-btn:hover{border-color:var(--accent);background:rgba(108,99,255,.1);}
+.preset-btn .pname{font-weight:700;font-size:12px;display:block;margin-bottom:1px;}
+.preset-btn .pmeta{color:var(--muted);font-size:10px;}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{background:var(--border);border-radius:6px;height:5px;overflow:hidden;}
+#progressBar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .3s;border-radius:6px;}
+
+/* ── WORD HIGHLIGHT ── */
+#highlightBox{min-height:100px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;line-height:2;overflow-y:auto;max-height:180px;}
+.word-span{cursor:default;transition:background .12s;}
+.word-span.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:4px;padding:1px 3px;}
+.word-span.done{color:var(--muted);}
+
+/* ── SENTENCE TRACKER ── */
+#sentenceTracker{background:var(--surface2);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.7;border:1px solid var(--border);min-height:50px;color:var(--muted);}
+#sentenceTracker .current-sent{color:var(--warning);font-weight:600;}
+
+/* ── EXPORT STATUS ── */
+#exportStatus{padding:9px 12px;border-radius:10px;font-size:12px;background:rgba(0,229,160,.1);color:var(--success);border:1px solid var(--success);display:none;}
+#recIndicator{width:9px;height:9px;border-radius:50%;background:var(--accent3);display:none;animation:blink 1s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ════════════════════════════════════
+   PLAYLIST PANEL
+════════════════════════════════════ */
+#playlistPanel{display:flex;flex-direction:column;gap:0;}
+
+/* Add-to-queue area */
+.queue-add{display:flex;flex-direction:column;gap:8px;}
+#queueInput{width:100%;min-height:80px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;line-height:1.7;padding:10px 12px;resize:vertical;font-family:inherit;transition:border-color .2s;}
+#queueInput:focus{outline:none;border-color:var(--success);}
+#queueInput::placeholder{color:var(--muted);}
+.add-row{display:flex;gap:8px;align-items:center;}
+#queueTitleInput{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:7px 10px;font-family:inherit;}
+#queueTitleInput:focus{outline:none;border-color:var(--success);}
+#queueTitleInput::placeholder{color:var(--muted);}
+
+/* Queue stats bar */
+.queue-stats{display:flex;align-items:center;gap:10px;padding:8px 0 2px;}
+.qs-item{font-size:11px;color:var(--muted);}
+.qs-item strong{color:var(--text);}
+.qs-sep{width:1px;height:12px;background:var(--border);}
+
+/* Queue progress indicator */
+#queueProgressBar{background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(0,212,255,.1));border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:none;}
+#queueProgressBar.visible{display:block;}
+.qpb-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.qpb-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.qpb-counter{font-size:22px;font-weight:800;color:var(--accent2);letter-spacing:-1px;}
+.qpb-title{font-size:12px;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.qpb-track{background:var(--border);border-radius:6px;height:5px;overflow:hidden;}
+.qpb-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .4s;border-radius:6px;}
+
+/* The queue list */
+#queueList{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow-y:auto;padding-right:2px;}
+#queueList::-webkit-scrollbar{width:4px;}
+#queueList::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+#queueList:empty::after{content:'No items in queue — add some snippets above';display:block;text-align:center;color:var(--muted);font-size:12px;padding:28px 10px;border:1px dashed var(--border);border-radius:10px;}
+
+/* Queue item */
+.q-item{
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;cursor:default;
+  transition:border-color .2s, background .2s, box-shadow .2s;
+  position:relative;user-select:none;
+}
+.q-item:hover{border-color:var(--border);background:var(--surface3);}
+.q-item.q-active{border-color:var(--accent);background:rgba(108,99,255,.12);box-shadow:0 0 12px rgba(108,99,255,.2);}
+.q-item.q-done{border-color:var(--success);background:rgba(0,229,160,.06);}
+.q-item.q-dragging{opacity:.45;border-style:dashed;}
+.q-item.q-dragover{border-color:var(--accent2);background:rgba(0,212,255,.1);}
+
+.q-item-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.q-drag-handle{color:var(--muted);font-size:14px;cursor:grab;flex-shrink:0;line-height:1;transition:color .15s;}
+.q-drag-handle:active{cursor:grabbing;}
+.q-item:hover .q-drag-handle{color:var(--text);}
+.q-num{width:20px;height:20px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;}
+.q-item.q-active .q-num{background:var(--accent);color:#fff;}
+.q-item.q-done .q-num{background:var(--success);color:#000;}
+.q-title{flex:1;font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-item-actions{display:flex;gap:4px;opacity:0;transition:opacity .2s;}
+.q-item:hover .q-item-actions{opacity:1;}
+.q-icon-btn{background:none;border:none;cursor:pointer;font-size:13px;padding:2px 4px;border-radius:5px;transition:background .15s;color:var(--muted);}
+.q-icon-btn:hover{background:var(--border);color:var(--text);}
+.q-icon-btn.del:hover{color:var(--accent3);}
+.q-icon-btn.play-now:hover{color:var(--accent2);}
+
+.q-preview{font-size:11px;color:var(--muted);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.q-meta{display:flex;gap:10px;margin-top:5px;}
+.q-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:var(--border);color:var(--muted);font-weight:600;}
+.q-item.q-active .q-tag.playing{background:rgba(108,99,255,.25);color:var(--accent);}
+.q-item.q-done .q-tag.done-tag{background:rgba(0,229,160,.2);color:var(--success);}
+
+/* queue controls */
+.queue-controls{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ── UTIL ── */
+.col-gap{display:flex;flex-direction:column;gap:12px;}
+.col-gap-16{display:flex;flex-direction:column;gap:16px;}
+hr.sep{border:none;border-top:1px solid var(--border);margin:4px 0;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ FOCUS OVERLAY ══════════ -->
+<div id="focusOverlay">
+  <div id="focusBox">
+    <button id="focusClose" onclick="exitFocus()">✕</button>
+    <div id="focusLabel">🎧 Focus Mode — Now Playing</div>
+    <div id="focusQueueInfo"></div>
+    <div id="focusTextScroll"></div>
+    <div class="focus-progress-wrap"><div id="focusProgress"></div></div>
+  </div>
+</div>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="logo-icon">🔊</div>
+  <div class="logo-text">
+    <h1>VoiceCraft TTS</h1>
+    <p>Playlist Edition — Advanced Text-to-Speech Converter</p>
+  </div>
+  <div class="header-badges">
+    <span class="badge b-purple">Web Speech API</span>
+    <span class="badge b-cyan">Canvas Waveform</span>
+    <span class="badge b-green">Playlist Queue</span>
+  </div>
+</header>
+
+<!-- ══════════ MAIN GRID ══════════ -->
+<div class="main">
+
+  <!-- ────── LEFT: EDITOR + PLAYBACK ────── -->
+  <div class="col-gap-16">
+
+    <!-- Waveform -->
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span>Live Waveform</div>
+      <canvas id="waveCanvas"></canvas>
+    </div>
+
+    <!-- Text Input -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Input Text</div>
+      <textarea id="textInput" placeholder="Type or paste text here, then ▶ Play or ➕ Add to Queue…&#10;&#10;Supports: English, Hindi (हिन्दी), Bengali (বাংলা), Arabic (مرحبا), Chinese (你好), Japanese, Korean, Russian, Thai, Spanish, French, German…" oninput="onTextChange()"></textarea>
+      <div id="etrStrip">
+        <div class="etr-item"><span class="etr-label">Words</span><span class="etr-value" id="wordCount">0</span></div>
+        <div class="etr-item"><span class="etr-label">Sentences</span><span class="etr-value" id="sentCount">0</span></div>
+        <div class="etr-item"><span class="etr-label">Est. Read Time</span><span class="etr-value" id="etrValue">0:00</span><span class="etr-unit">at current speed</span></div>
+        <div class="etr-item"><span class="etr-label">Chars</span><span class="etr-value" id="charCount">0</span></div>
+        <div id="langBadge">🌐 Auto</div>
+      </div>
+    </div>
+
+    <!-- Playback Controls -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Playback</div>
+      <div class="progress-wrap"><div id="progressBar"></div></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="playBtn" onclick="playSingle()">▶ Play</button>
+        <button class="btn btn-secondary" id="pauseBtn" onclick="pauseResume()" disabled>⏸ Pause</button>
+        <button class="btn btn-danger" onclick="stopAll()">⏹ Stop</button>
+        <button class="btn btn-secondary" onclick="toggleFocus()" id="focusBtn">🎯 Focus</button>
+        <div id="recIndicator" title="Recording…"></div>
+        <button class="btn btn-success btn-sm" id="exportBtn" onclick="startExport()">⬇ Export</button>
+      </div>
+      <div id="exportStatus"></div>
+    </div>
+
+    <!-- Word Highlighting + Sentence Tracker -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Word Highlighting</div>
+      <div id="highlightBox"><span style="color:var(--muted);font-size:13px;">Words will highlight as they are spoken…</span></div>
+      <hr class="sep"/>
+      <div class="panel-title"><span class="dot dot-warn"></span>Current Sentence</div>
+      <div id="sentenceTracker">Sentence tracker will appear here when playing…</div>
+    </div>
+
+  </div>
+
+  <!-- ────── MIDDLE: VOICE + CONTROLS ────── -->
+  <div class="col-gap-16">
+
+    <!-- Voice -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Voice Selection</div>
+      <select id="voiceSelect" onchange="onVoiceManualChange()"><option>Loading voices…</option></select>
+    </div>
+
+    <!-- Controls -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Controls</div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Speed / Rate</span><strong id="rateVal">1.0×</strong></div>
+        <input type="range" id="rateSlider" min="0.3" max="2.5" step="0.05" value="1.0" oninput="updateSliders()"/>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Pitch</span><strong id="pitchVal">1.0</strong></div>
+        <input type="range" id="pitchSlider" min="0.1" max="2.0" step="0.05" value="1.0" oninput="updateSliders()"/>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label"><span>Volume</span><strong id="volVal">100%</strong></div>
+        <input type="range" id="volSlider" min="0" max="1" step="0.05" value="1.0" oninput="updateSliders()"/>
+      </div>
+    </div>
+
+    <!-- Presets -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Voice Presets</div>
+      <div class="preset-grid" id="presetGrid"></div>
+    </div>
+
+    <!-- Auto Language -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot dot-green"></span>Auto Language Detection</div>
+      <div id="detectedLangInfo" style="font-size:12px;color:var(--text);background:var(--surface2);border-radius:8px;padding:9px 12px;border:1px solid var(--border);">No text entered yet.</div>
+    </div>
+
+    <!-- Tips -->
+    <div class="panel col-gap">
+      <div class="panel-title"><span class="dot"></span>Quick Tips</div>
+      <div style="font-size:11px;color:var(--muted);line-height:2">
+        ➕ <strong style="color:var(--text)">Add to Queue</strong> from the editor or the playlist panel<br/>
+        ⠿ <strong style="color:var(--text)">Drag handle</strong> to reorder queue items<br/>
+        ▶▶ <strong style="color:var(--text)">Play Queue</strong> auto-advances when each item ends<br/>
+        🎯 <strong style="color:var(--text)">Focus Mode</strong> shows queue title + position<br/>
+        ✏️ <strong style="color:var(--text)">Click item</strong> to load it into the editor
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ────── RIGHT: PLAYLIST QUEUE ────── -->
+  <div class="panel col-gap" id="playlistPanel">
+
+    <div class="panel-title">
+      <span class="dot dot-green"></span>Playlist Queue
+      <span class="pill" id="queueCountPill">0 items</span>
+    </div>
+
+    <!-- Queue Progress Indicator -->
+    <div id="queueProgressBar">
+      <div class="qpb-top">
+        <span class="qpb-label">Now Playing</span>
+        <span class="qpb-counter" id="qpbCounter">0 / 0</span>
+      </div>
+      <div class="qpb-title" id="qpbTitle">—</div>
+      <div class="qpb-track"><div class="qpb-fill" id="qpbFill"></div></div>
+    </div>
+
+    <!-- Add to queue -->
+    <div class="queue-add">
+      <div class="panel-title" style="margin-bottom:6px;"><span class="dot dot-green"></span>Add Snippet</div>
+      <div class="add-row">
+        <input type="text" id="queueTitleInput" placeholder="Title (optional)…" maxlength="60"/>
+        <button class="btn btn-success btn-sm" onclick="addCurrentToQueue()">➕ Add Current</button>
+      </div>
+      <textarea id="queueInput" placeholder="…or type / paste a new snippet here and click ➕ Add"></textarea>
+      <button class="btn btn-success" onclick="addCustomToQueue()" style="width:100%;justify-content:center;">➕ Add Snippet to Queue</button>
+    </div>
+
+    <hr class="sep"/>
+
+    <!-- Queue stats -->
+    <div class="queue-stats">
+      <span class="qs-item">Total: <strong id="qsTotalItems">0</strong></span>
+      <span class="qs-sep"></span>
+      <span class="qs-item">Done: <strong id="qsDoneItems">0</strong></span>
+      <span class="qs-sep"></span>
+      <span class="qs-item">Est: <strong id="qsTotalTime">0:00</strong></span>
+    </div>
+
+    <!-- Queue controls -->
+    <div class="queue-controls">
+      <button class="btn btn-primary btn-sm" id="playQueueBtn" onclick="playQueue()">▶▶ Play Queue</button>
+      <button class="btn btn-secondary btn-sm" id="skipBtn" onclick="skipToNext()" disabled>⏭ Skip</button>
+      <button class="btn btn-secondary btn-sm" onclick="resetQueue()">↺ Reset</button>
+      <button class="btn btn-danger btn-sm" onclick="clearQueue()">🗑 Clear</button>
+    </div>
+
+    <hr class="sep"/>
+
+    <!-- The list -->
+    <div id="queueList"></div>
+
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// GLOBAL STATE
+// ═══════════════════════════════════════════════════════
+const synth = window.speechSynthesis;
+let voices        = [];
+let utterance     = null;
+let words         = [];
+let wordSpans     = [];
+let sentences     = [];
+let speaking      = false;
+let paused        = false;
+let voiceManualOverride = false;
+let mediaRecorder = null;
+let audioChunks   = [];
+let audioCtx      = null;
+
+// ── Playlist state ──
+let queue         = [];          // [{id, title, text, done}]
+let queuePlaying  = false;
+let queueIndex    = -1;          // current item index while playing queue
+let dragSrcIdx    = null;        // drag-and-drop source
+
+// ── Waveform ──
+let wavePhase     = 0;
+let waveAnimating = false;
+let ampCurrent    = 0;
+let animFrameId   = null;
+
+// ═══════════════════════════════════════════════════════
+// PRESETS
+// ═══════════════════════════════════════════════════════
+const PRESETS = [
+  {name:'📖 Narrator',  rate:0.95,pitch:1.0, vol:1.0, desc:'Calm storytelling'},
+  {name:'📰 News',      rate:1.1, pitch:0.95,vol:1.0, desc:'Crisp & clear'},
+  {name:'🚀 Turbo',     rate:2.0, pitch:1.1, vol:0.9, desc:'Speed reading'},
+  {name:'🎭 Dramatic',  rate:0.8, pitch:0.75,vol:1.0, desc:'Deep & slow'},
+  {name:'🧒 Friendly',  rate:1.05,pitch:1.5, vol:1.0, desc:'Upbeat & high'},
+  {name:'🤖 Robot',     rate:1.3, pitch:0.5, vol:0.95,desc:'Synthetic feel'},
+];
+function buildPresets(){
+  const g=document.getElementById('presetGrid');g.innerHTML='';
+  PRESETS.forEach(p=>{
+    const b=document.createElement('button');b.className='preset-btn';
+    b.innerHTML=`<span class="pname">${p.name}</span><span class="pmeta">Rate ${p.rate}× · Pitch ${p.pitch}</span>`;
+    b.onclick=()=>applyPreset(p);g.appendChild(b);
+  });
+}
+function applyPreset(p){
+  document.getElementById('rateSlider').value=p.rate;
+  document.getElementById('pitchSlider').value=p.pitch;
+  document.getElementById('volSlider').value=p.vol;
+  updateSliders();
+}
+
+// ═══════════════════════════════════════════════════════
+// SLIDERS + ETR
+// ═══════════════════════════════════════════════════════
+function updateSliders(){
+  const r=parseFloat(document.getElementById('rateSlider').value);
+  const p=parseFloat(document.getElementById('pitchSlider').value);
+  const v=parseFloat(document.getElementById('volSlider').value);
+  document.getElementById('rateVal').textContent=r.toFixed(2)+'×';
+  document.getElementById('pitchVal').textContent=p.toFixed(2);
+  document.getElementById('volVal').textContent=Math.round(v*100)+'%';
+  computeETR();
+  updateQueueStats();
+}
+const AVG_WPM=150;
+function etrSecs(text,rate){
+  const wc=text.trim()?text.trim().split(/\s+/).length:0;
+  return wc/(AVG_WPM*(rate||1))*60;
+}
+function fmtTime(s){const m=Math.floor(s/60);return`${m}:${Math.floor(s%60).toString().padStart(2,'0')}`;}
+function computeETR(){
+  const text=document.getElementById('textInput').value;
+  const rate=parseFloat(document.getElementById('rateSlider').value);
+  const wc=text.trim()?text.trim().split(/\s+/).length:0;
+  const sc=text.trim()?text.split(/[.!?]+/).filter(s=>s.trim()).length:0;
+  document.getElementById('wordCount').textContent=wc;
+  document.getElementById('sentCount').textContent=sc;
+  document.getElementById('charCount').textContent=text.length;
+  document.getElementById('etrValue').textContent=fmtTime(etrSecs(text,rate));
+}
+
+// ═══════════════════════════════════════════════════════
+// VOICE LOADING
+// ═══════════════════════════════════════════════════════
+function loadVoices(){
+  voices=synth.getVoices();
+  if(!voices.length)return;
+  const sel=document.getElementById('voiceSelect');sel.innerHTML='';
+  voices.forEach((v,i)=>{
+    const o=document.createElement('option');o.value=i;
+    o.textContent=`${v.name} (${v.lang})`;sel.appendChild(o);
+  });
+  if(!voiceManualOverride)autoSelectVoice();
+}
+if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
+setTimeout(loadVoices,400);
+function onVoiceManualChange(){voiceManualOverride=true;}
+
+// ═══════════════════════════════════════════════════════
+// AUTO LANGUAGE DETECTION
+// ═══════════════════════════════════════════════════════
+const LANG_PATTERNS=[
+  {lang:'Hindi',  code:'hi',regex:/[\u0900-\u097F]/,flag:'🇮🇳'},
+  {lang:'Bengali',code:'bn',regex:/[\u0980-\u09FF]/,flag:'🇧🇩'},
+  {lang:'Arabic', code:'ar',regex:/[\u0600-\u06FF]/,flag:'🇸🇦'},
+  {lang:'Chinese',code:'zh',regex:/[\u4E00-\u9FFF]/,flag:'🇨🇳'},
+  {lang:'Japanese',code:'ja',regex:/[\u3040-\u30FF]/,flag:'🇯🇵'},
+  {lang:'Korean', code:'ko',regex:/[\uAC00-\uD7AF]/,flag:'🇰🇷'},
+  {lang:'Cyrillic',code:'ru',regex:/[\u0400-\u04FF]/,flag:'🇷🇺'},
+  {lang:'Greek',  code:'el',regex:/[\u0370-\u03FF]/,flag:'🇬🇷'},
+  {lang:'Thai',   code:'th',regex:/[\u0E00-\u0E7F]/,flag:'🇹🇭'},
+  {lang:'Spanish',code:'es',regex:/\b(el|la|los|las|es|está|son|que|por|con|una|uno)\b/i,flag:'🇪🇸'},
+  {lang:'French', code:'fr',regex:/\b(le|la|les|est|sont|dans|avec|pour|une|des)\b/i,flag:'🇫🇷'},
+  {lang:'German', code:'de',regex:/\b(der|die|das|und|ist|sind|nicht|mit|ich|sie)\b/i,flag:'🇩🇪'},
+  {lang:'English',code:'en',regex:/[a-zA-Z]/,flag:'🇺🇸'},
+];
+function detectLanguage(text){
+  for(const p of LANG_PATTERNS)if(p.regex.test(text))return p;
+  return{lang:'Unknown',code:'en',flag:'🌐'};
+}
+function autoSelectVoice(text){
+  const t=text||document.getElementById('textInput').value;
+  if(!t.trim()||!voices.length)return;
+  const d=detectLanguage(t);
+  document.getElementById('detectedLangInfo').innerHTML=
+    `${d.flag} Detected: <strong style="color:var(--accent2)">${d.lang}</strong> · <code style="color:var(--success)">${d.code}</code>`;
+  document.getElementById('langBadge').textContent=`${d.flag} ${d.lang}`;
+  if(voiceManualOverride)return;
+  const sel=document.getElementById('voiceSelect');
+  const idx=voices.findIndex(v=>v.lang.toLowerCase().startsWith(d.code.toLowerCase()));
+  if(idx>=0)sel.value=idx;
+}
+
+// ═══════════════════════════════════════════════════════
+// TEXT CHANGE
+// ═══════════════════════════════════════════════════════
+function onTextChange(){computeETR();autoSelectVoice();buildHighlightBox();}
+
+// ═══════════════════════════════════════════════════════
+// WORD HIGHLIGHT BOX
+// ═══════════════════════════════════════════════════════
+function buildHighlightBox(text){
+  const t=text!==undefined?text:document.getElementById('textInput').value;
+  words=t.trim().split(/\s+/).filter(Boolean);
+  sentences=t.split(/(?<=[.!?])\s+/).filter(s=>s.trim());
+  const box=document.getElementById('highlightBox');
+  if(!words.length){box.innerHTML='<span style="color:var(--muted);font-size:13px;">Words will highlight as they are spoken…</span>';wordSpans=[];return;}
+  box.innerHTML='';wordSpans=[];
+  let pos=0;
+  words.forEach((w,i)=>{
+    const sp=document.createElement('span');sp.className='word-span';
+    sp.textContent=w+' ';sp.dataset.idx=i;box.appendChild(sp);wordSpans.push(sp);
+  });
+}
+
+function highlightWord(idx,fullText){
+  wordSpans.forEach((sp,i)=>{
+    sp.classList.remove('active','done');
+    if(i===idx){sp.classList.add('active');sp.scrollIntoView({block:'nearest',behavior:'smooth'});updateFocusWord(i);}
+    else if(i<idx)sp.classList.add('done');
+  });
+}
+
+function updateSentenceTracker(charIdx,fullText){
+  const n=fullText.substring(0,charIdx).split(/[.!?]+/).length-1;
+  let html='';
+  sentences.forEach((s,i)=>{
+    if(i===n)html+=`<span class="current-sent">▶ ${s.trim()}</span><br/>`;
+    else if(i<n)html+=`<span style="color:var(--muted);text-decoration:line-through;font-size:11px">${s.trim()}</span><br/>`;
+  });
+  document.getElementById('sentenceTracker').innerHTML=html||'<span style="color:var(--muted)">Tracking…</span>';
+}
+
+// ═══════════════════════════════════════════════════════
+// CORE SPEECH ENGINE
+// ═══════════════════════════════════════════════════════
+function getVoiceSettings(){
+  return{
+    voice: voices[parseInt(document.getElementById('voiceSelect').value)]||null,
+    rate:  parseFloat(document.getElementById('rateSlider').value),
+    pitch: parseFloat(document.getElementById('pitchSlider').value),
+    volume:parseFloat(document.getElementById('volSlider').value),
+  };
+}
+
+function speakUtterance(text, onDone, onProgress){
+  synth.cancel();
+  buildHighlightBox(text);
+  autoSelectVoice(text);
+
+  utterance=new SpeechSynthesisUtterance(text);
+  const s=getVoiceSettings();
+  if(s.voice)utterance.voice=s.voice;
+  utterance.rate=s.rate; utterance.pitch=s.pitch; utterance.volume=s.volume;
+
+  let wordCharOffsets=[];
+  let pos=0;
+  words.forEach(w=>{const i=text.indexOf(w,pos);wordCharOffsets.push(i);pos=i+w.length;});
+
+  utterance.onboundary=e=>{
+    if(e.name==='word'){
+      const ci=e.charIndex;
+      let best=0,min=Infinity;
+      wordCharOffsets.forEach((o,i)=>{const d=Math.abs(o-ci);if(d<min){min=d;best=i;}});
+      highlightWord(best,text);
+      const pct=(ci/text.length)*100;
+      document.getElementById('progressBar').style.width=pct+'%';
+      document.getElementById('focusProgress').style.width=pct+'%';
+      if(queuePlaying)updateQueueProgressFill(pct);
+      if(onProgress)onProgress(pct);
+    }
+    if(e.name==='sentence')updateSentenceTracker(e.charIndex,text);
+  };
+
+  utterance.onstart=()=>{
+    speaking=true;paused=false;
+    document.getElementById('playBtn').disabled=true;
+    document.getElementById('pauseBtn').disabled=false;
+    document.getElementById('pauseBtn').textContent='⏸ Pause';
+    document.getElementById('skipBtn').disabled=!queuePlaying;
+    startWaveform();
+  };
+
+  utterance.onend=()=>{
+    speaking=false;paused=false;
+    document.getElementById('playBtn').disabled=false;
+    document.getElementById('pauseBtn').disabled=true;
+    document.getElementById('progressBar').style.width='100%';
+    document.getElementById('focusProgress').style.width='100%';
+    setTimeout(()=>{
+      document.getElementById('progressBar').style.width='0%';
+      document.getElementById('focusProgress').style.width='0%';
+    },1000);
+    stopWaveform();
+    wordSpans.forEach(s=>s.classList.remove('active','done'));
+    document.getElementById('sentenceTracker').innerHTML='Sentence tracker will appear here when playing…';
+    if(onDone)onDone();
+  };
+
+  utterance.onerror=e=>{console.warn('SpeechError',e);if(onDone)onDone();};
+  synth.speak(utterance);
+}
+
+// ═══════════════════════════════════════════════════════
+// SINGLE PLAY (editor text)
+// ═══════════════════════════════════════════════════════
+function playSingle(){
+  const text=document.getElementById('textInput').value.trim();
+  if(!text){alert('Please enter some text first.');return;}
+  queuePlaying=false;queueIndex=-1;
+  hideQueueProgress();
+  speakUtterance(text,null,null);
+}
+
+function pauseResume(){
+  if(!speaking&&!paused)return;
+  if(!paused){
+    synth.pause();paused=true;
+    document.getElementById('pauseBtn').textContent='▶ Resume';
+    stopWaveform();
+  }else{
+    synth.resume();paused=false;
+    document.getElementById('pauseBtn').textContent='⏸ Pause';
+    startWaveform();
+  }
+}
+
+function stopAll(){
+  synth.cancel();speaking=false;paused=false;queuePlaying=false;queueIndex=-1;
+  document.getElementById('playBtn').disabled=false;
+  document.getElementById('pauseBtn').disabled=true;
+  document.getElementById('pauseBtn').textContent='⏸ Pause';
+  document.getElementById('skipBtn').disabled=true;
+  document.getElementById('progressBar').style.width='0%';
+  document.getElementById('focusProgress').style.width='0%';
+  stopWaveform();
+  wordSpans.forEach(sp=>sp.classList.remove('active','done'));
+  document.getElementById('sentenceTracker').innerHTML='Sentence tracker will appear here when playing…';
+  hideQueueProgress();
+  renderQueue();
+}
+
+// ═══════════════════════════════════════════════════════
+// ██████████  PLAYLIST / QUEUE ENGINE  ██████████
+// ═══════════════════════════════════════════════════════
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+
+function addCurrentToQueue(){
+  const text=document.getElementById('textInput').value.trim();
+  if(!text){alert('Type some text in the editor first.');return;}
+  const rawTitle=document.getElementById('queueTitleInput').value.trim();
+  const title=rawTitle||autoTitle(text);
+  queue.push({id:uid(),title,text,done:false});
+  document.getElementById('queueTitleInput').value='';
+  renderQueue();updateQueueStats();
+}
+
+function addCustomToQueue(){
+  const text=document.getElementById('queueInput').value.trim();
+  if(!text){alert('Type or paste a snippet above.');return;}
+  const rawTitle=document.getElementById('queueTitleInput').value.trim();
+  const title=rawTitle||autoTitle(text);
+  queue.push({id:uid(),title,text,done:false});
+  document.getElementById('queueInput').value='';
+  document.getElementById('queueTitleInput').value='';
+  renderQueue();updateQueueStats();
+}
+
+function autoTitle(text){
+  const words=text.trim().split(/\s+/).slice(0,5).join(' ');
+  return words.length<text.trim().length?words+'…':words;
+}
+
+function removeFromQueue(idx){
+  queue.splice(idx,1);
+  if(queuePlaying&&queueIndex===idx)skipToNext();
+  else if(queuePlaying&&queueIndex>idx)queueIndex--;
+  renderQueue();updateQueueStats();
+}
+
+function loadItemToEditor(idx){
+  const item=queue[idx];if(!item)return;
+  document.getElementById('textInput').value=item.text;
+  onTextChange();
+}
+
+function resetQueue(){
+  queue.forEach(i=>i.done=false);
+  queueIndex=-1;queuePlaying=false;
+  synth.cancel();hideQueueProgress();renderQueue();updateQueueStats();
+}
+
+function clearQueue(){
+  if(queue.length&&!confirm('Clear all items from the queue?'))return;
+  queue=[];queueIndex=-1;queuePlaying=false;
+  synth.cancel();hideQueueProgress();renderQueue();updateQueueStats();
+}
+
+// ── Play Queue sequentially ──
+function playQueue(){
+  if(!queue.length){alert('Queue is empty. Add some text snippets first.');return;}
+  // find first not-done item
+  const start=queue.findIndex(i=>!i.done);
+  if(start===-1){
+    if(!confirm('All items are done. Reset and play again?'))return;
+    queue.forEach(i=>i.done=false);renderQueue();updateQueueStats();
+    playQueueFrom(0);
+  }else{
+    playQueueFrom(start);
+  }
+}
+
+function playQueueFrom(idx){
+  if(idx>=queue.length){
+    queuePlaying=false;queueIndex=-1;
+    stopWaveform();
+    document.getElementById('playBtn').disabled=false;
+    document.getElementById('pauseBtn').disabled=true;
+    document.getElementById('skipBtn').disabled=true;
+    updateQueueProgressBar(queue.length,queue.length,'✅ All done!');
+    renderQueue();
+    return;
+  }
+  queuePlaying=true;queueIndex=idx;
+  const item=queue[idx];
+  document.getElementById('textInput').value=item.text;
+  onTextChange();
+  showQueueProgress();
+  updateQueueProgressBar(idx+1,queue.length,item.title);
+  renderQueue();
+  // update Focus Mode
+  document.getElementById('focusQueueInfo').textContent=
+    `Track ${idx+1} of ${queue.length} — ${item.title}`;
+
+  speakUtterance(item.text, ()=>{
+    // on done
+    queue[idx].done=true;
+    renderQueue();updateQueueStats();
+    if(queuePlaying)playQueueFrom(idx+1);
+  }, null);
+}
+
+function skipToNext(){
+  if(!queuePlaying||queueIndex<0)return;
+  synth.cancel();        // triggers onend which calls playQueueFrom(next)
+  speaking=false;
+  queue[queueIndex].done=true;
+  renderQueue();updateQueueStats();
+  playQueueFrom(queueIndex+1);
+}
+
+// ── Progress bar helpers ──
+function showQueueProgress(){
+  document.getElementById('queueProgressBar').classList.add('visible');
+}
+function hideQueueProgress(){
+  document.getElementById('queueProgressBar').classList.remove('visible');
+  document.getElementById('qpbFill').style.width='0%';
+}
+function updateQueueProgressBar(current,total,title){
+  document.getElementById('qpbCounter').textContent=`${current} / ${total}`;
+  document.getElementById('qpbTitle').textContent=title;
+  document.getElementById('qpbFill').style.width=((current-1)/total*100)+'%';
+}
+function updateQueueProgressFill(pct){
+  // fills within the current track's slot
+  const slotWidth=100/queue.length;
+  const base=(queueIndex/queue.length)*100;
+  document.getElementById('qpbFill').style.width=(base+slotWidth*(pct/100))+'%';
+}
+
+// ── Stats ──
+function updateQueueStats(){
+  const rate=parseFloat(document.getElementById('rateSlider').value);
+  const total=queue.length;
+  const done=queue.filter(i=>i.done).length;
+  const totalSecs=queue.reduce((a,i)=>a+etrSecs(i.text,rate),0);
+  document.getElementById('qsTotalItems').textContent=total;
+  document.getElementById('qsDoneItems').textContent=done;
+  document.getElementById('qsTotalTime').textContent=fmtTime(totalSecs);
+  document.getElementById('queueCountPill').textContent=total===0?'0 items':total===1?'1 item':`${total} items`;
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER QUEUE LIST (with drag-and-drop)
+// ═══════════════════════════════════════════════════════
+function renderQueue(){
+  const list=document.getElementById('queueList');
+  list.innerHTML='';
+  queue.forEach((item,idx)=>{
+    const el=document.createElement('div');
+    el.className='q-item'+(idx===queueIndex?' q-active':item.done?' q-done':'');
+    el.dataset.idx=idx;
+    el.draggable=true;
+
+    const statusTag=idx===queueIndex
+      ?'<span class="q-tag playing">▶ playing</span>'
+      :item.done?'<span class="q-tag done-tag">✓ done</span>':'';
+    const wordCount=item.text.trim().split(/\s+/).length;
+    const rate=parseFloat(document.getElementById('rateSlider').value);
+    const est=fmtTime(etrSecs(item.text,rate));
+
+    el.innerHTML=`
+      <div class="q-item-header">
+        <span class="q-drag-handle" title="Drag to reorder">⠿</span>
+        <span class="q-num">${idx+1}</span>
+        <span class="q-title" title="${item.title}">${item.title}</span>
+        <div class="q-item-actions">
+          <button class="q-icon-btn play-now" title="Play this item now" onclick="playQueueFrom(${idx})">▶</button>
+          <button class="q-icon-btn" title="Load into editor" onclick="loadItemToEditor(${idx})">✏️</button>
+          <button class="q-icon-btn del" title="Remove" onclick="removeFromQueue(${idx})">✕</button>
+        </div>
+      </div>
+      <div class="q-preview">${item.text.replace(/</g,'&lt;').slice(0,90)}${item.text.length>90?'…':''}</div>
+      <div class="q-meta">
+        <span class="q-tag">${wordCount}w</span>
+        <span class="q-tag">~${est}</span>
+        ${statusTag}
+      </div>`;
+
+    // ── Drag events ──
+    el.addEventListener('dragstart', e=>{
+      dragSrcIdx=idx;
+      el.classList.add('q-dragging');
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',idx);
+    });
+    el.addEventListener('dragend', ()=>{ el.classList.remove('q-dragging'); });
+    el.addEventListener('dragover', e=>{
+      e.preventDefault();e.dataTransfer.dropEffect='move';
+      list.querySelectorAll('.q-item').forEach(i=>i.classList.remove('q-dragover'));
+      el.classList.add('q-dragover');
+    });
+    el.addEventListener('dragleave', ()=>el.classList.remove('q-dragover'));
+    el.addEventListener('drop', e=>{
+      e.preventDefault();el.classList.remove('q-dragover');
+      if(dragSrcIdx===null||dragSrcIdx===idx)return;
+      const moved=queue.splice(dragSrcIdx,1)[0];
+      queue.splice(idx,0,moved);
+      // adjust queueIndex if needed
+      if(queuePlaying){
+        if(queueIndex===dragSrcIdx)queueIndex=idx;
+        else if(dragSrcIdx<queueIndex&&idx>=queueIndex)queueIndex--;
+        else if(dragSrcIdx>queueIndex&&idx<=queueIndex)queueIndex++;
+      }
+      dragSrcIdx=null;
+      renderQueue();updateQueueStats();
+    });
+
+    list.appendChild(el);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// FOCUS MODE
+// ═══════════════════════════════════════════════════════
+function toggleFocus(){
+  const o=document.getElementById('focusOverlay');
+  o.classList.toggle('active');
+  if(o.classList.contains('active'))renderFocusBox();
+}
+function exitFocus(){document.getElementById('focusOverlay').classList.remove('active');}
+function renderFocusBox(){
+  const sc=document.getElementById('focusTextScroll');sc.innerHTML='';
+  if(!wordSpans.length)buildHighlightBox();
+  words.forEach((w,i)=>{
+    const sp=document.createElement('span');
+    sp.className='word-span';sp.textContent=w+' ';sc.appendChild(sp);
+  });
+  if(!queuePlaying)document.getElementById('focusQueueInfo').textContent='';
+}
+function updateFocusWord(idx){
+  const o=document.getElementById('focusOverlay');if(!o.classList.contains('active'))return;
+  document.getElementById('focusTextScroll').querySelectorAll('.word-span').forEach((sp,i)=>{
+    sp.classList.remove('active','done');
+    if(i===idx){sp.classList.add('active');sp.scrollIntoView({block:'center',behavior:'smooth'});}
+    else if(i<idx)sp.classList.add('done');
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// WAVEFORM
+// ═══════════════════════════════════════════════════════
+const canvas=document.getElementById('waveCanvas');
+const ctx2d=canvas.getContext('2d');
+
+function resizeCanvas(){
+  canvas.width=canvas.offsetWidth*devicePixelRatio;
+  canvas.height=canvas.offsetHeight*devicePixelRatio;
+  ctx2d.scale(devicePixelRatio,devicePixelRatio);
+}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+
+function drawIdleWave(){
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
+  ctx2d.clearRect(0,0,W,H);
+  ctx2d.strokeStyle='rgba(108,99,255,0.28)';ctx2d.lineWidth=1.5;
+  ctx2d.beginPath();
+  for(let x=0;x<W;x++){
+    const y=H/2+Math.sin(x*0.03+wavePhase)*3;
+    x===0?ctx2d.moveTo(x,y):ctx2d.lineTo(x,y);
+  }
+  ctx2d.stroke();
+}
+function drawActiveWave(amp){
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
+  ctx2d.clearRect(0,0,W,H);
+  const g=ctx2d.createLinearGradient(0,0,W,0);
+  g.addColorStop(0,'#6c63ff');g.addColorStop(0.5,'#00d4ff');g.addColorStop(1,'#ff6584');
+  ctx2d.strokeStyle=g;ctx2d.lineWidth=2;ctx2d.shadowBlur=8;ctx2d.shadowColor='#6c63ff';
+  ctx2d.beginPath();
+  for(let i=0;i<=120;i++){
+    const x=(i/120)*W;
+    const y=H/2+Math.sin(i*0.15+wavePhase)*amp
+            +Math.sin(i*0.35+wavePhase*1.3)*amp*0.5
+            +Math.sin(i*0.07+wavePhase*0.7)*amp*0.3;
+    i===0?ctx2d.moveTo(x,y):ctx2d.lineTo(x,y);
+  }
+  ctx2d.stroke();ctx2d.shadowBlur=0;
+  ctx2d.fillStyle='rgba(108,99,255,0.07)';
+  ctx2d.lineTo(W,H/2);ctx2d.lineTo(0,H/2);ctx2d.closePath();ctx2d.fill();
+}
+function startWaveform(){waveAnimating=true;animWave();}
+function stopWaveform(){waveAnimating=false;drawIdleWave();}
+function animWave(){
+  if(!waveAnimating)return;
+  wavePhase+=0.09;
+  const target=speaking&&!paused?18+Math.random()*12:4;
+  ampCurrent+=(target-ampCurrent)*0.12;
+  drawActiveWave(ampCurrent);
+  animFrameId=requestAnimationFrame(animWave);
+}
+(function idleLoop(){if(!waveAnimating){wavePhase+=0.02;drawIdleWave();}requestAnimationFrame(idleLoop);})();
+
+// ═══════════════════════════════════════════════════════
+// AUDIO EXPORT
+// ═══════════════════════════════════════════════════════
+async function startExport(){
+  const text=document.getElementById('textInput').value.trim();
+  if(!text){alert('Please enter text first.');return;}
+  const se=document.getElementById('exportStatus');
+  se.style.display='block';se.textContent='🔴 Recording… please wait for speech to finish.';
+  se.style.color='var(--success)';se.style.borderColor='var(--success)';se.style.background='rgba(0,229,160,.1)';
+  document.getElementById('recIndicator').style.display='inline-block';
+  try{
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const osc=audioCtx.createOscillator();osc.frequency.value=0;
+    const dest=audioCtx.createMediaStreamDestination();osc.connect(dest);osc.start();
+    let stream;
+    try{stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});}
+    catch{stream=dest.stream;}
+    audioChunks=[];
+    const mime=(['audio/webm;codecs=opus','audio/webm','audio/ogg','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t)))||'';
+    mediaRecorder=new MediaRecorder(stream,{mimeType:mime});
+    mediaRecorder.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data);};
+    mediaRecorder.onstop=()=>{
+      osc.stop();
+      const blob=new Blob(audioChunks,{type:mime});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download=`tts_${Date.now()}.webm`;a.click();
+      URL.revokeObjectURL(url);
+      se.textContent='✅ Export complete! Check your downloads.';
+      document.getElementById('recIndicator').style.display='none';
+      setTimeout(()=>se.style.display='none',4000);
+    };
+    mediaRecorder.start(100);
+    synth.cancel();buildHighlightBox(text);
+    utterance=new SpeechSynthesisUtterance(text);
+    const s=getVoiceSettings();if(s.voice)utterance.voice=s.voice;
+    utterance.rate=s.rate;utterance.pitch=s.pitch;utterance.volume=s.volume;
+    utterance.onstart=()=>{speaking=true;startWaveform();};
+    utterance.onend=()=>{speaking=false;stopWaveform();setTimeout(()=>{if(mediaRecorder.state!=='inactive')mediaRecorder.stop();},500);};
+    utterance.onerror=()=>{if(mediaRecorder.state!=='inactive')mediaRecorder.stop();};
+    synth.speak(utterance);
+  }catch(err){
+    se.textContent='⚠️ Export needs microphone permission. Try Chrome.';
+    se.style.color='var(--accent3)';se.style.borderColor='var(--accent3)';se.style.background='rgba(255,101,132,.1)';
+    document.getElementById('recIndicator').style.display='none';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+buildPresets();updateSliders();loadVoices();
+
+// Seed queue with demo items
+const DEMO=[
+ {title:'🌟 change language',text:`আপনি কেমন আছেন?`},
+  {title:'🌟 Introduction',text:`Hi , I Am Pabitra Nayak and I am study in computer science from SCE`},
+  {title:'📖 Chapter One',text:`In the beginning there was silence. Then words arrived — carried on the breath of storytellers, passed from generation to generation across millennia.`},
+  {title:'🌐 Multilingual Demo',text:`English flows naturally into other scripts. हिन्दी में भी बोलते हैं। আমরা বাংলায়ও কথা বলি। 你好，欢迎来到 VoiceCraft。`},
+  {title:'🎯 Wrap-Up',text:`That's the end of this demo queue. Try adding your own text snippets, reordering them by dragging, and playing them back with different voice presets!`},
+];
+DEMO.forEach(d=>{queue.push({id:uid(),title:d.title,text:d.text,done:false});});
+document.getElementById('textInput').value=DEMO[0].text;
+onTextChange();
+renderQueue();updateQueueStats();
+</script>
+</body>
+</html>
