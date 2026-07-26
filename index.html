@@ -92,7 +92,7 @@
 
     body {
       font-family: var(--ff-body);
-      background: var(--bg-dark);
+      background: var(--bg-dark); 
       color: #fff;
       min-height: 100vh;
       overflow-x: hidden;
@@ -2809,8 +2809,502 @@
       }
     }
 
-    /* Very Small — up to 360px */
-    @media (max-width: 360px) {
+    /* ===== AUTH OVERLAY ===== */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+      transition: opacity 0.55s ease, visibility 0.55s ease;
+      overflow-y: auto;
+      padding: 20px 0;
+    }
+
+    @supports (height: 100dvh) {
+      .auth-overlay { height: 100dvh; inset: auto; top: 0; bottom: 0; left: 0; right: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .auth-overlay {
+        height: -webkit-fill-available;
+        height: 100dvh;
+        align-items: flex-start;
+        padding-top: max(20px, env(safe-area-inset-top, 20px));
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+      }
+    }
+
+    .auth-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .auth-overlay.hidden .auth-logo,
+    .auth-overlay.hidden .auth-card {
+      transform: translateY(30px) scale(0.97);
+      opacity: 0;
+    }
+
+    .auth-bg-mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(106, 0, 255, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(0, 255, 240, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 40% at 50% 50%, rgba(255, 0, 128, 0.1) 0%, transparent 60%),
+        #080618;
+      animation: meshShift 20s ease-in-out infinite alternate;
+    }
+
+    .auth-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 240, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 240, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .auth-bg-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .auth-particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: authParticleFloat linear infinite;
+    }
+
+    @keyframes authParticleFloat {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    .auth-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 440px;
+      padding: 20px;
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 32px;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.5s 0.1s ease, transform 0.5s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .auth-overlay.entering .auth-logo {
+      animation: authLogoPop 0.6s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes authLogoPop {
+      from { opacity: 0; transform: translateY(-25px) scale(0.85); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-logo .logo {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      cursor: default;
+      display: inline-block;
+    }
+
+    .auth-logo .logo span { color: var(--cyan); text-shadow: var(--glow-sm); }
+    .auth-logo .logo em {
+      font-style: normal;
+      font-size: 0.55rem;
+      font-weight: 500;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-left: 8px;
+      vertical-align: middle;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .auth-logo p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .auth-overlay.entering .auth-card {
+      animation: authCardSlide 0.65s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes authCardSlide {
+      from { opacity: 0; transform: translateY(45px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-card:hover {
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 255, 240, 0.08);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: var(--ff-body);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.45);
+      transition: color 0.35s ease;
+      position: relative;
+      z-index: 1;
+      user-select: none;
+    }
+
+    .auth-tab.active {
+      color: #fff;
+    }
+
+    .auth-tab-slider {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: 3px;
+      width: calc(50% - 3px);
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      border-radius: 10px;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+      box-shadow: 0 4px 20px rgba(106, 0, 255, 0.35);
+    }
+
+    .auth-tab-slider.right {
+      transform: translateX(100%);
+    }
+
+    .auth-forms-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-form {
+      display: none;
+      opacity: 0;
+    }
+
+    .auth-form.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .auth-form.fade-in-right {
+      animation: authFormInRight 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .auth-form.fade-in-left {
+      animation: authFormInLeft 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes authFormInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes authFormInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .auth-field {
+      margin-bottom: 18px;
+    }
+
+    .auth-field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 7px;
+      letter-spacing: 0.3px;
+    }
+
+    .auth-field .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-field .input-wrap > i:first-child {
+      position: absolute;
+      left: 16px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+      z-index: 1;
+    }
+
+    .auth-field input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: var(--ff-body);
+      outline: none;
+      transition: border-color 0.35s ease, background 0.35s ease, box-shadow 0.35s ease, transform 0.3s ease;
+    }
+
+    .auth-field input:focus {
+      border-color: var(--cyan);
+      background: rgba(0, 255, 240, 0.06);
+      box-shadow: 0 0 0 3px rgba(0, 255, 240, 0.1);
+      transform: scale(1.015);
+    }
+
+    .auth-field input:focus ~ i:first-child {
+      color: var(--cyan);
+      transform: scale(1.2);
+    }
+
+    .auth-field input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .auth-field .toggle-pass {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px;
+      transition: color 0.3s ease, transform 0.3s ease;
+      z-index: 1;
+    }
+
+    .auth-field .toggle-pass:hover {
+      color: var(--cyan);
+      transform: scale(1.2);
+    }
+
+    .auth-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: var(--ff-body);
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(106, 0, 255, 0.4);
+      margin-top: 8px;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+    }
+
+    .auth-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .auth-submit:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 45px rgba(106, 0, 255, 0.6), 0 0 30px rgba(0, 255, 240, 0.2);
+    }
+
+    .auth-submit:hover::before {
+      opacity: 1;
+    }
+
+    .auth-submit:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 4px 20px rgba(106, 0, 255, 0.4);
+    }
+
+    .auth-submit i {
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .auth-submit:hover i {
+      transform: translateX(4px);
+    }
+
+    .auth-error, .auth-success {
+      border-radius: 10px;
+      font-size: 0.83rem;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      padding: 0 14px;
+      margin-bottom: 0;
+      border-width: 0;
+      transition: max-height 0.35s ease, opacity 0.35s ease, padding 0.35s ease, margin 0.35s ease, border-width 0.35s ease;
+    }
+
+    .auth-error {
+      background: rgba(255, 0, 128, 0.1);
+      border: 0 solid rgba(255, 0, 128, 0.3);
+      color: var(--pink);
+    }
+
+    .auth-success {
+      background: rgba(0, 200, 83, 0.1);
+      border: 0 solid rgba(0, 200, 83, 0.3);
+      color: #00c853;
+    }
+
+    .auth-error.show {
+      max-height: 80px;
+      opacity: 1;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      border-width: 1px;
+    }
+
+    .auth-success.show {
+      max-height: 80px;
+      opacity: 1;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      border-width: 1px;
+    }
+
+    .auth-error.show {
+      animation: authShake 0.5s 0.15s ease;
+    }
+
+    @keyframes authShake {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-7px); }
+      30% { transform: translateX(6px); }
+      45% { transform: translateX(-5px); }
+      60% { transform: translateX(3px); }
+      75% { transform: translateX(-1px); }
+    }
+
+    .auth-demo-note {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .auth-demo-note a {
+      color: var(--cyan);
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.25s ease, text-shadow 0.25s ease;
+    }
+
+    .auth-demo-note a:hover {
+      text-decoration: underline;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(0, 255, 240, 0.4);
+    }
+
+    /* ===== USER MENU IN NAVBAR ===== */
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar-nav {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: default;
+    }
+
+    .user-name-nav {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .logout-btn {
+      padding: 7px 16px;
+      background: rgba(255, 0, 128, 0.15);
+      border: 1px solid rgba(255, 0, 128, 0.3);
+      border-radius: 50px;
+      color: var(--pink);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--ff-body);
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 0, 128, 0.25);
+      border-color: var(--pink);
+    }
+
+    @media (max-width: 480px) {
       .hero h1 {
         font-size: 1.5rem;
       }
@@ -2830,11 +3324,255 @@
       .logo {
         font-size: 1.25rem;
       }
+
+      .auth-card {
+        padding: 28px 22px;
+      }
+
+      .auth-logo .logo {
+        font-size: 1.7rem;
+      }
+
+      .auth-logo p {
+        font-size: 0.82rem;
+      }
+
+      .auth-tab {
+        padding: 10px 8px;
+        font-size: 0.82rem;
+      }
+
+      .auth-field input {
+        padding: 12px 14px 12px 40px;
+        font-size: 0.85rem;
+      }
+
+      .auth-submit {
+        padding: 12px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .auth-container {
+        padding: 12px;
+      }
+
+      .auth-logo .logo {
+        font-size: 1.45rem;
+      }
+
+      .auth-logo {
+        margin-bottom: 24px;
+      }
+
+      .auth-card {
+        padding: 24px 18px;
+        border-radius: 20px;
+      }
+
+      .auth-tabs {
+        margin-bottom: 22px;
+      }
+
+      .auth-tab {
+        padding: 9px 6px;
+        font-size: 0.78rem;
+      }
+
+      .auth-tab-slider {
+        border-radius: 9px;
+      }
+
+      .auth-field {
+        margin-bottom: 14px;
+      }
+
+      .auth-field label {
+        font-size: 0.75rem;
+      }
+
+      .auth-field input {
+        padding: 11px 12px 11px 38px;
+        font-size: 0.82rem;
+        border-radius: 10px;
+      }
+
+      .auth-field .input-wrap > i:first-child {
+        left: 13px;
+        font-size: 0.82rem;
+      }
+
+      .auth-field .toggle-pass {
+        right: 10px;
+        font-size: 0.82rem;
+      }
+
+      .auth-submit {
+        padding: 12px;
+        font-size: 0.87rem;
+        border-radius: 10px;
+      }
+
+      .auth-error, .auth-success {
+        font-size: 0.78rem;
+      }
+
+      .auth-demo-note {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 768px) and (orientation: landscape) {
+      .auth-overlay {
+        align-items: flex-start;
+        padding-top: 10px;
+      }
+
+      .auth-logo {
+        margin-bottom: 16px;
+      }
+
+      .auth-logo .logo {
+        font-size: 1.4rem;
+      }
+
+      .auth-logo p {
+        display: none;
+      }
+
+      .auth-card {
+        padding: 20px 20px;
+        border-radius: 16px;
+      }
+
+      .auth-tabs {
+        margin-bottom: 16px;
+      }
+
+      .auth-field {
+        margin-bottom: 10px;
+      }
+
+      .auth-field label {
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+      }
+
+      .auth-field input {
+        padding: 10px 12px 10px 38px;
+        font-size: 0.83rem;
+      }
+
+      .auth-submit {
+        padding: 10px;
+        margin-top: 4px;
+        font-size: 0.87rem;
+      }
+
+      .auth-demo-note {
+        margin-top: 12px;
+        font-size: 0.75rem;
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- ===== AUTH OVERLAY ===== -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-bg-mesh"></div>
+    <div class="auth-bg-grid"></div>
+    <div class="auth-bg-particles" id="authParticles"></div>
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="logo">
+          <span>All</span>IN<span>One</span>
+          <em>AI</em>
+        </div>
+        <p>Access 150+ AI-Powered Academic Tools</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <div class="auth-tab-slider" id="authTabSlider"></div>
+          <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+          <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
+        </div>
+
+        <div class="auth-error" id="authError"><i class="fas fa-exclamation-circle"></i><span id="authErrorText"></span></div>
+        <div class="auth-success" id="authSuccess"><i class="fas fa-check-circle"></i><span id="authSuccessText"></span></div>
+
+        <div class="auth-forms-container">
+        <!-- LOGIN FORM -->
+        <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+          <div class="auth-field">
+            <label for="loginUser">User ID</label>
+            <div class="input-wrap">
+              <input type="text" id="loginUser" placeholder="Enter your User ID" required autocomplete="username">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="loginPass">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="loginPass" placeholder="Enter your password" required autocomplete="current-password">
+              <i class="fas fa-lock"></i>
+              <button type="button" class="toggle-pass" onclick="togglePassword('loginPass', this)"><i class="fas fa-eye"></i></button>
+            </div>
+          </div>
+          <button type="submit" class="auth-submit">Sign In <i class="fas fa-arrow-right"></i></button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+          <div class="auth-field">
+            <label for="regUser">Choose User ID</label>
+            <div class="input-wrap">
+              <input type="text" id="regUser" placeholder="Pick a unique User ID" required minlength="3" maxlength="20" autocomplete="username">
+              <i class="fas fa-at"></i>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="regEmail">Email Address</label>
+            <div class="input-wrap">
+              <input type="email" id="regEmail" placeholder="you@student.edu" required autocomplete="email">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="regName">Full Name</label>
+            <div class="input-wrap">
+              <input type="text" id="regName" placeholder="Your full name" required autocomplete="name">
+              <i class="fas fa-id-card"></i>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="regPass">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="regPass" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+              <i class="fas fa-lock"></i>
+              <button type="button" class="toggle-pass" onclick="togglePassword('regPass', this)"><i class="fas fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="regPassConfirm">Confirm Password</label>
+            <div class="input-wrap">
+              <input type="password" id="regPassConfirm" placeholder="Re-enter your password" required minlength="6" autocomplete="new-password">
+              <i class="fas fa-shield-alt"></i>
+              <button type="button" class="toggle-pass" onclick="togglePassword('regPassConfirm', this)"><i class="fas fa-eye"></i></button>
+            </div>
+          </div>
+          <button type="submit" class="auth-submit">Create Account <i class="fas fa-rocket"></i></button>
+        </form>
+        </div>
+
+        <div class="auth-demo-note">
+          <span id="authSwitchText">Don't have an account? <a onclick="switchAuthTab('register')">Register</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="bg-mesh" aria-hidden="true"></div>
   <div class="bg-grid" aria-hidden="true"></div>
@@ -2854,7 +3592,12 @@
         <a href="#demo">Live Demo</a>
         <a href="#resources">Resources</a>
         <a href="#faq">FAQ</a>
-        <a href="#contact" class="nav-cta">Get Started Free</a>
+        <div class="user-menu" id="userMenu" style="display:none;">
+          <div class="user-avatar-nav" id="navAvatar"></div>
+          <span class="user-name-nav" id="navUserName"></span>
+          <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+        <a href="#contact" class="nav-cta" id="navCta">Get Started Free</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -2976,7 +3719,7 @@
           <div class="tool-tags"><span class="tool-tag">AI-Powered</span><span class="tool-tag">Real-time</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.8k)</span></div>
-            <button class="tool-use-btn"><a href="./ALL TOOLS FOLDER/grammer Checker/index.html">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/grammer Checker/index.html')">Use Now →</a></button>
           </div>
         </article>
 
@@ -2990,7 +3733,7 @@
               class="tool-tag">Google Slides</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.4k)</span></div>
-            <button class="tool-use-btn"><a href="https://gamma.app/">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://gamma.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -3004,7 +3747,7 @@
           </div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (2.7k)</span></div>
-            <button class="tool-use-btn"><a href="./ALL TOOLS FOLDER/AI-Resume-Builder-main/index.html">Use Now
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/AI-Resume-Builder-main/index.html')">Use Now
                 →</a></button>
           </div>
         </article>
@@ -3018,7 +3761,7 @@
               class="tool-tag">Compress</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (1.5k)</span></div>
-            <button class="tool-use-btn"><a href="https://www.ilovepdf.com/word_to_pdf">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://www.ilovepdf.com/word_to_pdf')">Use Now →</a></button>
           </div>
         </article>
 
@@ -3032,7 +3775,7 @@
               class="tool-tag">50+ langs</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (4.1k)</span></div>
-            <button class="tool-use-btn"><a href="./ALL TOOLS FOLDER/text to voice converter/index.html">Use Now
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/text to voice converter/index.html')">Use Now
                 →</a></button>
           </div>
         </article>
@@ -3047,7 +3790,7 @@
               class="tool-tag">Free</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (4.1k)</span></div>
-            <button class="tool-use-btn"><a href="https://text-to-image-generator-omega.vercel.app/">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://text-to-image-generator-omega.vercel.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -3069,7 +3812,7 @@
               <span>4.9 (4.1k)</span>
             </div>
 
-            <a href="https://typing-speed-lovat.vercel.app/" target="_blank">
+            <a href="#" onclick="handleToolClick(event, 'https://typing-speed-lovat.vercel.app/')" target="_blank">
               <button class="tool-use-btn">Use Now →</button>
             </a>
           </div>
@@ -3085,7 +3828,7 @@
               class="tool-tag">Stats</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.8k)</span></div>
-            <button class="tool-use-btn"><a href="https://math-gpt.org/">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://math-gpt.org/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -3097,7 +3840,7 @@
           <div class="tool-tags"><span class="tool-tag">Auto-Save</span><span class="tool-tag">Organize</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (760)</span></div>
-            <button class="tool-use-btn"><a href="./ALL TOOLS FOLDER/online Note Book/indexhtl.html">Use Now
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/online Note Book/indexhtl.html')">Use Now
                 →</a></button>
           </div>
         </article>
@@ -3119,7 +3862,7 @@
               <span>4.8 (1.4k)</span>
             </div>
 
-            <a href="https://pn-quiz-start.vercel.app/" target="_blank">
+            <a href="#" onclick="handleToolClick(event, 'https://pn-quiz-start.vercel.app/')" target="_blank">
               <button class="tool-use-btn">Use Now →</button>
             </a>
 
@@ -3134,7 +3877,7 @@
           <div class="tool-tags"><span class="tool-tag">Task Manager</span><span class="tool-tag">Deadlines</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.1k)</span></div>
-            <button class="tool-use-btn"><a href="https://to-do-list-app-lovat-ten-65.vercel.app/">Use Now
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://to-do-list-app-lovat-ten-65.vercel.app/')">Use Now
                 →</a></button>
           </div>
         </article>
@@ -3148,7 +3891,7 @@
           <div class="tool-tags"><span class="tool-tag">Scientific</span><span class="tool-tag">Basic</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (690)</span></div>
-            <button class="tool-use-btn"><a href="https://modern-calculator-kohl.vercel.app/">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://modern-calculator-kohl.vercel.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -3161,7 +3904,7 @@
           </div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (840)</span></div>
-            <button class="tool-use-btn"><a href="./ALL TOOLS FOLDER/text editor/index.html">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/text editor/index.html')">Use Now →</a></button>
           </div>
         </article>
 
@@ -3175,7 +3918,7 @@
           </div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (5.2k)</span></div>
-            <button class="tool-use-btn">Use Now →</button>
+            <button class="tool-use-btn" onclick="requireAuth()">Use Now →</button>
           </div>
         </article>
 
@@ -3807,6 +4550,267 @@
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script>
+    /* ============ AUTH SYSTEM ============ */
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('saitools_users') || '{}');
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('saitools_users', JSON.stringify(users));
+    }
+
+    function getCurrentUser() {
+      return JSON.parse(localStorage.getItem('saitools_current_user') || 'null');
+    }
+
+    function setCurrentUser(user) {
+      localStorage.setItem('saitools_current_user', JSON.stringify(user));
+    }
+
+    function clearCurrentUser() {
+      localStorage.removeItem('saitools_current_user');
+    }
+
+    function showAuthError(msg) {
+      const err = document.getElementById('authError');
+      const suc = document.getElementById('authSuccess');
+      suc.classList.remove('show');
+      err.classList.remove('show');
+      document.getElementById('authErrorText').textContent = msg;
+      void err.offsetWidth;
+      err.classList.add('show');
+    }
+
+    function showAuthSuccess(msg) {
+      const err = document.getElementById('authError');
+      const suc = document.getElementById('authSuccess');
+      err.classList.remove('show');
+      suc.classList.remove('show');
+      document.getElementById('authSuccessText').textContent = msg;
+      void suc.offsetWidth;
+      suc.classList.add('show');
+    }
+
+    function clearAuthMessages() {
+      document.getElementById('authError').classList.remove('show');
+      document.getElementById('authSuccess').classList.remove('show');
+    }
+
+    function staggerFormFields(form) {
+      if (!form || !form.classList.contains('active')) return;
+      const fields = form.querySelectorAll('.auth-field, .auth-submit');
+      fields.forEach((f, i) => {
+        f.style.opacity = '0';
+        f.style.transform = 'translateX(-15px)';
+        f.style.transition = 'none';
+      });
+      void form.offsetWidth;
+      fields.forEach((f, i) => {
+        f.style.transition = `opacity 0.4s ${0.05 + i * 0.06}s ease, transform 0.4s ${0.05 + i * 0.06}s cubic-bezier(0.34, 1.56, 0.64, 1)`;
+        f.style.opacity = '1';
+        f.style.transform = 'translateX(0)';
+      });
+    }
+
+    function cleanFormInlineStyles(form) {
+      if (!form) return;
+      form.querySelectorAll('.auth-field, .auth-submit').forEach(f => {
+        f.style.opacity = '';
+        f.style.transform = '';
+        f.style.transition = '';
+      });
+    }
+
+    let authCurrentTab = 'login';
+
+    function switchAuthTab(tab) {
+      if (tab === authCurrentTab) return;
+      clearAuthMessages();
+
+      const tabs = document.querySelectorAll('.auth-tab');
+      const slider = document.getElementById('authTabSlider');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const goingRight = (authCurrentTab === 'login' && tab === 'register');
+
+      tabs.forEach(t => t.classList.remove('active'));
+      slider.classList.toggle('right', tab === 'register');
+
+      if (goingRight) {
+        tabs[1].classList.add('active');
+        cleanFormInlineStyles(loginForm);
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active', 'fade-in-right');
+        setTimeout(() => registerForm.classList.remove('fade-in-right'), 450);
+        setTimeout(() => staggerFormFields(registerForm), 50);
+      } else {
+        tabs[0].classList.add('active');
+        cleanFormInlineStyles(registerForm);
+        registerForm.classList.remove('active');
+        loginForm.classList.add('active', 'fade-in-left');
+        setTimeout(() => loginForm.classList.remove('fade-in-left'), 450);
+        setTimeout(() => staggerFormFields(loginForm), 50);
+      }
+
+      authCurrentTab = tab;
+      document.getElementById('authSwitchText').innerHTML = tab === 'login'
+        ? "Don't have an account? <a onclick=\"switchAuthTab('register')\">Register</a>"
+        : "Already have an account? <a onclick=\"switchAuthTab('login')\">Sign In</a>";
+    }
+
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    function simpleHash(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return 'h_' + Math.abs(hash).toString(36);
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      clearAuthMessages();
+      const userId = document.getElementById('regUser').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const name = document.getElementById('regName').value.trim();
+      const pass = document.getElementById('regPass').value;
+      const passConfirm = document.getElementById('regPassConfirm').value;
+
+      if (userId.length < 3) { showAuthError('User ID must be at least 3 characters.'); return; }
+      if (!/^[a-zA-Z0-9_]+$/.test(userId)) { showAuthError('User ID can only contain letters, numbers, and underscores.'); return; }
+      if (pass !== passConfirm) { showAuthError('Passwords do not match.'); return; }
+      if (pass.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
+
+      const users = getUsers();
+      const userIdLower = userId.toLowerCase();
+      if (users[userIdLower]) { showAuthError('This User ID is already taken. Please choose another.'); return; }
+
+      users[userIdLower] = { userId, email, name, passwordHash: simpleHash(pass), createdAt: new Date().toISOString() };
+      saveUsers(users);
+
+      showAuthSuccess('Account created successfully! Signing you in...');
+      setTimeout(() => {
+        const user = { userId, name, email };
+        setCurrentUser(user);
+        showMainApp(user);
+      }, 1000);
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      clearAuthMessages();
+      const userId = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value;
+
+      if (!userId || !pass) { showAuthError('Please fill in all fields.'); return; }
+
+      const users = getUsers();
+      const userIdLower = userId.toLowerCase();
+      const user = users[userIdLower];
+
+      if (!user) { showAuthError('User not found. Please check your User ID or register first.'); return; }
+      if (user.passwordHash !== simpleHash(pass)) { showAuthError('Incorrect password. Please try again.'); return; }
+
+      const currentUser = { userId: user.userId, name: user.name, email: user.email };
+      setCurrentUser(currentUser);
+      showAuthSuccess('Welcome back, ' + user.name + '!');
+      setTimeout(() => showMainApp(currentUser), 800);
+    }
+
+    function triggerAuthEntrance() {
+      const overlay = document.getElementById('authOverlay');
+      overlay.classList.remove('entering', 'hidden');
+      void overlay.offsetWidth;
+      overlay.classList.add('entering');
+      staggerFormFields(document.getElementById('loginForm'));
+    }
+
+    function handleLogout() {
+      clearCurrentUser();
+      document.getElementById('userMenu').style.display = 'none';
+      document.getElementById('navCta').style.display = '';
+      clearAuthMessages();
+      cleanFormInlineStyles(document.getElementById('loginForm'));
+      cleanFormInlineStyles(document.getElementById('registerForm'));
+      document.getElementById('loginForm').reset();
+      document.getElementById('registerForm').reset();
+      authCurrentTab = 'login';
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-tab')[0].classList.add('active');
+      document.getElementById('authTabSlider').classList.remove('right');
+      document.getElementById('loginForm').classList.add('active');
+      document.getElementById('registerForm').classList.remove('active');
+      document.getElementById('authSwitchText').innerHTML = "Don't have an account? <a onclick=\"switchAuthTab('register')\">Register</a>";
+      triggerAuthEntrance();
+    }
+
+    function showMainApp(user) {
+      document.getElementById('authOverlay').classList.add('hidden');
+      document.getElementById('authOverlay').classList.remove('entering');
+      document.getElementById('userMenu').style.display = 'flex';
+      document.getElementById('navCta').style.display = 'none';
+      document.getElementById('navAvatar').textContent = user.name.charAt(0).toUpperCase();
+      document.getElementById('navUserName').textContent = user.name;
+    }
+
+    function requireAuth() {
+      const user = getCurrentUser();
+      if (!user) {
+        triggerAuthEntrance();
+        showAuthError('Please sign in to use this tool.');
+        return false;
+      }
+      return true;
+    }
+
+    function handleToolClick(e, url) {
+      e.preventDefault();
+      if (!requireAuth()) return;
+      if (url && url !== '#') {
+        window.location.href = url;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = getCurrentUser();
+      if (user) {
+        showMainApp(user);
+      } else {
+        triggerAuthEntrance();
+      }
+
+      const container = document.getElementById('authParticles');
+      const colors = ['rgba(0,255,240,', 'rgba(106,0,255,', 'rgba(255,0,128,'];
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'auth-particle';
+        const size = Math.random() * 4 + 2;
+        const col = colors[Math.floor(Math.random() * colors.length)];
+        Object.assign(p.style, {
+          left: Math.random() * 100 + '%',
+          width: size + 'px',
+          height: size + 'px',
+          background: col + (Math.random() * 0.5 + 0.2) + ')',
+          animationDuration: (Math.random() * 12 + 8) + 's',
+          animationDelay: (Math.random() * 10) + 's'
+        });
+        container.appendChild(p);
+      }
+    });
+
     /* ============ PARTICLES ============ */
     (function () {
       const c = document.getElementById('particles');
