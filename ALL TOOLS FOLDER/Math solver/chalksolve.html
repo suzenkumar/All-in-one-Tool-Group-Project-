@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ChalkSolve — Math Problem Solver</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --board: #16261f;
+    --board-soft: #1e352b;
+    --line: rgba(244,241,232,0.16);
+    --chalk: #f4f1e8;
+    --chalk-dim: #c7cfc8;
+    --yellow: #e8c468;
+    --green: #93d3a4;
+    --danger: #e08a72;
+    --wood-dark: #4a3019;
+    --font-display: 'Kalam', cursive;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    min-height:100vh;
+    display:flex; justify-content:center;
+    padding: 24px 14px 60px;
+    background: var(--wood-dark);
+    font-family: var(--font-body);
+  }
+  button{ font-family:inherit; cursor:pointer; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline: 3px solid var(--yellow); outline-offset:2px;
+  }
+
+  .frame{
+    width:100%; max-width: 760px;
+    background: #6b4526;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+  }
+  .board{
+    background: var(--board);
+    border-radius: 10px;
+    padding: 28px 26px 34px;
+    color: var(--chalk);
+  }
+
+  header.title-block{ text-align:center; margin-bottom: 24px; }
+  header.title-block h1{
+    font-family: var(--font-display); font-weight:700;
+    font-size: 40px; margin: 0;
+  }
+  header.title-block p{
+    font-family: var(--font-body); color: var(--chalk-dim);
+    margin: 4px 0 0; font-size: 15px;
+  }
+
+  /* Step 1: the single chooser */
+  .chooser{
+    margin-bottom: 26px;
+  }
+  .chooser label{
+    display:block; font-size: 15px; font-weight:600;
+    margin-bottom: 8px; color: var(--chalk);
+  }
+  select#toolSelect{
+    width:100%;
+    font-family: var(--font-body); font-size: 17px; font-weight:500;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--line);
+    background: var(--board-soft) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23f4f1e8" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>') no-repeat right 14px center;
+    color: var(--chalk);
+    appearance:none;
+    -webkit-appearance:none;
+  }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation: fadeIn .15s ease; }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+
+  .panel-desc{
+    font-size: 15px; color: var(--chalk-dim); line-height:1.6;
+    margin: 0 0 16px;
+    background: rgba(244,241,232,0.05);
+    border-left: 3px solid var(--yellow);
+    padding: 12px 14px;
+    border-radius: 6px;
+  }
+
+  .example-btn{
+    background: none; border: 1.5px dashed var(--line); color: var(--chalk-dim);
+    border-radius: 8px; padding: 8px 14px; font-size: 13.5px;
+    margin-bottom: 18px;
+  }
+  .example-btn:hover{ border-color: var(--yellow); color: var(--chalk); }
+
+  .field{ margin-bottom: 16px; }
+  .field label{
+    display:block; font-size: 14px; font-weight:600;
+    margin-bottom: 6px; color: var(--chalk);
+  }
+  .field .helper{
+    font-size: 12.5px; color: var(--chalk-dim); margin-top: 5px; line-height:1.5;
+  }
+  .field input[type="text"], .field input[type="number"], .field textarea, .field select{
+    width:100%;
+    background: rgba(244,241,232,0.07);
+    border: 2px solid var(--line);
+    border-radius: 8px;
+    color: var(--chalk);
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 16px;
+  }
+  .field textarea{ resize: vertical; min-height:64px; line-height:1.5; }
+  .field input::placeholder{ color:#6b7a70; }
+  .row-2, .row-3{ display:grid; gap: 12px; }
+  .row-2{ grid-template-columns: 1fr 1fr; }
+  .row-3{ grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 480px){ .row-3{ grid-template-columns: 1fr; } .row-2{ grid-template-columns: 1fr; } }
+
+  .solve-btn{
+    width:100%;
+    background: var(--yellow); color:#241a06; border:none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 16px; font-weight:700;
+    margin-top: 6px;
+  }
+  .solve-btn:hover{ filter: brightness(1.07); }
+  .solve-btn:active{ transform: translateY(1px); }
+
+  .result{ margin-top: 22px; }
+  .answer-card{
+    background: rgba(147,211,164,0.1);
+    border: 2px solid rgba(147,211,164,0.45);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .answer-card .label{
+    font-size: 12px; letter-spacing:0.5px; text-transform:uppercase;
+    color: var(--green); font-weight:700; margin-bottom:6px;
+  }
+  .answer-card .value{
+    font-family: var(--font-display); font-size: 24px; color: var(--chalk);
+    word-break: break-word;
+  }
+
+  details.steps-toggle{
+    background: rgba(244,241,232,0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+  }
+  details.steps-toggle summary{
+    cursor:pointer; font-weight:600; font-size: 14px;
+    color: var(--chalk); list-style:none;
+  }
+  details.steps-toggle summary::-webkit-details-marker{ display:none; }
+  details.steps-toggle summary::before{ content:"▸ "; color: var(--yellow); }
+  details.steps-toggle[open] summary::before{ content:"▾ "; }
+  .steps{ list-style:none; margin:12px 0 0; padding:0; }
+  .steps li{
+    font-family: var(--font-mono); font-size:13.5px;
+    padding: 7px 0 7px 14px;
+    border-left: 2px solid var(--line);
+    margin-bottom: 4px; line-height:1.55;
+  }
+  .steps li.warn{ border-left-color: var(--danger); color:#f0c3b3; }
+
+  .error-box{
+    font-size:14px; color: var(--danger);
+    background: rgba(224,138,114,0.1);
+    border: 1px solid rgba(224,138,114,0.35);
+    padding: 13px 15px; border-radius:10px;
+  }
+
+  .matrix-grid{ display:flex; gap:6px; flex-wrap:wrap; font-family: var(--font-mono); }
+  .matrix-grid .mrow{ display:flex; gap:6px; }
+  .matrix-grid .mcell{
+    background: rgba(244,241,232,0.08); border:1px solid var(--line);
+    border-radius:6px; padding:9px 13px; min-width:54px; text-align:center;
+  }
+
+  canvas#graphCanvas{
+    width:100%; max-width:640px; height:auto;
+    background: rgba(244,241,232,0.03);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display:block; margin-top: 10px;
+  }
+
+  .export-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background: transparent; border: 2px solid var(--line); color: var(--chalk);
+    border-radius: 9px; padding: 10px 16px; font-size: 13.5px; font-weight:600;
+    margin-top: 4px;
+  }
+  .export-btn:hover{ border-color: var(--chalk); }
+
+  footer.credit{
+    text-align:center; margin-top: 22px;
+    font-size:11.5px; color: rgba(244,241,232,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="board">
+    <header class="title-block">
+      <h1>ChalkSolve</h1>
+      <p>Pick what you need below — one step at a time.</p>
+    </header>
+
+    <div class="chooser">
+      <label for="toolSelect">What do you need to solve?</label>
+      <select id="toolSelect">
+        <option value="linear">Linear equation — solve for x</option>
+        <option value="quadratic">Quadratic equation — ax² + bx + c = 0</option>
+        <option value="general">Any other equation</option>
+        <option value="derivative">Derivative</option>
+        <option value="integral">Integral</option>
+        <option value="matrix">Matrix operations</option>
+        <option value="graph">Graph a function</option>
+        <option value="simplify">Simplify or evaluate an expression</option>
+      </select>
+    </div>
+
+    <!-- ================= LINEAR ================= -->
+    <section class="panel active" id="panel-linear">
+      <p class="panel-desc">Solves an equation in the form <strong>ax + b = c</strong> and shows every step.</p>
+      <button class="example-btn" data-fill="linear">Fill in an example</button>
+      <div class="row-3">
+        <div class="field"><label>a</label><input type="number" id="lin-a" value="2"></div>
+        <div class="field"><label>b</label><input type="number" id="lin-b" value="3"></div>
+        <div class="field"><label>c</label><input type="number" id="lin-c" value="11"></div>
+      </div>
+      <p class="helper" style="margin:-6px 0 14px;">Example: for "2x + 3 = 11", a = 2, b = 3, c = 11.</p>
+      <button class="solve-btn" id="lin-solve">Solve for x</button>
+      <div class="result" id="lin-result"></div>
+    </section>
+
+    <!-- ================= QUADRATIC ================= -->
+    <section class="panel" id="panel-quadratic">
+      <p class="panel-desc">Solves an equation in the form <strong>ax² + bx + c = 0</strong> using the quadratic formula.</p>
+      <button class="example-btn" data-fill="quadratic">Fill in an example</button>
+      <div class="row-3">
+        <div class="field"><label>a</label><input type="number" id="quad-a" value="1"></div>
+        <div class="field"><label>b</label><input type="number" id="quad-b" value="-5"></div>
+        <div class="field"><label>c</label><input type="number" id="quad-c" value="6"></div>
+      </div>
+      <p class="helper" style="margin:-6px 0 14px;">Example: for "x² − 5x + 6 = 0", a = 1, b = −5, c = 6.</p>
+      <button class="solve-btn" id="quad-solve">Solve for x</button>
+      <div class="result" id="quad-result"></div>
+    </section>
+
+    <!-- ================= GENERAL ================= -->
+    <section class="panel" id="panel-general">
+      <p class="panel-desc">For equations that aren't simple linear or quadratic ones. Type the full equation and this will search for real number answers.</p>
+      <button class="example-btn" data-fill="general">Fill in an example</button>
+      <div class="field">
+        <label>Your equation</label>
+        <input type="text" id="gen-eq" placeholder="e.g. x^3 - 2x - 5 = 0" value="x^3 - 2x - 5 = 0">
+        <p class="helper">Use <code>^</code> for powers, and write it as one side = the other side.</p>
+      </div>
+      <button class="solve-btn" id="gen-solve">Find the answer</button>
+      <div class="result" id="gen-result"></div>
+    </section>
+
+    <!-- ================= DERIVATIVE ================= -->
+    <section class="panel" id="panel-derivative">
+      <p class="panel-desc">Finds the derivative of a function, one term at a time, and names the rule used for each.</p>
+      <button class="example-btn" data-fill="derivative">Fill in an example</button>
+      <div class="field">
+        <label>f(x) =</label>
+        <input type="text" id="deriv-expr" placeholder="e.g. 3x^2 + sin(x) - 5" value="3x^2 + sin(x) - 5">
+        <p class="helper">Works with powers, sin, cos, eˣ, and ln(x).</p>
+      </div>
+      <button class="solve-btn" id="deriv-solve">Find the derivative</button>
+      <div class="result" id="deriv-result"></div>
+    </section>
+
+    <!-- ================= INTEGRAL ================= -->
+    <section class="panel" id="panel-integral">
+      <p class="panel-desc">Finds the indefinite integral of a function, term by term.</p>
+      <button class="example-btn" data-fill="integral">Fill in an example</button>
+      <div class="field">
+        <label>f(x) =</label>
+        <input type="text" id="int-expr" placeholder="e.g. 3x^2 + sin(x)" value="3x^2 + sin(x)">
+        <p class="helper">Works with powers of x, sin(x), cos(x), eˣ, √x, and 1/x.</p>
+      </div>
+      <button class="solve-btn" id="int-solve">Find the integral</button>
+      <div class="result" id="int-result"></div>
+    </section>
+
+    <!-- ================= MATRIX ================= -->
+    <section class="panel" id="panel-matrix">
+      <p class="panel-desc">Enter your matrix numbers below — commas between columns, a new line for each row.</p>
+      <button class="example-btn" data-fill="matrix">Fill in an example</button>
+      <div class="field">
+        <label>What do you want to do?</label>
+        <select id="mat-op">
+          <option value="add">Add matrix A + matrix B</option>
+          <option value="sub">Subtract matrix A − matrix B</option>
+          <option value="mul">Multiply matrix A × matrix B</option>
+          <option value="det">Find the determinant of matrix A</option>
+          <option value="inv">Find the inverse of matrix A</option>
+          <option value="trans">Transpose matrix A</option>
+        </select>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Matrix A</label>
+          <textarea id="mat-a">1, 2
+3, 4</textarea>
+        </div>
+        <div class="field" id="mat-b-field">
+          <label>Matrix B</label>
+          <textarea id="mat-b">5, 6
+7, 8</textarea>
+          <p class="helper">Only needed for add, subtract, or multiply.</p>
+        </div>
+      </div>
+      <button class="solve-btn" id="mat-solve">Compute</button>
+      <div class="result" id="mat-result"></div>
+    </section>
+
+    <!-- ================= GRAPH ================= -->
+    <section class="panel" id="panel-graph">
+      <p class="panel-desc">Type a function of x and pick a range to see what it looks like.</p>
+      <button class="example-btn" data-fill="graph">Fill in an example</button>
+      <div class="field">
+        <label>f(x) =</label>
+        <input type="text" id="graph-expr" placeholder="e.g. x^2 - 4" value="x^2 - 4">
+      </div>
+      <div class="row-2">
+        <div class="field"><label>Smallest x to show</label><input type="number" id="graph-min" value="-10"></div>
+        <div class="field"><label>Largest x to show</label><input type="number" id="graph-max" value="10"></div>
+      </div>
+      <button class="solve-btn" id="graph-plot">Draw the graph</button>
+      <canvas id="graphCanvas" width="640" height="380"></canvas>
+      <div class="error-box" id="graph-error" style="display:none; margin-top:12px;"></div>
+    </section>
+
+    <!-- ================= SIMPLIFY ================= -->
+    <section class="panel" id="panel-simplify">
+      <p class="panel-desc">Simplifies an expression, and can also plug in a value for x.</p>
+      <button class="example-btn" data-fill="simplify">Fill in an example</button>
+      <div class="field">
+        <label>Expression</label>
+        <input type="text" id="simp-expr" placeholder="e.g. (2x + 4)/2 + x" value="(2x + 4)/2 + x">
+      </div>
+      <div class="field" style="max-width:200px;">
+        <label>Evaluate at x =</label>
+        <input type="number" id="simp-x" value="3">
+      </div>
+      <button class="solve-btn" id="simp-solve">Simplify it</button>
+      <div class="result" id="simp-result"></div>
+    </section>
+
+    <footer class="credit">Built for coursework &amp; projects · works fully offline once the page has loaded</footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  function engineReady(){ return typeof math !== 'undefined'; }
+
+  // ---------- tool switcher ----------
+  const select = document.getElementById('toolSelect');
+  function showPanel(name){
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+  }
+  select.addEventListener('change', () => showPanel(select.value));
+
+  // ---------- example fillers ----------
+  const examples = {
+    linear: () => { setVal('lin-a', 4); setVal('lin-b', -7); setVal('lin-c', 9); },
+    quadratic: () => { setVal('quad-a', 1); setVal('quad-b', -5); setVal('quad-c', 6); },
+    general: () => { setVal('gen-eq', 'x^3 - 2x - 5 = 0'); },
+    derivative: () => { setVal('deriv-expr', '3x^2 + sin(x) - 5'); },
+    integral: () => { setVal('int-expr', '3x^2 + sin(x)'); },
+    matrix: () => { setVal('mat-a', '1, 2\n3, 4'); setVal('mat-b', '5, 6\n7, 8'); document.getElementById('mat-op').value = 'mul'; },
+    graph: () => { setVal('graph-expr', 'x^2 - 4'); setVal('graph-min', -10); setVal('graph-max', 10); },
+    simplify: () => { setVal('simp-expr', '(2x + 4)/2 + x'); setVal('simp-x', 3); }
+  };
+  function setVal(id, v){ document.getElementById(id).value = v; }
+  document.querySelectorAll('.example-btn').forEach(btn => {
+    btn.addEventListener('click', () => examples[btn.dataset.fill]());
+  });
+
+  // ---------- shared helpers ----------
+  function fmt(n){
+    if(!isFinite(n)) return String(n);
+    let r = Math.round(n * 10000) / 10000;
+    if(Object.is(r, -0)) r = 0;
+    return r.toString();
+  }
+  function renderAnswerBlock(containerId, answerText, steps, exportInfo){
+    const el = document.getElementById(containerId);
+    const stepsHtml = steps && steps.length
+      ? `<details class="steps-toggle"><summary>Show step-by-step working</summary><ul class="steps">${steps.map(s => `<li${s.warn?' class="warn"':''}>${s.text}</li>`).join('')}</ul></details>`
+      : '';
+    el.innerHTML = `
+      <div class="answer-card"><div class="label">Answer</div><div class="value">${answerText}</div></div>
+      ${stepsHtml}
+      <button class="export-btn" id="${containerId}-export">⬇ Export as PDF</button>
+    `;
+    if(exportInfo){
+      document.getElementById(containerId + '-export').addEventListener('click', () => {
+        exportPdf(exportInfo.title, exportInfo.subtitle, exportInfo.lines, exportInfo.filename);
+      });
+    }
+  }
+  function renderError(containerId, message){
+    document.getElementById(containerId).innerHTML = `<div class="error-box">${message}</div>`;
+  }
+
+  function exportPdf(title, subtitle, lines, filename){
+    try{
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+      const margin = 56;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const maxWidth = pageWidth - margin * 2;
+      let y = margin;
+
+      doc.setFont('times', 'bold'); doc.setFontSize(18); doc.setTextColor(20,20,20);
+      doc.splitTextToSize(title, maxWidth).forEach(l => { doc.text(l, margin, y); y += 22; });
+
+      if(subtitle){
+        doc.setFont('times', 'normal'); doc.setFontSize(11); doc.setTextColor(100,100,100);
+        doc.splitTextToSize(subtitle, maxWidth).forEach(l => { doc.text(l, margin, y); y += 16; });
+      }
+      y += 8;
+      doc.setDrawColor(210,210,210); doc.line(margin, y, pageWidth - margin, y); y += 20;
+
+      doc.setFont('courier', 'normal'); doc.setFontSize(11); doc.setTextColor(25,25,25);
+      lines.forEach(line => {
+        doc.splitTextToSize(line, maxWidth).forEach(l => {
+          if(y > pageHeight - margin){ doc.addPage(); y = margin; }
+          doc.text(l, margin, y); y += 15;
+        });
+        y += 4;
+      });
+      doc.save(filename);
+    }catch(err){
+      console.error(err);
+      alert('Could not generate the PDF — check the console for details.');
+    }
+  }
+
+  // ===================== LINEAR =====================
+  document.getElementById('lin-solve').addEventListener('click', () => {
+    const a = parseFloat(document.getElementById('lin-a').value);
+    const b = parseFloat(document.getElementById('lin-b').value);
+    const c = parseFloat(document.getElementById('lin-c').value);
+    const steps = [{ text: `Start: ${fmt(a)}x + ${fmt(b)} = ${fmt(c)}` }];
+    let answerText;
+
+    if(a === 0){
+      if(b === c){ steps.push({text:`Since a = 0, this is always true.`}); answerText = 'Infinitely many solutions'; }
+      else { steps.push({text:`Since a = 0, this is never true.`, warn:true}); answerText = 'No solution'; }
+    } else {
+      const rhs = c - b;
+      steps.push({ text: `Subtract ${fmt(b)} from both sides: ${fmt(a)}x = ${fmt(rhs)}` });
+      const x = rhs / a;
+      steps.push({ text: `Divide both sides by ${fmt(a)}: x = ${fmt(x)}` });
+      answerText = `x = ${fmt(x)}`;
+    }
+
+    renderAnswerBlock('lin-result', answerText, steps, {
+      title: 'Linear Equation — Worked Solution',
+      subtitle: `${fmt(a)}x + ${fmt(b)} = ${fmt(c)}`,
+      lines: steps.map(s => '• ' + s.text).concat(['', 'Answer: ' + answerText]),
+      filename: 'linear-equation-solution.pdf'
+    });
+  });
+
+  // ===================== QUADRATIC =====================
+  document.getElementById('quad-solve').addEventListener('click', () => {
+    const a = parseFloat(document.getElementById('quad-a').value);
+    const b = parseFloat(document.getElementById('quad-b').value);
+    const c = parseFloat(document.getElementById('quad-c').value);
+    if(a === 0){ renderError('quad-result', 'a cannot be 0 in a quadratic equation — try the linear equation tool instead.'); return; }
+
+    const steps = [{ text: `Start: ${fmt(a)}x² + ${fmt(b)}x + ${fmt(c)} = 0` }];
+    const D = b*b - 4*a*c;
+    steps.push({ text: `Discriminant: D = b² − 4ac = ${fmt(D)}` });
+    steps.push({ text: `Formula: x = (−b ± √D) / (2a)` });
+    let answerText;
+
+    if(D > 0){
+      const sq = Math.sqrt(D);
+      const x1 = (-b+sq)/(2*a), x2 = (-b-sq)/(2*a);
+      steps.push({ text: `D > 0, so there are two real answers.` });
+      steps.push({ text: `x₁ = ${fmt(x1)},  x₂ = ${fmt(x2)}` });
+      answerText = `x₁ = ${fmt(x1)},  x₂ = ${fmt(x2)}`;
+    } else if(D === 0){
+      const x = -b/(2*a);
+      steps.push({ text: `D = 0, so there is exactly one repeated answer.` });
+      answerText = `x = ${fmt(x)} (double root)`;
+    } else {
+      const re = -b/(2*a), im = Math.sqrt(-D)/(2*a);
+      steps.push({ text: `D < 0, so the answers are complex numbers.` });
+      answerText = `x = ${fmt(re)} + ${fmt(im)}i  or  x = ${fmt(re)} − ${fmt(im)}i`;
+    }
+
+    renderAnswerBlock('quad-result', answerText, steps, {
+      title: 'Quadratic Equation — Worked Solution',
+      subtitle: `${fmt(a)}x² + ${fmt(b)}x + ${fmt(c)} = 0`,
+      lines: steps.map(s => '• ' + s.text).concat(['', 'Answer: ' + answerText]),
+      filename: 'quadratic-equation-solution.pdf'
+    });
+  });
+
+  // ===================== GENERAL EQUATION =====================
+  document.getElementById('gen-solve').addEventListener('click', () => {
+    if(!engineReady()){ renderError('gen-result', 'The math engine failed to load. Check your internet connection and reload the page.'); return; }
+    const raw = document.getElementById('gen-eq').value.trim();
+    try{
+      let lhs = raw, rhs = '0';
+      if(raw.includes('=')){ const p = raw.split('='); lhs = p[0]; rhs = p.slice(1).join('='); }
+      const f = math.compile(`(${lhs}) - (${rhs})`);
+      const steps = [{ text: `Rearranged so one side is 0: (${lhs}) − (${rhs}) = 0` }];
+
+      const xmin=-25, xmax=25, step=0.02;
+      const roots = [];
+      let prevX = xmin, prevY; try{ prevY = f.evaluate({x:prevX}); }catch(e){ prevY = NaN; }
+      for(let x=xmin+step; x<=xmax; x+=step){
+        let y; try{ y = f.evaluate({x}); }catch(e){ y = NaN; }
+        if(isFinite(prevY) && isFinite(y) && prevY*y < 0){
+          let lo=prevX, hi=x, flo=prevY;
+          for(let i=0;i<50;i++){ const mid=(lo+hi)/2; const fm=f.evaluate({x:mid}); if(flo*fm<=0){hi=mid;} else {lo=mid; flo=fm;} }
+          const root=(lo+hi)/2;
+          if(!roots.some(r=>Math.abs(r-root)<1e-3)) roots.push(root);
+        }
+        prevX=x; prevY=y;
+      }
+      steps.push({ text: `Searched for values of x between −25 and 25 where the answer crosses zero.` });
+
+      let answerText;
+      if(roots.length === 0){ steps.push({text:'No answers found in that range.', warn:true}); answerText = 'No real solution found between -25 and 25'; }
+      else{ roots.sort((a,b)=>a-b); roots.forEach((r,i)=>steps.push({text:`Answer ${i+1}: x ≈ ${fmt(r)}`})); answerText = roots.map((r,i)=>`x${i+1} ≈ ${fmt(r)}`).join(',  '); }
+
+      renderAnswerBlock('gen-result', answerText, steps, {
+        title: 'Equation — Solution', subtitle: raw,
+        lines: steps.map(s=>'• '+s.text).concat(['', 'Answer: '+answerText]),
+        filename: 'equation-solution.pdf'
+      });
+    }catch(err){ renderError('gen-result', `Couldn't understand that equation: ${err.message}`); }
+  });
+
+  // ===================== CALCULUS HELPERS =====================
+  function unwrap(node){ while(node.type === 'ParenthesisNode') node = node.content; return node; }
+  function flattenSum(node, sign, out){
+    node = unwrap(node);
+    if(node.type==='OperatorNode' && node.op==='+' && node.args.length===2){ flattenSum(node.args[0],sign,out); flattenSum(node.args[1],sign,out); }
+    else if(node.type==='OperatorNode' && node.op==='-' && node.args.length===2){ flattenSum(node.args[0],sign,out); flattenSum(node.args[1],-sign,out); }
+    else if(node.type==='OperatorNode' && node.op==='unaryMinus'){ flattenSum(node.args[0],-sign,out); }
+    else out.push({node,sign});
+    return out;
+  }
+  function extractCoeff(node){
+    node = unwrap(node);
+    if(node.type==='OperatorNode' && node.op==='*' && node.args.length===2){
+      const l=extractCoeff(node.args[0]), r=extractCoeff(node.args[1]);
+      if(l.rest && r.rest) throw new Error('a product of two functions is beyond this tool');
+      return { coeff: l.coeff*r.coeff, rest: l.rest||r.rest };
+    }
+    if(node.type==='OperatorNode' && node.op==='/' && node.args.length===2){
+      const l=extractCoeff(node.args[0]); const d=unwrap(node.args[1]);
+      if(d.type!=='ConstantNode') throw new Error('dividing by x is not supported');
+      return { coeff: l.coeff/d.value, rest: l.rest };
+    }
+    if(node.type==='OperatorNode' && node.op==='unaryMinus'){ const inner=extractCoeff(node.args[0]); return {coeff:-inner.coeff, rest:inner.rest}; }
+    if(node.type==='ConstantNode') return { coeff: node.value, rest: null };
+    return { coeff: 1, rest: node };
+  }
+  function integratePattern(node){
+    if(node===null) return { expr:'x', rule:'∫c dx = c·x' };
+    node = unwrap(node);
+    if(node.type==='SymbolNode' && node.name==='x') return { expr:'x^2/2', rule:'∫x dx = x²/2' };
+    if(node.type==='OperatorNode' && node.op==='^'){
+      const base=unwrap(node.args[0]), exp=unwrap(node.args[1]);
+      if(base.type==='SymbolNode' && base.name==='x' && exp.type==='ConstantNode'){
+        const n=exp.value;
+        if(n===-1) return { expr:'ln(|x|)', rule:'∫x⁻¹ dx = ln|x|' };
+        const np1=n+1;
+        return { expr:`x^${fmt(np1)}/${fmt(np1)}`, rule:`Power rule (n=${fmt(n)})` };
+      }
+      throw new Error('only powers of plain x are supported here');
+    }
+    if(node.type==='FunctionNode'){
+      const name = node.fn.name; const arg = unwrap(node.args[0]);
+      if(!(arg.type==='SymbolNode' && arg.name==='x')) throw new Error(`${name}(...) with a compound argument isn't supported here`);
+      if(name==='sin') return { expr:'-cos(x)', rule:'∫sin(x) dx = −cos(x)' };
+      if(name==='cos') return { expr:'sin(x)', rule:'∫cos(x) dx = sin(x)' };
+      if(name==='exp') return { expr:'exp(x)', rule:'∫eˣ dx = eˣ' };
+      if(name==='sqrt') return { expr:'(2/3)*x^1.5', rule:'√x = x^0.5 → power rule' };
+      throw new Error(`the function "${name}(x)" isn't supported here`);
+    }
+    throw new Error('this term is not supported here');
+  }
+
+  // ===================== DERIVATIVE =====================
+  document.getElementById('deriv-solve').addEventListener('click', () => {
+    if(!engineReady()){ renderError('deriv-result', 'The math engine failed to load. Check your internet connection and reload the page.'); return; }
+    const exprStr = document.getElementById('deriv-expr').value.trim();
+    try{
+      const root = math.parse(exprStr);
+      const terms = flattenSum(root, 1, []);
+      const steps = [];
+      terms.forEach((t,i) => {
+        const signedStr = (t.sign<0 ? '-(' : '(') + t.node.toString() + ')';
+        let dstr;
+        try{ dstr = math.simplify(math.derivative(signedStr,'x')).toString(); }
+        catch(e){ dstr = math.derivative(signedStr,'x').toString(); }
+        steps.push({ text: `Term ${i+1}: d/dx[${signedStr}] = ${dstr}` });
+      });
+      let full;
+      try{ full = math.simplify(math.derivative(exprStr,'x')).toString(); }
+      catch(e){ full = math.derivative(exprStr,'x').toString(); }
+
+      renderAnswerBlock('deriv-result', `f'(x) = ${full}`, steps, {
+        title: 'Derivative — Worked Solution', subtitle: `f(x) = ${exprStr}`,
+        lines: steps.map(s=>'• '+s.text).concat(['', `Answer: f'(x) = ${full}`]),
+        filename: 'derivative-solution.pdf'
+      });
+    }catch(err){ renderError('deriv-result', `Couldn't read that expression: ${err.message}`); }
+  });
+
+  // ===================== INTEGRAL =====================
+  document.getElementById('int-solve').addEventListener('click', () => {
+    if(!engineReady()){ renderError('int-result', 'The math engine failed to load. Check your internet connection and reload the page.'); return; }
+    const exprStr = document.getElementById('int-expr').value.trim();
+    try{
+      const root = math.parse(exprStr);
+      const terms = flattenSum(root, 1, []);
+      const steps = []; const pieces = []; let warned = false;
+
+      terms.forEach((t,i) => {
+        const label = t.node.toString();
+        try{
+          const { coeff, rest } = extractCoeff(t.node);
+          const signedCoeff = coeff * t.sign;
+          const pat = integratePattern(rest);
+          const coeffStr = (signedCoeff===1) ? '' : (signedCoeff===-1 ? '-' : fmt(signedCoeff)+'*');
+          const piece = `${coeffStr}${pat.expr}`;
+          steps.push({ text: `Term ${i+1}: ${t.sign<0?'-':''}${label}  →  ${pat.rule}  →  ${piece}` });
+          pieces.push(piece);
+        }catch(err){
+          steps.push({ text: `Term ${i+1}: "${label}" — ${err.message}. Skipped.`, warn:true });
+          warned = true;
+        }
+      });
+
+      const final = pieces.length ? pieces.join(' + ').replace(/\+ -/g,'− ') + ' + C' : 'could not be found symbolically';
+      if(warned) steps.push({ text: 'Note: some terms were outside this tool\'s range (like products of two functions) and were skipped.', warn:true });
+
+      renderAnswerBlock('int-result', `∫f(x) dx = ${final}`, steps, {
+        title: 'Integral — Worked Solution', subtitle: `f(x) = ${exprStr}`,
+        lines: steps.map(s=>'• '+s.text).concat(['', `Answer: ∫f(x) dx = ${final}`]),
+        filename: 'integral-solution.pdf'
+      });
+    }catch(err){ renderError('int-result', `Couldn't read that expression: ${err.message}`); }
+  });
+
+  // ===================== MATRIX =====================
+  function parseMatrix(str){ return str.trim().split('\n').map(row => row.split(',').map(v => parseFloat(v.trim()))); }
+  function matrixHtml(m){ return '<div class="matrix-grid">' + m.map(row => '<div class="mrow">' + row.map(v => `<div class="mcell">${fmt(v)}</div>`).join('') + '</div>').join('') + '</div>'; }
+
+  const matOpSelect = document.getElementById('mat-op');
+  function toggleMatB(){ document.getElementById('mat-b-field').style.display = ['add','sub','mul'].includes(matOpSelect.value) ? 'block' : 'none'; }
+  matOpSelect.addEventListener('change', toggleMatB); toggleMatB();
+
+  document.getElementById('mat-solve').addEventListener('click', () => {
+    if(!engineReady()){ renderError('mat-result', 'The math engine failed to load. Check your internet connection and reload the page.'); return; }
+    const op = matOpSelect.value;
+    try{
+      const A = parseMatrix(document.getElementById('mat-a').value);
+      const B = parseMatrix(document.getElementById('mat-b').value);
+      let resultHtml = '', label = '', pdfLines = [];
+
+      if(op==='add' || op==='sub'){ const res = op==='add' ? math.add(A,B) : math.subtract(A,B); label = op==='add' ? 'A + B' : 'A − B'; resultHtml = matrixHtml(res); pdfLines = res.map(r=>r.map(fmt).join('\t')); }
+      else if(op==='mul'){ const res = math.multiply(A,B); label='A × B'; resultHtml = matrixHtml(res); pdfLines = res.map(r=>r.map(fmt).join('\t')); }
+      else if(op==='det'){ const d = math.det(A); label='Determinant of A'; resultHtml=''; pdfLines=[`det(A) = ${fmt(d)}`];
+        renderAnswerBlock('mat-result', fmt(d), [], { title:'Matrix — Determinant', subtitle:`A = [${A.map(r=>r.join(', ')).join(' | ')}]`, lines: pdfLines, filename:'matrix-determinant.pdf' });
+        return;
+      }
+      else if(op==='inv'){ const inv = math.inv(A); label='Inverse of A'; resultHtml = matrixHtml(inv); pdfLines = inv.map(r=>r.map(fmt).join('\t')); }
+      else if(op==='trans'){ const t = math.transpose(A); label='Transpose of A'; resultHtml = matrixHtml(t); pdfLines = t.map(r=>r.map(fmt).join('\t')); }
+
+      const el = document.getElementById('mat-result');
+      el.innerHTML = `<div class="answer-card"><div class="label">${label}</div><div class="value">${resultHtml}</div></div>
+        <button class="export-btn" id="mat-result-export">⬇ Export as PDF</button>`;
+      document.getElementById('mat-result-export').addEventListener('click', () => {
+        exportPdf(`Matrix Operation — ${label}`, `A = [${A.map(r=>r.join(', ')).join(' | ')}]` + (['add','sub','mul'].includes(op) ? `,  B = [${B.map(r=>r.join(', ')).join(' | ')}]` : ''), pdfLines, 'matrix-solution.pdf');
+      });
+    }catch(err){ renderError('mat-result', `Couldn't compute that: ${err.message}. Check that the matrix sizes match the chosen operation.`); }
+  });
+
+  // ===================== GRAPH =====================
+  document.getElementById('graph-plot').addEventListener('click', () => {
+    const errorBox = document.getElementById('graph-error');
+    errorBox.style.display = 'none';
+    if(!engineReady()){ errorBox.style.display='block'; errorBox.textContent='The math engine failed to load. Check your internet connection and reload the page.'; return; }
+
+    const exprStr = document.getElementById('graph-expr').value.trim();
+    const xmin = parseFloat(document.getElementById('graph-min').value);
+    const xmax = parseFloat(document.getElementById('graph-max').value);
+    const canvas = document.getElementById('graphCanvas'); const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height; ctx.clearRect(0,0,W,H);
+
+    try{
+      const f = math.compile(exprStr); const N = 400; const pts = [];
+      let ymin=Infinity, ymax=-Infinity;
+      for(let i=0;i<=N;i++){
+        const x = xmin + (xmax-xmin)*i/N; let y;
+        try{ y = f.evaluate({x}); }catch(e){ y = NaN; }
+        if(isFinite(y)){ ymin=Math.min(ymin,y); ymax=Math.max(ymax,y); }
+        pts.push({x,y});
+      }
+      if(!isFinite(ymin) || !isFinite(ymax)) throw new Error('no finite values found over this range');
+      if(ymin===ymax){ ymin-=1; ymax+=1; }
+      const pad=(ymax-ymin)*0.1; ymin-=pad; ymax+=pad;
+      const toPx = (x,y) => [40+(x-xmin)/(xmax-xmin)*(W-60), H-30-(y-ymin)/(ymax-ymin)*(H-60)];
+
+      ctx.strokeStyle='rgba(244,241,232,0.12)'; ctx.lineWidth=1;
+      for(let gx=0;gx<=10;gx++){ const x=xmin+(xmax-xmin)*gx/10; const [px]=toPx(x,ymin); ctx.beginPath(); ctx.moveTo(px,10); ctx.lineTo(px,H-30); ctx.stroke(); }
+      for(let gy=0;gy<=8;gy++){ const y=ymin+(ymax-ymin)*gy/8; const [,py]=toPx(xmin,y); ctx.beginPath(); ctx.moveTo(40,py); ctx.lineTo(W-20,py); ctx.stroke(); }
+      ctx.strokeStyle='rgba(244,241,232,0.45)'; ctx.lineWidth=1.5;
+      if(xmin<=0 && xmax>=0){ const [px0]=toPx(0,ymin); ctx.beginPath(); ctx.moveTo(px0,10); ctx.lineTo(px0,H-30); ctx.stroke(); }
+      if(ymin<=0 && ymax>=0){ const [,py0]=toPx(xmin,0); ctx.beginPath(); ctx.moveTo(40,py0); ctx.lineTo(W-20,py0); ctx.stroke(); }
+
+      ctx.strokeStyle='#e8c468'; ctx.lineWidth=2.5; ctx.beginPath(); let started=false;
+      pts.forEach(p => { if(!isFinite(p.y)){ started=false; return; } const [px,py]=toPx(p.x,p.y); if(!started){ ctx.moveTo(px,py); started=true; } else ctx.lineTo(px,py); });
+      ctx.stroke();
+
+      ctx.fillStyle='rgba(244,241,232,0.55)'; ctx.font='11px IBM Plex Mono, monospace';
+      ctx.fillText(fmt(xmin), 36, H-14); ctx.fillText(fmt(xmax), W-40, H-14);
+      ctx.fillText(fmt(ymax), 4, 20); ctx.fillText(fmt(ymin), 4, H-34);
+    }catch(err){ errorBox.style.display='block'; errorBox.textContent = `Couldn't draw that: ${err.message}`; }
+  });
+
+  // ===================== SIMPLIFY =====================
+  document.getElementById('simp-solve').addEventListener('click', () => {
+    if(!engineReady()){ renderError('simp-result', 'The math engine failed to load. Check your internet connection and reload the page.'); return; }
+    const exprStr = document.getElementById('simp-expr').value.trim();
+    const xVal = parseFloat(document.getElementById('simp-x').value);
+    try{
+      const simplified = math.simplify(exprStr).toString();
+      const steps = [{ text: `Simplified form: ${simplified}` }];
+      let evalResult;
+      try{ evalResult = math.evaluate(exprStr, { x: xVal }); steps.push({ text: `At x = ${fmt(xVal)}, this equals ${fmt(evalResult)}` }); }
+      catch(e){ steps.push({ text: `Couldn't evaluate numerically at x = ${fmt(xVal)}`, warn:true }); }
+
+      const answerText = evalResult !== undefined ? `${simplified}  (= ${fmt(evalResult)} at x = ${fmt(xVal)})` : simplified;
+      renderAnswerBlock('simp-result', answerText, steps, {
+        title: 'Simplify & Evaluate — Worked Solution', subtitle: `Expression: ${exprStr}`,
+        lines: steps.map(s=>'• '+s.text), filename: 'simplify-solution.pdf'
+      });
+    }catch(err){ renderError('simp-result', `Couldn't read that expression: ${err.message}`); }
+  });
+})();
+</script>
+</body>
+</html>
