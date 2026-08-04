@@ -957,12 +957,527 @@
       padding-top: 70px;
     }
 
+    .tools-subsection {
+      margin-bottom: 60px;
+    }
+
+    .tools-subsection-header {
+      text-align: center;
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .tools-subsection-title {
+      font-family: var(--ff-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      padding: 12px 28px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+    }
+
+    .tools-subsection-title i {
+      font-size: 1.3rem;
+    }
+
+    .trending-icon {
+      color: #ff6b00;
+      animation: fireGlow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes fireGlow {
+      0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 107, 0, 0.5)); }
+      50% { filter: drop-shadow(0 0 15px rgba(255, 107, 0, 0.8)); }
+    }
+
+    .upcoming-icon {
+      color: var(--cyan);
+      animation: rocketBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes rocketBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-5px) rotate(-5deg); }
+      75% { transform: translateY(-3px) rotate(5deg); }
+    }
+
+    .tools-subsection-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ===== UPCOMING SECTION STYLES ===== */
+    .upcoming-section {
+      position: relative;
+      padding: 60px 0;
+      margin-top: 30px;
+    }
+
+    .upcoming-section-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% 30%, rgba(106, 0, 255, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 70%, rgba(0, 255, 240, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%, rgba(255, 255, 255, 0.02) 100%);
+      border-radius: 32px;
+      pointer-events: none;
+    }
+
+    .upcoming-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5%;
+      right: 5%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 240, 0.3), rgba(106, 0, 255, 0.3), transparent);
+      border-radius: 2px;
+    }
+
+    .upcoming-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .upcoming-badge-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(0, 255, 240, 0.08);
+      border: 1px solid rgba(0, 255, 240, 0.2);
+      border-radius: 50px;
+      margin-bottom: 16px;
+      animation: fadeInDown 0.6s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upcoming-live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: livePulse 1.5s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .upcoming-live-text {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      text-transform: uppercase;
+    }
+
+    .upcoming-title {
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===== UPCOMING CARD STYLES ===== */
+    .upcoming-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1.5px dashed rgba(255, 255, 255, 0.12) !important;
+      filter: grayscale(100%) brightness(0.65);
+      opacity: 0.75;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .upcoming-card-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      transition: left 0.7s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .upcoming-card:hover .upcoming-card-shine {
+      left: 100%;
+    }
+
+    .upcoming-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.05), rgba(106, 0, 255, 0.05));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
+
+    .upcoming-card:hover {
+      filter: grayscale(30%) brightness(0.85);
+      opacity: 1;
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(0, 255, 240, 0.3) !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 255, 240, 0.1);
+    }
+
+    .upcoming-card:hover::before {
+      opacity: 1;
+    }
+
+    .upcoming-icon-box {
+      filter: grayscale(70%);
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .upcoming-card:hover .upcoming-icon-box {
+      filter: grayscale(20%);
+      transform: scale(1.1) rotate(-5deg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .upcoming-card h3 {
+      position: relative;
+      z-index: 2;
+      transition: color 0.3s ease;
+    }
+
+    .upcoming-card:hover h3 {
+      color: var(--cyan);
+    }
+
+    .upcoming-card p {
+      position: relative;
+      z-index: 2;
+    }
+
+    .upcoming-card .tool-tags {
+      position: relative;
+      z-index: 2;
+    }
+
+    .upcoming-card .tool-footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ===== UPCOMING BADGE ===== */
+    .upcoming-badge {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06)) !important;
+      color: rgba(255, 255, 255, 0.8) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: badgePulse 2.5s ease-in-out infinite;
+      backdrop-filter: blur(8px);
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.15); }
+      50% { box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.08); }
+    }
+
+    /* ===== UPCOMING BUTTON ===== */
+    .upcoming-btn {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px dashed rgba(255, 255, 255, 0.2) !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      cursor: pointer !important;
+      transition: all 0.4s ease !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upcoming-btn i {
+      margin-right: 4px;
+      animation: bellShake 2s ease-in-out infinite;
+    }
+
+    @keyframes bellShake {
+      0%, 100% { transform: rotate(0deg); }
+      10% { transform: rotate(10deg); }
+      20% { transform: rotate(-10deg); }
+      30% { transform: rotate(8deg); }
+      40% { transform: rotate(0deg); }
+    }
+
+    .upcoming-card:hover .upcoming-btn {
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.15), rgba(106, 0, 255, 0.15)) !important;
+      border: 1px solid rgba(0, 255, 240, 0.4) !important;
+      color: var(--cyan) !important;
+      transform: scale(1.05);
+    }
+
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 22px;
       max-width: 1400px;
       margin: 0 auto;
+    }
+
+    /* ===== STAY TUNED POPUP ===== */
+    .stay-tuned-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .stay-tuned-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .stay-tuned-popup {
+      background: linear-gradient(135deg, rgba(20, 16, 40, 0.98), rgba(10, 8, 24, 0.98));
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      position: relative;
+      transform: scale(0.8) translateY(30px);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 100px rgba(106, 0, 255, 0.15);
+    }
+
+    .stay-tuned-overlay.show .stay-tuned-popup {
+      transform: scale(1) translateY(0);
+    }
+
+    .stay-tuned-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .stay-tuned-close:hover {
+      background: rgba(255, 0, 128, 0.2);
+      border-color: var(--pink);
+      color: var(--pink);
+      transform: rotate(90deg);
+    }
+
+    .stay-tuned-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(106, 0, 255, 0.3), rgba(0, 255, 240, 0.2));
+      border: 2px solid rgba(0, 255, 240, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      margin: 0 auto 24px;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 240, 0.3); transform: scale(1); }
+      50% { box-shadow: 0 0 30px rgba(0, 255, 240, 0.3); transform: scale(1.05); }
+    }
+
+    .stay-tuned-title {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stay-tuned-tool-name {
+      font-size: 1rem;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .stay-tuned-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .stay-tuned-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 30px rgba(106, 0, 255, 0.4);
+    }
+
+    .stay-tuned-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 14px 45px rgba(106, 0, 255, 0.6);
+    }
+
+    .stay-tuned-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .stay-tuned-btn:hover i {
+      transform: translateX(4px);
+    }
+
+    /* ===== UPCOMING GRID ===== */
+    .upcoming-grid {
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .upcoming-grid .tool-card {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .upcoming-grid .tool-card:nth-child(1) { animation-delay: 0.1s; }
+    .upcoming-grid .tool-card:nth-child(2) { animation-delay: 0.15s; }
+    .upcoming-grid .tool-card:nth-child(3) { animation-delay: 0.2s; }
+    .upcoming-grid .tool-card:nth-child(4) { animation-delay: 0.25s; }
+    .upcoming-grid .tool-card:nth-child(5) { animation-delay: 0.3s; }
+    .upcoming-grid .tool-card:nth-child(6) { animation-delay: 0.35s; }
+    .upcoming-grid .tool-card:nth-child(7) { animation-delay: 0.4s; }
+    .upcoming-grid .tool-card:nth-child(8) { animation-delay: 0.45s; }
+
+    /* ===== ENHANCED STAY TUNED POPUP ===== */
+    .stay-tuned-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      border-radius: 24px;
+    }
+
+    .st-particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      opacity: 0.3;
+      animation: stFloat 4s ease-in-out infinite;
+    }
+
+    .st-particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+    .st-particle:nth-child(2) { left: 80%; top: 30%; animation-delay: 0.5s; background: var(--purple); }
+    .st-particle:nth-child(3) { left: 20%; top: 70%; animation-delay: 1s; }
+    .st-particle:nth-child(4) { left: 70%; top: 80%; animation-delay: 1.5s; background: var(--pink); }
+    .st-particle:nth-child(5) { left: 50%; top: 10%; animation-delay: 2s; }
+
+    @keyframes stFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+      50% { transform: translateY(-20px) scale(1.3); opacity: 0.6; }
+    }
+
+    .stay-tuned-icon-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .stay-tuned-icon-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(106, 0, 255, 0.3), rgba(0, 255, 240, 0.3));
+      animation: iconRing 3s ease-in-out infinite;
+    }
+
+    @keyframes iconRing {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.15); opacity: 0.2; }
+    }
+
+    .stay-tuned-divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      border-radius: 3px;
+      margin: 0 auto 20px;
+    }
+
+    .stay-tuned-features {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .st-feature {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .st-feature i {
+      color: var(--cyan);
+      font-size: 0.7rem;
     }
 
     .tool-card {
@@ -2786,6 +3301,59 @@
         gap: 16px;
       }
 
+      /* Upcoming section mobile */
+      .upcoming-section {
+        padding: 40px 0;
+        margin-top: 20px;
+      }
+
+      .upcoming-section::before {
+        left: 2%;
+        right: 2%;
+      }
+
+      .upcoming-badge-wrapper {
+        padding: 5px 12px;
+        gap: 6px;
+      }
+
+      .upcoming-live-text {
+        font-size: 0.6rem;
+        letter-spacing: 1.5px;
+      }
+
+      .upcoming-card {
+        padding: 20px 16px;
+      }
+
+      .upcoming-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .stay-tuned-features {
+        gap: 8px;
+      }
+
+      .st-feature {
+        font-size: 0.72rem;
+        padding: 5px 10px;
+      }
+
+      .stay-tuned-popup {
+        padding: 36px 24px;
+        border-radius: 20px;
+      }
+
+      .stay-tuned-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 2.2rem;
+      }
+
+      .stay-tuned-title {
+        font-size: 1.4rem;
+      }
+
       .search-section {
         padding: 0;
       }
@@ -3704,7 +4272,7 @@
 
 <body>
   <!-- ===== AUTH OVERLAY ===== -->
-  <div class="auth-overlay" id="authOverlay">
+  <div class="auth-overlay hidden" id="authOverlay">
     <div class="auth-bg-mesh"></div>
     <div class="auth-bg-grid"></div>
     <div class="auth-bg-particles" id="authParticles"></div>
@@ -3923,7 +4491,7 @@
       </div>
     </section>
 
-    <!-- ===== TOOLS SECTION ===== -->
+      <!-- ===== TOOLS SECTION ===== -->
     <section class="tools-section" id="tools" aria-label="AI Tools catalog">
       <div class="section-header">
         <div class="section-label">🔧 AI Tool Suite</div>
@@ -3950,11 +4518,16 @@
         <button class="filter-tab" data-cat="study" role="tab" aria-selected="false">📚 Study</button>
       </div>
 
-      <div class="tools-grid" id="toolsGrid">
-
-        <span class="tool-badge badge-hot">🔥 Hot</span>
+      <!-- ===== TOP TRENDING TOOLS ===== -->
+      <div class="tools-subsection">
+        <div class="tools-subsection-header">
+          <h3 class="tools-subsection-title"><i class="fas fa-fire trending-icon" aria-hidden="true"></i> Top Trending Tools</h3>
+          <p class="tools-subsection-desc">Most popular tools loved by students worldwide</p>
+        </div>
+        <div class="tools-grid" id="toolsGrid">
 
         <article class="tool-card reveal" data-cat="writing" data-name="grammar checker writing spell punctuation">
+          <span class="tool-badge badge-hot">🔥 Hot</span>
           <div class="tool-icon" style="background:linear-gradient(135deg,#00c853,#00e5ff)">✅</div>
           <h3>Grammar Checker</h3>
           <p>Fix grammar, spelling, punctuation and style errors instantly. Get a professional writing score with
@@ -3965,20 +4538,6 @@
             <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/grammer Checker/index.html')">Use Now →</a></button>
           </div>
         </article>
-
-        <!-- <article class="tool-card reveal" data-cat="document" data-name="ppt presentation maker slides powerpoint">
-          <span class="tool-badge badge-popular">⭐ Popular</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#ff0080,#6a00ff)">📊</div>
-          <h3>PPT Maker</h3>
-          <p>Create stunning AI-designed presentations in under 60 seconds. Choose from 100+ professional themes and
-            export to PowerPoint.</p>
-          <div class="tool-tags"><span class="tool-tag">PPTX</span><span class="tool-tag">PDF</span><span
-              class="tool-tag">Google Slides</span></div>
-          <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.4k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://gamma.app/')">Use Now →</a></button>
-          </div>
-        </article> -->
 
         <article class="tool-card reveal" data-cat="document" data-name="resume builder cv job career">
           <span class="tool-badge badge-new">✨ New</span>
@@ -3992,18 +4551,6 @@
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (2.7k)</span></div>
             <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://resume-bulider-student.vercel.app/')">Use Now
                 →</a></button>
-          </div>
-        </article>
-
-        <article class="tool-card reveal" data-cat="document" data-name="pdf converter merge split compress">
-          <div class="tool-icon" style="background:linear-gradient(135deg,#ff5f57,#ff9800)">📑</div>
-          <h3>Puzzle Game</h3>
-          <p>A puzzle game is a type of video game that emphasizes puzzle-solving skills. Players are challenged to solve a series of puzzles or problems to progress through the game.</p>
-          <div class="tool-tags"><span class="tool-tag">Convert</span><span class="tool-tag">Merge</span><span
-              class="tool-tag">Compress</span></div>
-          <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (1.5k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://3-d-game-flax.vercel.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -4036,31 +4583,35 @@
           </div>
         </article>
 
-        <article class="tool-card reveal" data-cat="code" data-name="typing speed test wpm keyboard accuracy">
-          <span class="tool-badge badge-ai">🤖 AI</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#00acc1,#00e5ff)">⌨️</div>
-          <h3>Typing Speed Test</h3>
-          <p>Measure your typing speed in WPM and accuracy with real-time feedback. Track your progress and improve your
-            keyboard skills.</p>
-          <div class="tool-tags">
-            <span class="tool-tag">WPM Tracker</span>
-            <span class="tool-tag">Accuracy</span>
-            <span class="tool-tag">Progress</span>
-          </div>
-
+        <article class="tool-card reveal" data-cat="math" data-name="math solver calculator calculus algebra equations">
+          <span class="tool-badge badge-popular">⭐ Popular</span>
+          <div class="tool-icon" style="background:linear-gradient(135deg,#7b2d00,#ff6b00)">🧮</div>
+          <h3>Math Solver</h3>
+          <p>Solve calculus, algebra, statistics, and more with detailed step-by-step explanations. Understand every
+            solution, not just the answer.</p>
+          <div class="tool-tags"><span class="tool-tag">Calculus</span><span class="tool-tag">Algebra</span><span
+              class="tool-tag">Stats</span></div>
           <div class="tool-footer">
-            <div class="tool-rating">
-              <i class="fas fa-star"></i>
-              <span>4.9 (4.1k)</span>
-            </div>
-
-            <a href="#" onclick="handleToolClick(event, 'https://typing-speed-lovat.vercel.app/')" target="_blank">
-              <button class="tool-use-btn">Use Now →</button>
-            </a>
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.8k)</span></div>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/Math solver/chalksolve.html')">Use Now →</a></button>
           </div>
         </article>
 
-      <article class="tool-card reveal" data-cat="math" data-name="gpa calculator grade point average college school">
+        <article class="tool-card reveal" data-cat="study" data-name="ai tutor chat learn explain concept help">
+          <span class="tool-badge badge-ai">🤖 AI</span>
+          <div class="tool-icon" style="background:linear-gradient(135deg,#6a00ff,#ff0080)">🧠</div>
+          <h3>AI Tutor</h3>
+          <p>Get instant AI-powered explanations for any concept in any subject. Like having a personal Socratic tutor
+            available 24/7.</p>
+          <div class="tool-tags"><span class="tool-tag">All Subjects</span><span class="tool-tag">Socratic Mode</span>
+          </div>
+          <div class="tool-footer">
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (5.2k)</span></div>
+            <button class="tool-use-btn" onclick="handleToolClick(event, 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/')">Use Now →</button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" data-cat="math" data-name="gpa calculator grade point average college school">
           <span class="tool-badge badge-popular">⭐ Popular</span>
           <div class="tool-icon" style="background:linear-gradient(135deg,#004d40,#00c896)">🎓</div>
           <h3>GPA Calculator</h3>
@@ -4074,17 +4625,58 @@
           </div>
         </article>
 
-        <article class="tool-card reveal" data-cat="math" data-name="math solver calculator calculus algebra equations">
-          <span class="tool-badge badge-popular">⭐ Popular</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#7b2d00,#ff6b00)">🧮</div>
-          <h3>Math Solver</h3>
-          <p>Solve calculus, algebra, statistics, and more with detailed step-by-step explanations. Understand every
-            solution, not just the answer.</p>
-          <div class="tool-tags"><span class="tool-tag">Calculus</span><span class="tool-tag">Algebra</span><span
-              class="tool-tag">Stats</span></div>
+        <article class="tool-card reveal" data-cat="writing" data-name="plagiarism checker originality detect academic integrity">
+          <span class="tool-badge badge-hot">🔥 Hot</span>
+          <div class="tool-icon" style="background:linear-gradient(135deg,#d32f2f,#ef5350)">🔍</div>
+          <h3>Plagiarism Checker</h3>
+          <p>Check your essays, assignments, and reports for originality before submission. Get a detailed similarity report to ensure academic integrity.</p>
+          <div class="tool-tags"><span class="tool-tag">Originality</span><span class="tool-tag">Academic Integrity</span></div>
           <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.8k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, './ALL TOOLS FOLDER/Math solver/chalksolve.html')">Use Now →</a></button>
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.1k)</span></div>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://www.duplichecker.com/')">Use Now →</a></button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" data-cat="writing" data-name="essay outliner structure outline academic writing">
+          <span class="tool-badge badge-new">✨ New</span>
+          <div class="tool-icon" style="background:linear-gradient(135deg,#5c6bc0,#7986cb)">📝</div>
+          <h3>Essay & Youtube Description Generator</h3>
+          <p>Generate a structured essay outline with thesis statement, body paragraphs, and conclusion in seconds. Start your essays with confidence.</p>
+          <div class="tool-tags"><span class="tool-tag">Thesis Builder</span><span class="tool-tag">Structure</span></div>
+          <div class="tool-footer">
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.6k)</span></div>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/')">Use Now →</a></button>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" data-cat="code" data-name="typing speed test wpm keyboard accuracy">
+          <span class="tool-badge badge-ai">🤖 AI</span>
+          <div class="tool-icon" style="background:linear-gradient(135deg,#00acc1,#00e5ff)">⌨️</div>
+          <h3>Typing Speed Test</h3>
+          <p>Measure your typing speed in WPM and accuracy with real-time feedback. Track your progress and improve your
+            keyboard skills.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">WPM Tracker</span>
+            <span class="tool-tag">Accuracy</span>
+            <span class="tool-tag">Progress</span>
+          </div>
+          <div class="tool-footer">
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (4.1k)</span></div>
+            <a href="#" onclick="handleToolClick(event, 'https://typing-speed-lovat.vercel.app/')" target="_blank">
+              <button class="tool-use-btn">Use Now →</button>
+            </a>
+          </div>
+        </article>
+
+        <article class="tool-card reveal" data-cat="document" data-name="pdf converter merge split compress">
+          <div class="tool-icon" style="background:linear-gradient(135deg,#ff5f57,#ff9800)">📑</div>
+          <h3>Puzzle Game</h3>
+          <p>A puzzle game is a type of video game that emphasizes puzzle-solving skills. Players are challenged to solve a series of puzzles or problems to progress through the game.</p>
+          <div class="tool-tags"><span class="tool-tag">Convert</span><span class="tool-tag">Merge</span><span
+              class="tool-tag">Compress</span></div>
+          <div class="tool-footer">
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.7 (1.5k)</span></div>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://3-d-game-flax.vercel.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -4106,22 +4698,12 @@
           <h3>Quiz Maker</h3>
           <p>Generate custom practice quizzes on any topic with instant grading and personalized performance analytics
             to ace your exams.</p>
-
-          <div class="tool-tags">
-            <span class="tool-tag">Auto-Grade</span>
-            <span class="tool-tag">Analytics</span>
-          </div>
-
+          <div class="tool-tags"><span class="tool-tag">Auto-Grade</span><span class="tool-tag">Analytics</span></div>
           <div class="tool-footer">
-            <div class="tool-rating">
-              <i class="fas fa-star"></i>
-              <span>4.8 (1.4k)</span>
-            </div>
-
+            <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.4k)</span></div>
             <a href="#" onclick="handleToolClick(event, 'https://pn-quiz-start.vercel.app/')" target="_blank">
               <button class="tool-use-btn">Use Now →</button>
             </a>
-
           </div>
         </article>
 
@@ -4164,56 +4746,6 @@
           </div>
         </article>
 
-        <article class="tool-card reveal" data-cat="study" data-name="ai tutor chat learn explain concept help">
-          <span class="tool-badge badge-ai">🤖 AI</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#6a00ff,#ff0080)">🧠</div>
-          <h3>AI Tutor</h3>
-          <p>Get instant AI-powered explanations for any concept in any subject. Like having a personal Socratic tutor
-            available 24/7.</p>
-          <div class="tool-tags"><span class="tool-tag">All Subjects</span><span class="tool-tag">Socratic Mode</span>
-          </div>
-          <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (5.2k)</span></div>
-            <button class="tool-use-btn" onclick="handleToolClick(event, 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/')">Use Now →</button>
-          </div>
-        </article>
-
-        <!-- <article class="tool-card reveal" data-cat="writing" data-name="citation generator apa mla chicago reference bibliography">
-          <span class="tool-badge badge-new">✨ New</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#00897b,#26a69a)">📑</div>
-          <h3>Citation Generator</h3>
-          <p>Auto-generate perfect citations in APA, MLA, Chicago, and Harvard formats. Just paste the source and get a properly formatted reference instantly.</p>
-          <div class="tool-tags"><span class="tool-tag">APA</span><span class="tool-tag">MLA</span><span class="tool-tag">Chicago</span></div>
-          <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.9k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, '#')">Use Now →</a></button>
-          </div>
-        </article> -->
-
-        <article class="tool-card reveal" data-cat="writing" data-name="essay outliner structure outline academic writing">
-          <span class="tool-badge badge-new">✨ New</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#5c6bc0,#7986cb)">📝</div>
-          <h3>Essay & Youtube Description Generator</h3>
-          <p>Generate a structured essay outline with thesis statement, body paragraphs, and conclusion in seconds. Start your essays with confidence.</p>
-          <div class="tool-tags"><span class="tool-tag">Thesis Builder</span><span class="tool-tag">Structure</span></div>
-          <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.6k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/')">Use Now →</a></button>
-          </div>
-        </article>
-
-        <article class="tool-card reveal" data-cat="writing" data-name="plagiarism checker originality detect academic integrity">
-          <span class="tool-badge badge-hot">🔥 Hot</span>
-          <div class="tool-icon" style="background:linear-gradient(135deg,#d32f2f,#ef5350)">🔍</div>
-          <h3>Plagiarism Checker</h3>
-          <p>Check your essays, assignments, and reports for originality before submission. Get a detailed similarity report to ensure academic integrity.</p>
-          <div class="tool-tags"><span class="tool-tag">Originality</span><span class="tool-tag">Academic Integrity</span></div>
-          <div class="tool-footer">
-            <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (3.1k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://www.duplichecker.com/')">Use Now →</a></button>
-          </div>
-        </article>
-
         <article class="tool-card reveal" data-cat="study" data-name="study schedule planner timetable plan organize">
           <span class="tool-badge badge-new">✨ New</span>
           <div class="tool-icon" style="background:linear-gradient(135deg,#00796b,#4db6ac)">📅</div>
@@ -4229,6 +4761,156 @@
         <div class="no-results" id="noResults" aria-live="polite">
           <i class="fas fa-search-minus" aria-hidden="true"></i>
           <p>No tools match your search. Try different keywords!</p>
+        </div>
+      </div>
+      </div>
+
+      <!-- ===== UPCOMING TOOLS ===== -->
+      <div class="tools-subsection upcoming-section">
+        <div class="upcoming-section-bg"></div>
+        <div class="tools-subsection-header">
+          <div class="upcoming-badge-wrapper">
+            <span class="upcoming-live-dot"></span>
+            <span class="upcoming-live-text">IN DEVELOPMENT</span>
+          </div>
+          <h3 class="tools-subsection-title upcoming-title"><i class="fas fa-rocket upcoming-icon" aria-hidden="true"></i> Upcoming Tools</h3>
+          <p class="tools-subsection-desc">Exciting new tools we're building for you soon</p>
+        </div>
+        <div class="tools-grid upcoming-grid">
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('Word To Pdf Converter')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#00897b,#26a69a)">📑</div>
+            <h3>Word To Pdf Converter</h3>
+            <p>Convert your Word documents to PDF format with ease. Maintain formatting and quality while ensuring compatibility across different devices and platforms.</p>
+            <div class="tool-tags"><span class="tool-tag">Convert</span><span class="tool-tag">PDF</span><span class="tool-tag">Word</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('Pdf To Word Converter')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#ff6f00,#ffab00)">📄</div>
+            <h3>Pdf To Word Converter</h3>
+            <p>Convert your PDF documents to Word format with ease. Maintain formatting and quality while ensuring compatibility across different devices and platforms.</p>
+            <div class="tool-tags"><span class="tool-tag">Convert</span><span class="tool-tag">PDF</span><span class="tool-tag">Word</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('Youtube Video Downloader')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#ff0080,#6a00ff)">🎬</div>
+            <h3>Youtube Video Downloader</h3>
+            <p>Download and save your favorite YouTube videos for offline viewing. No registration required and supports multiple quality options.</p>
+            <div class="tool-tags"><span class="tool-tag">Download</span><span class="tool-tag">Offline</span><span class="tool-tag">Quality Options</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('Interview Preparation Platform')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#00c853,#69f0ae)">🎯</div>
+            <h3>Interview Preparation Platform</h3>
+            <p>Comprehensive platform with company-specific questions, aptitude tests, coding challenges, HR questions, mock interviews, and progress tracking.</p>
+            <div class="tool-tags"><span class="tool-tag">Mock Interview</span><span class="tool-tag">Coding</span><span class="tool-tag">Aptitude</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('Paraphrasing Tool')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#aa00ff,#e040fb)">🔄</div>
+            <h3>Paraphrasing Tool</h3>
+            <p>Rewrite and rephrase any text while maintaining the original meaning. Perfect for avoiding plagiarism and improving clarity in your academic writing.</p>
+            <div class="tool-tags"><span class="tool-tag">Rewrite</span><span class="tool-tag">Academic</span><span class="tool-tag">Clarity</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('Language Translator')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#1a237e,#5c6bc0)">🌍</div>
+            <h3>Language Translator</h3>
+            <p>Translate text between 100+ languages instantly. Perfect for international students, foreign language courses, and multilingual research papers.</p>
+            <div class="tool-tags"><span class="tool-tag">100+ Languages</span><span class="tool-tag">Instant</span><span class="tool-tag">Accurate</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('PPT To PDF Converter')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#e91e63,#ff5722)">📊</div>
+            <h3>PPT To PDF Converter</h3>
+            <p>Convert your PowerPoint presentations to PDF format instantly. Preserve animations, transitions, and formatting for easy sharing and printing.</p>
+            <div class="tool-tags"><span class="tool-tag">PPT</span><span class="tool-tag">PDF</span><span class="tool-tag">Convert</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+          <article class="tool-card reveal upcoming-card" onclick="showStayTuned('PDF to PPT Converter')">
+            <div class="upcoming-card-shine"></div>
+            <span class="tool-badge upcoming-badge">Coming Soon</span>
+            <div class="tool-icon upcoming-icon-box" style="background:linear-gradient(135deg,#2196f3,#00bcd4)">📑</div>
+            <h3>PDF to PPT Converter</h3>
+            <p>Convert your PDF files into editable PowerPoint presentations. Maintain layout, images, and text formatting for professional results.</p>
+            <div class="tool-tags"><span class="tool-tag">PDF</span><span class="tool-tag">PPT</span><span class="tool-tag">Editable</span></div>
+            <div class="tool-footer">
+              <div class="tool-rating"><i class="fas fa-clock"></i><span>Coming Soon</span></div>
+              <button class="tool-use-btn upcoming-btn"><i class="fas fa-bell"></i> Stay Tuned</button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- ===== STAY TUNED POPUP ===== -->
+      <div class="stay-tuned-overlay" id="stayTunedOverlay" onclick="closeStayTuned(event)">
+        <div class="stay-tuned-popup">
+          <div class="stay-tuned-particles">
+            <span class="st-particle"></span>
+            <span class="st-particle"></span>
+            <span class="st-particle"></span>
+            <span class="st-particle"></span>
+            <span class="st-particle"></span>
+          </div>
+          <button class="stay-tuned-close" onclick="closeStayTuned(event)" aria-label="Close"><i class="fas fa-times"></i></button>
+          <div class="stay-tuned-icon-wrapper">
+            <div class="stay-tuned-icon">🚀</div>
+          </div>
+          <h3 class="stay-tuned-title">Stay Tuned!</h3>
+          <p class="stay-tuned-tool-name" id="stayTunedToolName">Tool Name</p>
+          <div class="stay-tuned-divider"></div>
+          <p class="stay-tuned-desc">This amazing tool is currently under development. We're working hard to bring it to you soon.</p>
+          <div class="stay-tuned-features">
+            <span class="st-feature"><i class="fas fa-check-circle"></i> Free for Students</span>
+            <span class="st-feature"><i class="fas fa-check-circle"></i> AI-Powered</span>
+            <span class="st-feature"><i class="fas fa-check-circle"></i> Launching Soon</span>
+          </div>
+          <button class="stay-tuned-btn" onclick="closeStayTuned(event)">
+            Got It! <i class="fas fa-arrow-right"></i>
+          </button>
         </div>
       </div>
       <!-- ===== FEATURES ===== -->
@@ -4463,7 +5145,7 @@
         <div class="resources-grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;max-width:1400px;margin:0 auto;">
 
           <!-- 1. Grammar Checker -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, './ALL TOOLS FOLDER/grammer Checker/index.html')" style="cursor:pointer">
             <div class="resource-emoji">✅</div>
             <h3>Grammar Checker</h3>
             <p>Paste your essay, report, or any text and instantly fix grammar, spelling, punctuation, and style errors. The AI rates your writing and suggests improvements for clarity, tone, and flow. Perfect for polishing assignments before submission.</p>
@@ -4471,17 +5153,10 @@
             <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Essays, Reports, Assignments</div>
           </div>
 
-          <!-- 2. PPT Maker -->
-          <div class="resource-card reveal">
-            <div class="resource-emoji">📊</div>
-            <h3>PPT Maker</h3>
-            <p>Enter your topic and get a complete professional presentation in under 60 seconds. Choose from 100+ themes, export to PowerPoint or PDF, and share with classmates via Google Slides. No design skills needed.</p>
-            <div class="tool-tags" style="margin-top:4px;"><span class="tool-tag">PPTX</span><span class="tool-tag">PDF</span><span class="tool-tag">Google Slides</span></div>
-            <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Presentations, Projects, Seminars</div>
-          </div>
+          
 
           <!-- 3. Resume Builder -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://resume-bulider-student.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">📄</div>
             <h3>Resume Builder</h3>
             <p>Build an ATS-optimized resume with AI suggestions for every section. Choose from professional templates, add your education and experience, and get real-time feedback on content. Export as PDF and apply for internships or jobs.</p>
@@ -4489,17 +5164,8 @@
             <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Internships, Jobs, Applications</div>
           </div>
 
-          <!-- 4. PDF Converter -->
-          <div class="resource-card reveal">
-            <div class="resource-emoji">📑</div>
-            <h3>PDF Converter</h3>
-            <p>Convert, merge, split, compress, and edit PDF files directly in your browser. No uploads needed — everything is processed locally for maximum privacy. Supports Word, Excel, JPG, and more.</p>
-            <div class="tool-tags" style="margin-top:4px;"><span class="tool-tag">Convert</span><span class="tool-tag">Merge</span><span class="tool-tag">Compress</span><span class="tool-tag">Private</span></div>
-            <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Document Management, Submissions</div>
-          </div>
-
           <!-- 5. Text To Speech -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, './ALL TOOLS FOLDER/text to voice converter/index.html')" style="cursor:pointer">
             <div class="resource-emoji">🔊</div>
             <h3>Text To Speech</h3>
             <p>Convert any text into natural-sounding audio in 50+ languages. Choose from multiple AI voices and playback speeds. Export as MP3 for listening during commutes, workouts, or study breaks.</p>
@@ -4508,7 +5174,7 @@
           </div>
 
           <!-- 6. Text To Image Generator -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://text-to-image-create.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">🎨</div>
             <h3>Text To Image Generator</h3>
             <p>Describe what you need in plain text and the AI creates a unique, high-quality image in seconds. Generate diagrams, illustrations, concept art, or project visuals. Export as PNG for any use.</p>
@@ -4517,7 +5183,7 @@
           </div>
 
           <!-- 7. Typing Speed Test -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://typing-speed-lovat.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">⌨️</div>
             <h3>Typing Speed Test</h3>
             <p>Measure your typing speed in Words Per Minute (WPM) and accuracy with real-time visual feedback. Track your progress over time and identify your weakest keys. Essential for computer science students and anyone who types regularly.</p>
@@ -4526,7 +5192,7 @@
           </div>
 
           <!-- 8. GPA Calculator -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, './ALL TOOLS FOLDER/gpa calculator/gpa-calculator.html')" style="cursor:pointer">
             <div class="resource-emoji">🎓</div>
             <h3>GPA Calculator</h3>
             <p>Add your courses, credits, and grades to instantly calculate your semester or cumulative GPA. Supports weighted and unweighted GPA scales. Track your academic standing and see what grades you need to hit your target GPA.</p>
@@ -4535,7 +5201,7 @@
           </div>
 
           <!-- 9. Math Solver -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, './ALL TOOLS FOLDER/Math solver/chalksolve.html')" style="cursor:pointer">
             <div class="resource-emoji">🧮</div>
             <h3>Math Solver</h3>
             <p>Solve calculus, algebra, statistics, linear algebra, and more with detailed step-by-step explanations. Enter any equation or problem and get not just the answer, but the full reasoning behind every step. Learn, don't just memorize.</p>
@@ -4544,7 +5210,7 @@
           </div>
 
           <!-- 10. Online Notes Book -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, './ALL TOOLS FOLDER/online Note Book/index.html')" style="cursor:pointer">
             <div class="resource-emoji">📓</div>
             <h3>Online Notes Book</h3>
             <p>Write and organize your notes in a clean, distraction-free editor. Auto-save ensures you never lose work, and you can access your notes from any device. Organize by subject, tag, or date for quick reference.</p>
@@ -4553,7 +5219,7 @@
           </div>
 
           <!-- 11. Quiz Maker -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://pn-quiz-start.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">📝</div>
             <h3>Quiz Maker</h3>
             <p>Generate custom practice quizzes on any topic with auto-grading and performance analytics. Test yourself before exams, identify weak areas, and track improvement over time. Perfect for active recall study method.</p>
@@ -4562,7 +5228,7 @@
           </div>
 
           <!-- 12. To Do List -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://to-do-list-app-lovat-ten-65.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">✅</div>
             <h3>To Do List</h3>
             <p>Manage your daily tasks, assignments, and deadlines in one smart organizer. Set priorities, due dates, and get reminders. Never miss a submission deadline again with our intuitive task management system.</p>
@@ -4571,7 +5237,7 @@
           </div>
 
           <!-- 13. Online Calculator -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://modern-calculator-kohl.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">🔢</div>
             <h3>Online Calculator</h3>
             <p>Perform basic and advanced scientific calculations instantly in your browser. Supports trigonometry, logarithms, exponents, and complex expressions. Fast, accurate, and works without any installation.</p>
@@ -4580,7 +5246,7 @@
           </div>
 
           <!-- 14. Online Code Editor -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, './ALL TOOLS FOLDER/text editor/index.html')" style="cursor:pointer">
             <div class="resource-emoji">💻</div>
             <h3>Online Code Editor</h3>
             <p>Write, run, and test HTML, CSS, and JavaScript code right in your browser with a live preview. Syntax highlighting, auto-completion, and error detection built in. No setup required — just open and start coding.</p>
@@ -4589,7 +5255,7 @@
           </div>
 
           <!-- 15. AI Tutor -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">🧠</div>
             <h3>AI Tutor</h3>
             <p>Ask any question in any subject and get an instant, clear explanation. Uses Socratic method to help you understand concepts deeply, not just memorize answers. Covers all academic subjects and 50+ programming languages.</p>
@@ -4597,35 +5263,21 @@
             <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Concept Learning, Doubt Clearing</div>
           </div>
 
-          <!-- 16. Citation Generator -->
-          <div class="resource-card reveal">
-            <div class="resource-emoji">📑</div>
-            <h3>Citation Generator</h3>
-            <p>Auto-generate perfectly formatted citations in APA 7th, MLA 9th, Chicago, and Harvard styles. Just paste the source details — author, title, year, URL — and get an instant, error-free reference. No more manual formatting.</p>
-            <div class="tool-tags" style="margin-top:4px;"><span class="tool-tag">APA</span><span class="tool-tag">MLA</span><span class="tool-tag">Chicago</span><span class="tool-tag">Harvard</span></div>
-            <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Research Papers, Bibliographies</div>
-          </div>
+      
 
-          <!-- 17. Flashcard Maker -->
-          <div class="resource-card reveal">
-            <div class="resource-emoji">🃏</div>
-            <h3>Flashcard Maker</h3>
-            <p>Create AI-powered flashcards from any topic, textbook, or notes. Uses spaced repetition algorithm to optimize your review schedule and boost long-term memory retention. Study smarter, not longer.</p>
-            <div class="tool-tags" style="margin-top:4px;"><span class="tool-tag">Spaced Repetition</span><span class="tool-tag">AI-Powered</span><span class="tool-tag">Memory Boost</span></div>
-            <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Memorization, Revision, Exams</div>
-          </div>
+          
 
           <!-- 18. Essay Outliner -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">📝</div>
-            <h3>Essay Outliner</h3>
+            <h3>Essay & YouTube Description Generator</h3>
             <p>Generate a complete structured essay outline with thesis statement, introduction hook, body paragraphs with evidence placeholders, and conclusion in seconds. Start writing with a clear roadmap instead of a blank page.</p>
             <div class="tool-tags" style="margin-top:4px;"><span class="tool-tag">Thesis Builder</span><span class="tool-tag">Structure</span><span class="tool-tag">Time Saver</span></div>
             <div class="resource-arrow"><i class="fas fa-arrow-right"></i> Best for: Essays, Research Papers, Assignments</div>
           </div>
 
           <!-- 19. Plagiarism Checker -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://www.duplichecker.com/')" style="cursor:pointer">
             <div class="resource-emoji">🔍</div>
             <h3>Plagiarism Checker</h3>
             <p>Scan your essays, reports, and assignments for originality before submission. Get a detailed similarity report showing exact matches, paraphrased content, and proper citation checks. Protect your academic reputation.</p>
@@ -4634,7 +5286,7 @@
           </div>
 
           <!-- 20. Study Schedule Planner -->
-          <div class="resource-card reveal">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://study-planner-flax-gamma.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">📅</div>
             <h3>Study Schedule Planner</h3>
             <p>Plan your entire weekly study timetable with AI assistance. Set subject goals, allocate time blocks, track daily progress, and never miss a deadline. Perfect for exam season when every hour counts.</p>
@@ -4734,7 +5386,7 @@
         </div>
       </section>
 
-      <!-- ===== CONTACT ===== -->
+      <!-- ===== CONTACT =====
       <section class="features" id="contact" style="padding-top:72px;background:rgba(255,255,255,0.02);"
         aria-label="Contact and support">
         <div class="section-header">
@@ -4767,7 +5419,7 @@
               class="fas fa-paper-plane"></i> Contact Support Now</a>
         </div>
       </section>
-  </main>
+  </main> -->
 
   <!-- ===== FOOTER ===== -->
   <footer role="contentinfo">
@@ -5058,6 +5710,11 @@
       document.getElementById('navCta').style.display = 'none';
       document.getElementById('navAvatar').textContent = user.name.charAt(0).toUpperCase();
       document.getElementById('navUserName').textContent = user.name;
+      if (pendingToolUrl) {
+        const url = pendingToolUrl;
+        pendingToolUrl = null;
+        setTimeout(() => openTool(url), 400);
+      }
     }
 
     function requireAuth() {
@@ -5070,9 +5727,18 @@
       return true;
     }
 
+    let pendingToolUrl = null;
+
     function handleToolClick(e, url) {
       e.preventDefault();
-      if (!requireAuth()) return;
+      if (!requireAuth()) {
+        pendingToolUrl = url || null;
+        return;
+      }
+      openTool(url);
+    }
+
+    function openTool(url) {
       if (url && url !== '#') {
         if (url.startsWith('http://') || url.startsWith('https://')) {
           window.open(url, '_blank', 'noopener,noreferrer');
@@ -5086,8 +5752,6 @@
       const user = getCurrentUser();
       if (user) {
         showMainApp(user);
-      } else {
-        triggerAuthEntrance();
       }
 
       const container = document.getElementById('authParticles');
@@ -5224,7 +5888,8 @@
     const toolSearch = document.getElementById('toolSearch');
     const searchClear = document.getElementById('searchClear');
     const filterTabs = document.querySelectorAll('.filter-tab');
-    const toolCards = document.querySelectorAll('.tool-card');
+    const toolsGrid = document.getElementById('toolsGrid');
+    const toolCards = toolsGrid ? toolsGrid.querySelectorAll('.tool-card') : [];
     const noResults = document.getElementById('noResults');
     let currentCat = 'all';
 
@@ -5234,21 +5899,33 @@
       let visible = 0;
       toolCards.forEach(card => {
         const cat = card.dataset.cat;
-        const name = card.dataset.name;
+        const name = card.dataset.name || '';
+        const title = card.querySelector('h3') ? card.querySelector('h3').textContent.toLowerCase() : '';
+        const desc = card.querySelector('p') ? card.querySelector('p').textContent.toLowerCase() : '';
         const catMatch = currentCat === 'all' || cat === currentCat;
-        const qMatch = !q || name.includes(q) || card.querySelector('h3').textContent.toLowerCase().includes(q) || card.querySelector('p').textContent.toLowerCase().includes(q);
+        const qMatch = !q || name.includes(q) || title.includes(q) || desc.includes(q);
         card.classList.toggle('hidden', !(catMatch && qMatch));
         if (catMatch && qMatch) visible++;
       });
       noResults.style.display = visible === 0 ? 'block' : 'none';
     }
+
     toolSearch.addEventListener('input', filterTools);
-    searchClear.addEventListener('click', () => { toolSearch.value = ''; filterTools(); });
+    searchClear.addEventListener('click', () => { 
+      toolSearch.value = ''; 
+      filterTools(); 
+    });
+
     filterTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        filterTabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-        tab.classList.add('active'); tab.setAttribute('aria-selected', 'true');
-        currentCat = tab.dataset.cat; filterTools();
+        filterTabs.forEach(t => { 
+          t.classList.remove('active'); 
+          t.setAttribute('aria-selected', 'false'); 
+        });
+        tab.classList.add('active'); 
+        tab.setAttribute('aria-selected', 'true');
+        currentCat = tab.dataset.cat; 
+        filterTools();
       });
     });
 
@@ -5506,6 +6183,32 @@
     }
 
     /* ============ SMOOTH SCROLL ============ */
+
+    /* ============ STAY TUNED POPUP ============ */
+    function showStayTuned(toolName) {
+      const overlay = document.getElementById('stayTunedOverlay');
+      document.getElementById('stayTunedToolName').textContent = toolName;
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeStayTuned(e) {
+      if (e.target.id === 'stayTunedOverlay' || e.target.closest('.stay-tuned-close') || e.target.closest('.stay-tuned-btn')) {
+        const overlay = document.getElementById('stayTunedOverlay');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const overlay = document.getElementById('stayTunedOverlay');
+        if (overlay.classList.contains('show')) {
+          overlay.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      }
+    });
   </script>
 </body>
 
