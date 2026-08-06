@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sheets — Spreadsheet Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --app:#188038; --app-500:#34A853; --app-100:#e6f4ea; --app-900:#0f5132; --sel:#188038;
+    --ink:#202124; --ink-soft:#5f6368; --line:#d8dee3; --chrome:#ffffff; --bar:#f8f9fa; --canvas:#f1f3f4;
+    --head-bg:#f5f7f8; --head-ink:#5f6368; --shadow-lg:0 2px 6px rgba(60,64,67,.25), 0 8px 20px 4px rgba(60,64,67,.16);
+  }
+  body.dark{
+    --ink:#e8eaed; --ink-soft:#9aa0a6; --line:#3c4043; --chrome:#202124; --bar:#292a2d;
+    --canvas:#171a1c; --app-100:#16241d; --head-bg:#2b3034; --head-ink:#9aa0a6; --sel:#34A853;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    color:var(--ink); height:100vh; display:flex; flex-direction:column; background:var(--chrome);
+    transition:background .25s, color .25s; overflow:hidden;
+  }
+
+  .titlebar{
+    background:var(--chrome); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:10px; padding:8px 16px; flex-shrink:0;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+  .logo{
+    width:38px; height:38px; border-radius:12px; display:grid; place-items:center;
+    color:#fff; font-size:19px; font-weight:700;
+    background:linear-gradient(135deg, #34A853, #188038);
+    box-shadow:0 2px 6px rgba(24,128,56,.35);
+  }
+  .brand-name{ display:flex; flex-direction:column; line-height:1.15; }
+  .brand-name b{ font-size:13px; letter-spacing:.02em; }
+  .brand-name span{ font-size:11px; color:var(--ink-soft); }
+  .titlebar input.docname{
+    flex:1; min-width:80px; max-width:340px; text-align:center; margin:0 auto;
+    background:transparent; border:none; color:var(--ink); font-size:17px; font-weight:500;
+    outline:none; border-radius:8px; padding:7px 12px; font-family:inherit; transition:background .2s;
+  }
+  .titlebar input.docname:hover{ background:var(--bar); }
+  .titlebar input.docname:focus{ background:var(--bar); box-shadow:0 0 0 2px var(--app-500) inset; }
+  .titlebar .actions{ display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .tb-btn{
+    display:inline-flex; align-items:center; gap:6px; border:none; cursor:pointer; font-family:inherit;
+    font-size:13px; font-weight:500; color:var(--ink); background:transparent; border-radius:8px;
+    padding:8px 11px; white-space:nowrap; transition:background .15s, box-shadow .15s;
+  }
+  .tb-btn:hover{ background:var(--bar); }
+  .tb-btn.icon-only{ width:38px; height:38px; justify-content:center; padding:0; font-size:16px; }
+  .tb-btn.primary{ background:var(--app); color:#fff; box-shadow:0 1px 2px rgba(24,128,56,.4); }
+  .tb-btn.primary:hover{ background:var(--app-900); }
+  .autosave{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-soft); margin:0 4px; }
+  .autosave-dot{ width:8px; height:8px; border-radius:50%; background:#34A853; transition:background .3s; }
+  .autosave-dot.saving{ background:#FBBC04; }
+
+  .ribbon{
+    background:var(--bar); border-bottom:1px solid var(--line); display:flex; align-items:center;
+    gap:2px; padding:6px 12px; flex-wrap:wrap; flex-shrink:0;
+  }
+  .grp{ display:flex; align-items:center; gap:3px; padding:2px 10px; border-right:1px solid var(--line); }
+  .grp:first-child{ padding-left:2px; }
+  .grp:last-child{ border-right:none; }
+  select, .ribbon button{
+    background:var(--chrome); border:1px solid transparent; border-radius:8px; cursor:pointer;
+    font-family:inherit; font-size:13px; color:var(--ink); padding:6px 8px; height:32px;
+    transition:background .15s, border-color .15s, box-shadow .15s;
+  }
+  select:hover, .ribbon button:hover{ background:var(--canvas); border-color:var(--line); }
+  select:focus-visible, .ribbon button:focus-visible{ outline:none; box-shadow:0 0 0 2px var(--app-500); }
+  .ribbon button.iconbtn{ width:34px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-size:14px; }
+  .ribbon button.active{ background:var(--app-100); color:var(--app); border-color:rgba(24,128,56,.3); }
+  .colorwrap{ position:relative; width:34px; height:32px; border-radius:8px; background:var(--chrome); }
+  .colorwrap input[type=color]{ position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .colorwrap .swatch{
+    width:34px; height:32px; border-radius:8px; border:1px solid transparent; background:var(--chrome);
+    display:flex; align-items:center; justify-content:center; font-weight:700; pointer-events:none; font-size:13px;
+  }
+  .colorwrap:hover .swatch{ background:var(--canvas); border-color:var(--line); }
+  .colorwrap .bar{ height:4px; margin-top:-6px; border-radius:2px; }
+
+  .formulabar{
+    display:flex; align-items:center; border-bottom:1px solid var(--line); padding:7px 14px; gap:10px; flex-shrink:0; background:var(--chrome);
+  }
+  .formulabar .fx{
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:var(--ink-soft);
+    background:var(--bar); border:1px solid var(--line); border-radius:8px; padding:7px 10px;
+  }
+  #cellRef{
+    width:74px; border:1px solid var(--line); border-radius:8px; padding:7px 8px; font-size:13px;
+    text-align:center; font-family:'JetBrains Mono',monospace; background:var(--bar); color:var(--ink);
+    outline:none; transition:box-shadow .15s;
+  }
+  #cellRef:focus{ box-shadow:0 0 0 2px var(--app-500); border-color:transparent; }
+  #formulaInput{
+    flex:1; border:1px solid var(--line); border-radius:8px; padding:7px 12px; font-size:13px;
+    background:var(--bar); color:var(--ink); font-family:'Inter',sans-serif; outline:none;
+    transition:box-shadow .15s;
+  }
+  #formulaInput:focus{ box-shadow:0 0 0 2px var(--app-500); border-color:transparent; }
+
+  .grid-wrap{ flex:1; overflow:auto; position:relative; background:var(--canvas); }
+  table.grid{ border-collapse:separate; border-spacing:0; table-layout:fixed; user-select:none; margin:0; }
+  table.grid th{
+    background:var(--head-bg); border:1px solid var(--line); border-left:none; border-top:none;
+    font-weight:600; font-size:12px; color:var(--head-ink); position:sticky; top:0; z-index:2; height:26px; min-width:80px;
+  }
+  table.grid th.corner{ position:sticky; left:0; top:0; z-index:4; min-width:42px; width:42px; border-left:none; }
+  table.grid td{ border:1px solid var(--line); border-left:none; border-top:none; padding:0; height:26px; min-width:80px; max-width:300px; position:relative; background:var(--chrome); }
+  table.grid td.rowhead{
+    background:var(--head-bg); text-align:center; font-size:12px; color:var(--head-ink);
+    position:sticky; left:0; z-index:1; font-weight:600; min-width:42px; width:42px; border-top:none;
+  }
+  table.grid td .cell{
+    width:100%; height:100%; border:none; outline:none; padding:2px 6px; font-size:13px;
+    background:transparent; white-space:nowrap; overflow:hidden; user-select:text; font-family:inherit; color:inherit;
+  }
+  td.selected{ outline:2px solid var(--sel); outline-offset:-2px; }
+  td.selected .cell{ background:rgba(52,168,83,.08); }
+  td.active-cell{ outline:2px solid var(--app-900); outline-offset:-2px; }
+
+  .sheet-tabs{
+    display:flex; align-items:center; border-top:1px solid var(--line); background:var(--chrome);
+    padding:5px 12px; gap:4px; flex-shrink:0; overflow-x:auto;
+  }
+  .sheet-tab{
+    padding:7px 16px; border-radius:9px; font-size:12.5px; cursor:pointer; border:1px solid transparent;
+    white-space:nowrap; color:var(--ink); font-family:inherit; transition:background .15s; position:relative;
+  }
+  .sheet-tab.active{ background:var(--app-100); color:var(--app); font-weight:600; }
+  .sheet-tab.active::after{
+    content:''; position:absolute; left:12px; right:12px; bottom:2px; height:3px; border-radius:2px; background:var(--app);
+  }
+  .sheet-tab:hover{ background:var(--bar); }
+  .addSheetBtn{
+    width:30px; height:30px; border-radius:8px; border:1px solid var(--line); background:var(--chrome);
+    cursor:pointer; font-weight:700; font-size:16px; color:var(--ink); transition:background .15s, border-color .15s;
+  }
+  .addSheetBtn:hover{ background:var(--app-100); border-color:var(--app-500); color:var(--app); }
+
+  .ctx-menu{
+    position:fixed; background:var(--chrome); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-lg); z-index:50; padding:5px; font-size:13px; display:none; min-width:180px;
+  }
+  .ctx-menu div{ padding:8px 13px; cursor:pointer; white-space:nowrap; border-radius:7px; color:var(--ink); }
+  .ctx-menu div:hover{ background:var(--app-100); }
+  .ctx-menu hr{ border:none; border-top:1px solid var(--line); margin:5px 4px; }
+
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(32,33,36,.5); display:none; align-items:center;
+    justify-content:center; z-index:100; backdrop-filter:blur(3px);
+  }
+  .modal{
+    background:var(--chrome); color:var(--ink); border-radius:14px; padding:22px; width:340px; max-width:92vw;
+    box-shadow:var(--shadow-lg); border:1px solid var(--line);
+  }
+  .modal h3{ margin:0 0 6px; font-size:16px; font-weight:600; }
+  .modal input{
+    width:100%; padding:9px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px;
+    margin-bottom:10px; box-sizing:border-box; background:var(--bar); color:var(--ink); font-family:inherit;
+    outline:none; transition:box-shadow .15s;
+  }
+  .modal input:focus{ box-shadow:0 0 0 2px var(--app-500); border-color:transparent; }
+  .modal .row{ display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
+  .modal button{
+    padding:8px 15px; border-radius:8px; border:1px solid var(--line); background:var(--chrome);
+    color:var(--ink); cursor:pointer; font-size:13px; font-family:inherit; font-weight:500; transition:background .15s;
+  }
+  .modal button:hover{ background:var(--bar); }
+  .modal button.primary{ background:var(--app); color:#fff; border-color:var(--app); }
+  .modal button.primary:hover{ background:var(--app-900); }
+  .modal .hint{ font-size:11px; color:var(--ink-soft); margin:-4px 0 10px; }
+  .version-item, .template-item{
+    display:flex; align-items:center; justify-content:space-between; padding:10px 6px;
+    border-bottom:1px solid var(--line); font-size:13px; gap:8px; border-radius:8px;
+  }
+  .version-item:hover, .template-item:hover{ background:var(--bar); }
+  .version-item .meta{ color:var(--ink-soft); font-size:11px; }
+  .template-item{ cursor:pointer; }
+  .small-btn{ padding:5px 11px !important; font-size:11px !important; height:auto !important; }
+
+  .banner{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%); z-index:20;
+    background:var(--app); color:#fff; padding:9px 16px; border-radius:10px; font-size:13px;
+    display:flex; align-items:center; gap:12px; box-shadow:var(--shadow-lg);
+  }
+  .banner button{
+    background:rgba(255,255,255,.2); border:none; color:#fff; padding:5px 11px; border-radius:7px;
+    font-size:12px; cursor:pointer; font-family:inherit; font-weight:500;
+  }
+  .banner button:hover{ background:rgba(255,255,255,.3); }
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <a class="brand" href="index.html">
+    <div class="logo">S</div>
+    <div class="brand-name"><b>WebOffice</b><span>Sheets</span></div>
+  </a>
+  <input class="docname" id="docName" value="Untitled spreadsheet">
+  <div class="actions">
+    <span class="autosave"><span class="autosave-dot" id="autosaveDot"></span><span id="autosaveLabel">Saved</span></span>
+    <button class="tb-btn" onclick="importFile()">⬆ Import</button>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none">
+    <button class="tb-btn icon-only" onclick="toggleTheme()" id="themeBtn" title="Toggle dark mode">🌙</button>
+    <button class="tb-btn" onclick="openTemplates()">Templates</button>
+    <button class="tb-btn" onclick="openVersions()">History</button>
+    <button class="tb-btn primary" onclick="exportXlsx()">⬇ Download .xlsx</button>
+  </div>
+</div>
+
+<div class="ribbon">
+  <div class="grp">
+    <button class="iconbtn" title="Bold" id="b-bold" onclick="toggleStyle('bold')"><b>B</b></button>
+    <button class="iconbtn" title="Italic" id="b-italic" onclick="toggleStyle('italic')"><i>I</i></button>
+    <button class="iconbtn" title="Underline" id="b-underline" onclick="toggleStyle('underline')"><u>U</u></button>
+  </div>
+  <div class="grp">
+    <div class="colorwrap" title="Text color">
+      <div class="swatch">A<div class="bar" id="textColorBar" style="background:#202124"></div></div>
+      <input type="color" id="textColor" value="#202124" oninput="applyTextColor(this.value)">
+    </div>
+    <div class="colorwrap" title="Fill color">
+      <div class="swatch">🪣<div class="bar" id="fillColorBar" style="background:#ffffff"></div></div>
+      <input type="color" id="fillColor" value="#ffffff" oninput="applyFillColor(this.value)">
+    </div>
+  </div>
+  <div class="grp">
+    <button class="iconbtn" title="Align left" onclick="applyAlign('left')">⯇</button>
+    <button class="iconbtn" title="Align center" onclick="applyAlign('center')">☰</button>
+    <button class="iconbtn" title="Align right" onclick="applyAlign('right')">⯈</button>
+  </div>
+  <div class="grp">
+    <select id="numFormat" onchange="applyNumFormat(this.value)" title="Number format">
+      <option value="general">General</option>
+      <option value="number">Number</option>
+      <option value="currency">Currency</option>
+      <option value="percent">Percent</option>
+    </select>
+  </div>
+  <div class="grp">
+    <button onclick="mergeSelection()">⬛ Merge</button>
+    <button onclick="unmergeSelection()">Unmerge</button>
+  </div>
+  <div class="grp">
+    <button onclick="autoSum()">Σ AutoSum</button>
+    <button onclick="sortSelection(1)">Sort A→Z</button>
+    <button onclick="sortSelection(-1)">Sort Z→A</button>
+  </div>
+  <div class="grp">
+    <button onclick="openFindReplace()">🔍 Find & Replace</button>
+  </div>
+</div>
+
+<div class="formulabar">
+  <span class="fx">fx</span>
+  <input id="cellRef" readonly value="A1">
+  <input id="formulaInput" placeholder="Enter a value or formula, e.g. =SUM(A1:A5)">
+</div>
+
+<div class="grid-wrap">
+  <div id="restoreBanner" class="banner" style="display:none;">
+    <span>A previous autosaved workbook was found.</span>
+    <button onclick="restoreAutosave()">Restore</button>
+    <button onclick="dismissAutosave()">Discard</button>
+  </div>
+  <table class="grid" id="grid"></table>
+</div>
+
+<div class="sheet-tabs" id="sheetTabs"></div>
+
+<div class="ctx-menu" id="ctxMenu">
+  <div onclick="ctxAction('copy')">Copy</div>
+  <div onclick="ctxAction('cut')">Cut</div>
+  <div onclick="ctxAction('paste')">Paste</div>
+  <hr>
+  <div onclick="ctxAction('insertRowAbove')">Insert row above</div>
+  <div onclick="ctxAction('insertRowBelow')">Insert row below</div>
+  <div onclick="ctxAction('deleteRow')">Delete row</div>
+  <hr>
+  <div onclick="ctxAction('insertColLeft')">Insert column left</div>
+  <div onclick="ctxAction('insertColRight')">Insert column right</div>
+  <div onclick="ctxAction('deleteCol')">Delete column</div>
+  <hr>
+  <div onclick="ctxAction('merge')">Merge cells</div>
+  <div onclick="ctxAction('clear')">Clear contents</div>
+</div>
+
+<div class="modal-backdrop" id="frModal">
+  <div class="modal">
+    <h3>Find & Replace</h3>
+    <input id="findInput" placeholder="Find">
+    <input id="replaceInput" placeholder="Replace with">
+    <div class="row">
+      <button onclick="closeFindReplace()">Close</button>
+      <button onclick="findReplace(false)">Replace</button>
+      <button class="primary" onclick="findReplace(true)">Replace All</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="versionModal">
+  <div class="modal">
+    <h3>Version History</h3>
+    <div class="hint">Snapshots are saved on this device only.</div>
+    <div class="row" style="justify-content:flex-start; margin-bottom:12px;">
+      <button class="primary" onclick="saveVersion()">💾 Save current as version</button>
+    </div>
+    <div id="versionList"></div>
+    <div class="row" style="margin-top:14px;">
+      <button onclick="closeVersions()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="templateModal">
+  <div class="modal">
+    <h3>Start from a template</h3>
+    <div class="hint">This replaces your current workbook.</div>
+    <div id="templateList"></div>
+    <div class="row" style="margin-top:14px;">
+      <button onclick="closeTemplates()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let NUM_ROWS = 60;
+let NUM_COLS = 18; // A..R
+
+function colLetter(i){
+  let s=''; i++;
+  while(i>0){ const m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26); }
+  return s;
+}
+function colIndex(letters){
+  for(let i=0;i<NUM_COLS;i++) if(colLetter(i)===letters) return i;
+  return 0;
+}
+function refFor(r,c){ return colLetter(c) + (r+1); }
+function parseRef(ref){
+  const col = ref.match(/[A-Z]+/)[0];
+  const row = parseInt(ref.match(/\d+/)[0]) - 1;
+  return { r: row, c: colIndex(col) };
+}
+
+// ---- Workbook: multiple sheets ----
+function newSheet(name){
+  return { name, cells:{}, merges:[] }; // merges: [{r1,c1,r2,c2}]
+}
+let workbook = { sheets:[ newSheet('Sheet1') ], active:0 };
+function sheet(){ return workbook.sheets[workbook.active]; }
+function getCell(ref){
+  const s = sheet();
+  if(!s.cells[ref]) s.cells[ref] = {raw:'', bold:false, italic:false, underline:false, color:'#202124', fill:'#ffffff', align:'left', format:'general'};
+  return s.cells[ref];
+}
+function mergeAt(r,c){
+  return sheet().merges.find(m => r>=m.r1 && r<=m.r2 && c>=m.c1 && c<=m.c2);
+}
+
+let selection = { r1:0, c1:0, r2:0, c2:0 }; // active range
+let selecting = false;
+let clipboard = null; // {cells: [[cellObj,...]], cut:bool}
+
+const table = document.getElementById('grid');
+
+function buildGrid(){
+  table.innerHTML = '';
+  const thead = document.createElement('tr');
+  thead.innerHTML = '<th class="corner"></th>' + Array.from({length:NUM_COLS}, (_,c)=>`<th>${colLetter(c)}</th>`).join('');
+  table.appendChild(thead);
+  for(let r=0;r<NUM_ROWS;r++){
+    const tr = document.createElement('tr');
+    tr.dataset.row = r;
+    let rowHtml = `<td class="rowhead">${r+1}</td>`;
+    for(let c=0;c<NUM_COLS;c++){
+      const ref = refFor(r,c);
+      rowHtml += `<td data-ref="${ref}" data-r="${r}" data-c="${c}"><div class="cell" contenteditable="true" data-ref="${ref}"></div></td>`;
+    }
+    tr.innerHTML = rowHtml;
+    table.appendChild(tr);
+  }
+}
+buildGrid();
+
+function activeRef(){ return refFor(selection.r1, selection.c1); }
+
+function selectSingle(r,c,focus=true){
+  selection = {r1:r,c1:c,r2:r,c2:c};
+  renderSelectionHighlight();
+  syncFormulaBar();
+  if(focus){
+    const div = table.querySelector(`.cell[data-ref="${refFor(r,c)}"]`);
+    if(div) div.focus();
+  }
+}
+function renderSelectionHighlight(){
+  table.querySelectorAll('td.selected').forEach(td=>td.classList.remove('selected'));
+  table.querySelectorAll('td.active-cell').forEach(td=>td.classList.remove('active-cell'));
+  const r1=Math.min(selection.r1,selection.r2), r2=Math.max(selection.r1,selection.r2);
+  const c1=Math.min(selection.c1,selection.c2), c2=Math.max(selection.c1,selection.c2);
+  for(let r=r1;r<=r2;r++) for(let c=c1;c<=c2;c++){
+    const td = table.querySelector(`td[data-r="${r}"][data-c="${c}"]`);
+    if(td) td.classList.add('selected');
+  }
+  const activeTd = table.querySelector(`td[data-r="${selection.r1}"][data-c="${selection.c1}"]`);
+  if(activeTd) activeTd.classList.add('active-cell');
+}
+function syncFormulaBar(){
+  const ref = activeRef();
+  document.getElementById('cellRef').value = ref;
+  const c = getCell(ref);
+  document.getElementById('formulaInput').value = c.raw;
+  document.getElementById('textColor').value = c.color;
+  document.getElementById('fillColor').value = c.fill;
+  document.getElementById('numFormat').value = c.format;
+  updateStyleButtons(c);
+}
+function updateStyleButtons(c){
+  document.getElementById('b-bold').classList.toggle('active', c.bold);
+  document.getElementById('b-italic').classList.toggle('active', c.italic);
+  document.getElementById('b-underline').classList.toggle('active', c.underline);
+}
+
+table.addEventListener('mousedown', e=>{
+  const td = e.target.closest('td[data-r]');
+  if(!td) return;
+  if(e.button === 2) return; // right click handled separately
+  selecting = true;
+  const r = parseInt(td.dataset.r), c = parseInt(td.dataset.c);
+  selection = {r1:r,c1:c,r2:r,c2:c};
+  renderSelectionHighlight();
+  syncFormulaBar();
+});
+table.addEventListener('mouseover', e=>{
+  if(!selecting) return;
+  const td = e.target.closest('td[data-r]');
+  if(!td) return;
+  selection.r2 = parseInt(td.dataset.r);
+  selection.c2 = parseInt(td.dataset.c);
+  renderSelectionHighlight();
+});
+document.addEventListener('mouseup', ()=>{ selecting=false; });
+
+table.addEventListener('focusin', e=>{
+  if(e.target.classList.contains('cell')){
+    const {r,c} = parseRef(e.target.dataset.ref);
+    if(selection.r1===selection.r2 && selection.c1===selection.c2 && selection.r1===r && selection.c1===c) return;
+  }
+});
+
+table.addEventListener('input', e=>{
+  if(e.target.classList.contains('cell')){
+    const ref = e.target.dataset.ref;
+    getCell(ref).raw = e.target.innerText;
+    if(ref === activeRef()) document.getElementById('formulaInput').value = getCell(ref).raw;
+    recalcAll();
+  }
+});
+
+table.addEventListener('keydown', e=>{
+  if(!e.target.classList.contains('cell')) return;
+  const ref = e.target.dataset.ref;
+  const {r:row, c:colIdx} = parseRef(ref);
+
+  if(e.key === 'Enter'){ e.preventDefault(); selectSingle(row+1, colIdx); }
+  else if(e.key === 'Tab'){ e.preventDefault(); selectSingle(row, colIdx+1); }
+  else if(e.key === 'ArrowDown'){ e.preventDefault(); selectSingle(row+1, colIdx); }
+  else if(e.key === 'ArrowUp'){ e.preventDefault(); selectSingle(row-1, colIdx); }
+  else if(e.key === 'ArrowLeft' && window.getSelection().toString()===''){ e.preventDefault(); selectSingle(row, colIdx-1); }
+  else if(e.key === 'ArrowRight' && window.getSelection().toString()===''){ e.preventDefault(); selectSingle(row, colIdx+1); }
+  else if(e.key === 'Delete' || e.key === 'Backspace'){
+    // if range bigger than 1 cell and this key came right on td focus without text selected, allow clearing whole range via Delete only (not while typing)
+  }
+});
+
+// Clear whole selection with Delete key when not editing a specific char
+document.addEventListener('keydown', e=>{
+  const active = document.activeElement;
+  const inGrid = active && active.classList && active.classList.contains('cell');
+  if(!inGrid) return;
+  const multi = (selection.r1!==selection.r2 || selection.c1!==selection.c2);
+  if((e.key==='Delete') && multi){
+    e.preventDefault();
+    forEachSelected((r,c)=>{ getCell(refFor(r,c)).raw=''; });
+    recalcAll();
+  }
+});
+
+document.getElementById('formulaInput').addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){
+    const val = e.target.value;
+    const ref = activeRef();
+    getCell(ref).raw = val;
+    const div = table.querySelector(`.cell[data-ref="${ref}"]`);
+    if(div) div.innerText = val;
+    recalcAll();
+    const {r,c} = parseRef(ref);
+    selectSingle(r+1, c);
+  }
+});
+document.getElementById('formulaInput').addEventListener('input', e=>{
+  getCell(activeRef()).raw = e.target.value;
+});
+
+function forEachSelected(fn){
+  const r1=Math.min(selection.r1,selection.r2), r2=Math.max(selection.r1,selection.r2);
+  const c1=Math.min(selection.c1,selection.c2), c2=Math.max(selection.c1,selection.c2);
+  for(let r=r1;r<=r2;r++) for(let c=c1;c<=c2;c++) fn(r,c);
+}
+
+// ---- Formula engine ----
+function rangeRefs(a,b){
+  const A=parseRef(a), B=parseRef(b);
+  const refs=[];
+  for(let r=Math.min(A.r,B.r); r<=Math.max(A.r,B.r); r++)
+    for(let c=Math.min(A.c,B.c); c<=Math.max(A.c,B.c); c++)
+      refs.push(refFor(r,c));
+  return refs;
+}
+function evalFormula(raw, visiting){
+  if(!raw.startsWith('=')) return raw;
+  let expr = raw.slice(1);
+  expr = expr.replace(/([A-Z]+\()([A-Z0-9:,\s]+)(\))/gi, (m, fn, args) => {
+    const name = fn.slice(0,-1).toUpperCase();
+    const parts = args.split(',').map(s=>s.trim());
+    let refs = [];
+    parts.forEach(p=>{
+      if(p.includes(':')){ const [a,b]=p.split(':'); refs = refs.concat(rangeRefs(a.trim(), b.trim())); }
+      else if(/^[A-Z]+\d+$/.test(p)) refs.push(p);
+    });
+    const nums = refs.map(r=> parseFloat(computeCell(r, visiting)) || 0);
+    let result = 0;
+    if(name==='SUM') result = nums.reduce((a,b)=>a+b,0);
+    else if(name==='AVERAGE') result = nums.length ? nums.reduce((a,b)=>a+b,0)/nums.length : 0;
+    else if(name==='MIN') result = Math.min(...nums);
+    else if(name==='MAX') result = Math.max(...nums);
+    else if(name==='COUNT') result = nums.length;
+    else result = 0;
+    return result;
+  });
+  expr = expr.replace(/[A-Z]+\d+/g, ref => { const v = parseFloat(computeCell(ref, visiting)); return isNaN(v)?0:v; });
+  try{ return Function('"use strict"; return (' + expr + ')')(); }
+  catch(err){ return '#ERR'; }
+}
+function computeCell(ref, visiting=new Set()){
+  if(visiting.has(ref)) return 0;
+  visiting.add(ref);
+  const c = getCell(ref);
+  if(c.raw && c.raw.startsWith('=')) return evalFormula(c.raw, visiting);
+  return c.raw;
+}
+function formatValue(val, fmt){
+  const num = parseFloat(val);
+  if(isNaN(num) || fmt==='general') return val;
+  if(fmt==='number') return num.toFixed(2);
+  if(fmt==='currency') return '$' + num.toFixed(2);
+  if(fmt==='percent') return (num*100).toFixed(1) + '%';
+  return val;
+}
+
+function applyMergesToDom(){
+  // reset all td to visible, colspan/rowspan 1
+  table.querySelectorAll('td[data-r]').forEach(td=>{
+    td.style.display='';
+    td.removeAttribute('colspan');
+    td.removeAttribute('rowspan');
+  });
+  sheet().merges.forEach(m=>{
+    const topLeft = table.querySelector(`td[data-r="${m.r1}"][data-c="${m.c1}"]`);
+    if(topLeft){
+      topLeft.setAttribute('colspan', m.c2-m.c1+1);
+      topLeft.setAttribute('rowspan', m.r2-m.r1+1);
+    }
+    for(let r=m.r1;r<=m.r2;r++) for(let c=m.c1;c<=m.c2;c++){
+      if(r===m.r1 && c===m.c1) continue;
+      const td = table.querySelector(`td[data-r="${r}"][data-c="${c}"]`);
+      if(td) td.style.display='none';
+    }
+  });
+}
+
+function recalcAll(){
+  const s = sheet();
+  Object.keys(s.cells).forEach(ref=>{
+    const c = s.cells[ref];
+    const div = table.querySelector(`.cell[data-ref="${ref}"]`);
+    if(!div) return;
+    let display = c.raw.startsWith('=') ? evalFormula(c.raw, new Set()) : c.raw;
+    display = formatValue(display, c.format);
+    if(document.activeElement !== div) div.innerText = display;
+    div.style.fontWeight = c.bold ? '700' : '400';
+    div.style.fontStyle = c.italic ? 'italic' : 'normal';
+    div.style.textDecoration = c.underline ? 'underline' : 'none';
+    div.style.color = c.color;
+    div.parentElement.style.background = c.fill;
+    div.style.textAlign = c.align;
+  });
+  applyMergesToDom();
+  scheduleAutosave();
+}
+
+// ---- Style controls ----
+function toggleStyle(prop){
+  const val = !getCell(activeRef())[prop];
+  forEachSelected((r,c)=>{ getCell(refFor(r,c))[prop] = val; });
+  updateStyleButtons(getCell(activeRef()));
+  recalcAll();
+}
+function applyTextColor(val){
+  forEachSelected((r,c)=>{ getCell(refFor(r,c)).color = val; });
+  document.getElementById('textColorBar').style.background = val;
+  recalcAll();
+}
+function applyFillColor(val){
+  forEachSelected((r,c)=>{ getCell(refFor(r,c)).fill = val; });
+  document.getElementById('fillColorBar').style.background = val;
+  recalcAll();
+}
+function applyAlign(a){ forEachSelected((r,c)=>{ getCell(refFor(r,c)).align = a; }); recalcAll(); }
+function applyNumFormat(f){ forEachSelected((r,c)=>{ getCell(refFor(r,c)).format = f; }); recalcAll(); }
+
+// ---- Merge ----
+function mergeSelection(){
+  const r1=Math.min(selection.r1,selection.r2), r2=Math.max(selection.r1,selection.r2);
+  const c1=Math.min(selection.c1,selection.c2), c2=Math.max(selection.c1,selection.c2);
+  if(r1===r2 && c1===c2){ alert('Select more than one cell to merge.'); return; }
+  sheet().merges = sheet().merges.filter(m => !(m.r1<=r2 && m.r2>=r1 && m.c1<=c2 && m.c2>=c1));
+  sheet().merges.push({r1,c1,r2,c2});
+  recalcAll();
+}
+function unmergeSelection(){
+  const r1=Math.min(selection.r1,selection.r2), r2=Math.max(selection.r1,selection.r2);
+  const c1=Math.min(selection.c1,selection.c2), c2=Math.max(selection.c1,selection.c2);
+  sheet().merges = sheet().merges.filter(m => !(m.r1>=r1 && m.r2<=r2 && m.c1>=c1 && m.c2<=c2));
+  recalcAll();
+}
+
+// ---- AutoSum ----
+function autoSum(){
+  const ref = activeRef();
+  const {r,c} = parseRef(ref);
+  let top = r-1;
+  while(top>=0){
+    const v = getCell(refFor(top,c)).raw;
+    if(v==='' ) break;
+    top--;
+  }
+  top++;
+  if(top>=r){ alert('No numeric cells above to sum.'); return; }
+  const formula = `=SUM(${refFor(top,c)}:${refFor(r-1,c)})`;
+  getCell(ref).raw = formula;
+  const div = table.querySelector(`.cell[data-ref="${ref}"]`);
+  if(div) div.innerText = formula;
+  document.getElementById('formulaInput').value = formula;
+  recalcAll();
+}
+
+// ---- Sort ----
+function sortSelection(dir){
+  const r1=Math.min(selection.r1,selection.r2), r2=Math.max(selection.r1,selection.r2);
+  const c1=Math.min(selection.c1,selection.c2), c2=Math.max(selection.c1,selection.c2);
+  if(r1===r2){ alert('Select multiple rows to sort.'); return; }
+  const rows = [];
+  for(let r=r1;r<=r2;r++){
+    const rowVals = [];
+    for(let c=c1;c<=c2;c++) rowVals.push({...getCell(refFor(r,c))});
+    rows.push(rowVals);
+  }
+  rows.sort((a,b)=>{
+    const av = a[0].raw, bv = b[0].raw;
+    const an = parseFloat(av), bn = parseFloat(bv);
+    let cmp;
+    if(!isNaN(an) && !isNaN(bn)) cmp = an-bn;
+    else cmp = String(av).localeCompare(String(bv));
+    return cmp*dir;
+  });
+  for(let i=0;i<rows.length;i++){
+    for(let j=0;j<rows[i].length;j++){
+      sheet().cells[refFor(r1+i, c1+j)] = rows[i][j];
+    }
+  }
+  recalcAll();
+}
+
+// ---- Clipboard (copy/cut/paste) ----
+document.addEventListener('keydown', e=>{
+  const active = document.activeElement;
+  const inGrid = active && active.classList && active.classList.contains('cell');
+  if(!inGrid) return;
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c'){ e.preventDefault(); doCopy(false); }
+  else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x'){ e.preventDefault(); doCopy(true); }
+  else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v'){ e.preventDefault(); doPaste(); }
+  else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='f'){ e.preventDefault(); openFindReplace(); }
+});
+function doCopy(cut){
+  const r1=Math.min(selection.r1,selection.r2), r2=Math.max(selection.r1,selection.r2);
+  const c1=Math.min(selection.c1,selection.c2), c2=Math.max(selection.c1,selection.c2);
+  const data = [];
+  for(let r=r1;r<=r2;r++){
+    const row=[];
+    for(let c=c1;c<=c2;c++) row.push({...getCell(refFor(r,c))});
+    data.push(row);
+  }
+  clipboard = { data, cut, r1, c1 };
+  if(cut) forEachSelected((r,c)=>{ getCell(refFor(r,c)).raw=''; });
+  recalcAll();
+}
+function doPaste(){
+  if(!clipboard) return;
+  const destR = Math.min(selection.r1,selection.r2), destC = Math.min(selection.c1,selection.c2);
+  clipboard.data.forEach((row,i)=>{
+    row.forEach((cellData,j)=>{
+      const r = destR+i, c = destC+j;
+      if(r<NUM_ROWS && c<NUM_COLS) sheet().cells[refFor(r,c)] = {...cellData};
+    });
+  });
+  recalcAll();
+}
+
+// ---- Insert/Delete rows/cols ----
+function insertRow(beforeIdx){
+  const s = sheet();
+  const newCells = {};
+  Object.keys(s.cells).forEach(ref=>{
+    const {r,c} = parseRef(ref);
+    const nr = r>=beforeIdx ? r+1 : r;
+    newCells[refFor(nr,c)] = s.cells[ref];
+  });
+  s.cells = newCells;
+  recalcAll();
+}
+function deleteRowAt(idx){
+  const s = sheet();
+  const newCells = {};
+  Object.keys(s.cells).forEach(ref=>{
+    const {r,c} = parseRef(ref);
+    if(r===idx) return;
+    const nr = r>idx ? r-1 : r;
+    newCells[refFor(nr,c)] = s.cells[ref];
+  });
+  s.cells = newCells;
+  recalcAll();
+}
+function insertColAt(beforeIdx){
+  const s = sheet();
+  const newCells = {};
+  Object.keys(s.cells).forEach(ref=>{
+    const {r,c} = parseRef(ref);
+    const nc = c>=beforeIdx ? c+1 : c;
+    if(nc<NUM_COLS) newCells[refFor(r,nc)] = s.cells[ref];
+  });
+  s.cells = newCells;
+  recalcAll();
+}
+function deleteColAt(idx){
+  const s = sheet();
+  const newCells = {};
+  Object.keys(s.cells).forEach(ref=>{
+    const {r,c} = parseRef(ref);
+    if(c===idx) return;
+    const nc = c>idx ? c-1 : c;
+    newCells[refFor(r,nc)] = s.cells[ref];
+  });
+  s.cells = newCells;
+  recalcAll();
+}
+
+// ---- Context menu ----
+const ctxMenu = document.getElementById('ctxMenu');
+let ctxTargetRef = null;
+table.addEventListener('contextmenu', e=>{
+  const td = e.target.closest('td[data-r]');
+  if(!td) return;
+  e.preventDefault();
+  ctxTargetRef = {r:parseInt(td.dataset.r), c:parseInt(td.dataset.c)};
+  ctxMenu.style.left = e.clientX+'px';
+  ctxMenu.style.top = e.clientY+'px';
+  ctxMenu.style.display = 'block';
+});
+document.addEventListener('click', ()=>{ ctxMenu.style.display='none'; });
+function ctxAction(action){
+  if(!ctxTargetRef) return;
+  const {r,c} = ctxTargetRef;
+  if(action==='copy'){ selectSingle(r,c,false); doCopy(false); }
+  else if(action==='cut'){ selectSingle(r,c,false); doCopy(true); }
+  else if(action==='paste'){ selectSingle(r,c,false); doPaste(); }
+  else if(action==='insertRowAbove') insertRow(r);
+  else if(action==='insertRowBelow') insertRow(r+1);
+  else if(action==='deleteRow') deleteRowAt(r);
+  else if(action==='insertColLeft') insertColAt(c);
+  else if(action==='insertColRight') insertColAt(c+1);
+  else if(action==='deleteCol') deleteColAt(c);
+  else if(action==='merge'){ selectSingle(r,c,false); mergeSelection(); }
+  else if(action==='clear'){ forEachSelected((rr,cc)=>{ getCell(refFor(rr,cc)).raw=''; }); recalcAll(); }
+  ctxMenu.style.display='none';
+}
+
+// ---- Find & Replace ----
+function openFindReplace(){ document.getElementById('frModal').style.display='flex'; document.getElementById('findInput').focus(); }
+function closeFindReplace(){ document.getElementById('frModal').style.display='none'; }
+function findReplace(all){
+  const find = document.getElementById('findInput').value;
+  const repl = document.getElementById('replaceInput').value;
+  if(!find) return;
+  const s = sheet();
+  let count = 0;
+  Object.keys(s.cells).forEach(ref=>{
+    const c = s.cells[ref];
+    if(c.raw.includes(find)){
+      if(all || count===0){ c.raw = c.raw.split(find).join(repl); count++; }
+    }
+  });
+  recalcAll();
+  if(!all) closeFindReplace();
+}
+
+// ---- Sheet tabs ----
+function renderSheetTabs(){
+  const wrap = document.getElementById('sheetTabs');
+  wrap.innerHTML = '';
+  workbook.sheets.forEach((s,i)=>{
+    const tab = document.createElement('div');
+    tab.className = 'sheet-tab' + (i===workbook.active ? ' active':'');
+    tab.textContent = s.name;
+    tab.onclick = ()=>{ workbook.active=i; buildGrid(); recalcAll(); renderSheetTabs(); selectSingle(0,0,false); };
+    tab.ondblclick = ()=>{
+      const name = prompt('Sheet name:', s.name);
+      if(name){ s.name=name; renderSheetTabs(); }
+    };
+    wrap.appendChild(tab);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className='addSheetBtn'; addBtn.textContent='+';
+  addBtn.title = 'Add sheet';
+  addBtn.onclick = ()=>{
+    workbook.sheets.push(newSheet('Sheet'+(workbook.sheets.length+1)));
+    workbook.active = workbook.sheets.length-1;
+    buildGrid(); recalcAll(); renderSheetTabs(); selectSingle(0,0,false);
+  };
+  wrap.appendChild(addBtn);
+}
+renderSheetTabs();
+selectSingle(0,0,false);
+
+// ---- Export ----
+function exportXlsx(){
+  const name = (document.getElementById('docName').value || 'spreadsheet').replace(/[^\w\- ]/g,'');
+  const wb = XLSX.utils.book_new();
+  const prevActive = workbook.active;
+  workbook.sheets.forEach((s, sIdx)=>{
+    workbook.active = sIdx; // so formula evaluation resolves against this sheet
+    const aoa = [];
+    for(let r=0;r<NUM_ROWS;r++){
+      const row = [];
+      for(let c=0;c<NUM_COLS;c++){
+        const ref = refFor(r,c);
+        const cell = s.cells[ref];
+        let val = '';
+        if(cell && cell.raw !== ''){
+          val = cell.raw.startsWith('=') ? evalFormula(cell.raw, new Set()) : cell.raw;
+          const n = parseFloat(val);
+          val = (!isNaN(n) && val.toString().trim() !== '') ? n : val;
+        }
+        row.push(val);
+      }
+      aoa.push(row);
+    }
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    if(s.merges.length){
+      ws['!merges'] = s.merges.map(m=>({s:{r:m.r1,c:m.c1}, e:{r:m.r2,c:m.c2}}));
+    }
+    XLSX.utils.book_append_sheet(wb, ws, s.name.slice(0,31));
+  });
+  workbook.active = prevActive;
+  buildGrid(); recalcAll();
+  XLSX.writeFile(wb, name + '.xlsx');
+}
+
+document.getElementById('docName').addEventListener('input', e=>{
+  document.title = e.target.value + ' — Sheets';
+  scheduleAutosave();
+});
+
+// ---- Local persistence (browser localStorage) ----
+function trySet(key,val){ try{ localStorage.setItem(key, val); return true; }catch(e){ return false; } }
+function tryGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function tryDelete(key){ try{ localStorage.removeItem(key); return true; }catch(e){ return false; } }
+function tryListKeys(prefix){ try{ return Object.keys(localStorage).filter(k=>k.startsWith(prefix)); }catch(e){ return []; } }
+
+function toggleTheme(){
+  document.body.classList.toggle('dark');
+  const dark = document.body.classList.contains('dark');
+  document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
+  trySet('sheets-theme', dark ? 'dark' : 'light');
+}
+(function initTheme(){
+  if(tryGet('sheets-theme')==='dark'){ document.body.classList.add('dark'); document.getElementById('themeBtn').textContent='☀️'; }
+})();
+
+// ---- Autosave ----
+var autosaveTimer = null;
+function scheduleAutosave(){
+  clearTimeout(autosaveTimer);
+  const dot = document.getElementById('autosaveDot'), label = document.getElementById('autosaveLabel');
+  if(dot) dot.classList.add('saving');
+  if(label) label.textContent = 'Editing…';
+  autosaveTimer = setTimeout(doAutosave, 1500);
+}
+function doAutosave(){
+  const ok = trySet('sheets-autosave', JSON.stringify({ workbook, docName: document.getElementById('docName').value, savedAt: Date.now() }));
+  const dot = document.getElementById('autosaveDot'), label = document.getElementById('autosaveLabel');
+  if(dot) dot.classList.remove('saving');
+  if(label) label.textContent = ok ? 'Saved just now' : 'Autosave unavailable';
+}
+function checkAutosaveOnLoad(){
+  const raw = tryGet('sheets-autosave');
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    if(data.workbook && JSON.stringify(data.workbook) !== JSON.stringify(workbook)){
+      document.getElementById('restoreBanner').style.display = 'flex';
+      window._pendingAutosave = data;
+    }
+  }catch(e){ /* corrupted, ignore */ }
+}
+function restoreAutosave(){
+  if(window._pendingAutosave){
+    workbook = window._pendingAutosave.workbook;
+    document.getElementById('docName').value = window._pendingAutosave.docName || 'Untitled spreadsheet';
+    buildGrid(); recalcAll(); renderSheetTabs(); selectSingle(0,0,false);
+  }
+  document.getElementById('restoreBanner').style.display = 'none';
+}
+function dismissAutosave(){ document.getElementById('restoreBanner').style.display = 'none'; }
+checkAutosaveOnLoad();
+
+// ---- Version history ----
+function openVersions(){ document.getElementById('versionModal').style.display='flex'; renderVersionList(); }
+function closeVersions(){ document.getElementById('versionModal').style.display='none'; }
+function saveVersion(){
+  const label = prompt('Name this version (optional):', new Date().toLocaleString());
+  if(label===null) return;
+  const key = 'sheets-version:' + Date.now();
+  const ok = trySet(key, JSON.stringify({ label, workbook, docName: document.getElementById('docName').value }));
+  if(ok) renderVersionList();
+  else alert('Could not save version — your browser storage may be full or disabled for this page.');
+}
+function renderVersionList(){
+  const listEl = document.getElementById('versionList');
+  const keys = tryListKeys('sheets-version:').sort().reverse();
+  if(!keys.length){ listEl.innerHTML = '<div class="hint">No saved versions yet.</div>'; return; }
+  listEl.innerHTML = '';
+  keys.forEach(key=>{
+    let data;
+    try{ data = JSON.parse(tryGet(key)); }catch(e){ return; }
+    if(!data) return;
+    const row = document.createElement('div');
+    row.className = 'version-item';
+    const ts = key.split(':')[1];
+    const date = ts ? new Date(parseInt(ts)).toLocaleString() : '';
+    row.innerHTML = `<div><div>${data.label || 'Untitled version'}</div><div class="meta">${date}</div></div>`;
+    const btns = document.createElement('div');
+    const restoreBtn = document.createElement('button'); restoreBtn.className='small-btn primary'; restoreBtn.textContent='Restore';
+    restoreBtn.onclick = ()=>{
+      workbook = data.workbook;
+      document.getElementById('docName').value = data.docName || 'Untitled spreadsheet';
+      buildGrid(); recalcAll(); renderSheetTabs(); selectSingle(0,0,false);
+      closeVersions();
+    };
+    const delBtn = document.createElement('button'); delBtn.className='small-btn'; delBtn.style.marginLeft='6px'; delBtn.textContent='Delete';
+    delBtn.onclick = ()=>{ tryDelete(key); renderVersionList(); };
+    btns.appendChild(restoreBtn); btns.appendChild(delBtn);
+    row.appendChild(btns);
+    listEl.appendChild(row);
+  });
+}
+
+// ---- Templates ----
+function tplSheet(name, rows){
+  const s = newSheet(name);
+  rows.forEach(([ref, raw, bold])=>{
+    const c = getCellIn(s, ref);
+    c.raw = raw;
+    if(bold) c.bold = true;
+  });
+  return s;
+}
+function getCellIn(s, ref){
+  if(!s.cells[ref]) s.cells[ref] = {raw:'', bold:false, italic:false, underline:false, color:'#202124', fill:'#ffffff', align:'left', format:'general'};
+  return s.cells[ref];
+}
+const SHEET_TEMPLATES = {
+  'Blank spreadsheet': ()=> ({ sheets:[newSheet('Sheet1')], active:0 }),
+  'Budget tracker': ()=> ({ sheets:[ tplSheet('Budget', [
+    ['A1','Category',true],['B1','Budgeted',true],['C1','Actual',true],['D1','Difference',true],
+    ['A2','Rent'],['B2','1200'],['C2','1200'],['D2','=B2-C2'],
+    ['A3','Groceries'],['B3','400'],['C3','380'],['D3','=B3-C3'],
+    ['A4','Transport'],['B4','150'],['C4','170'],['D4','=B4-C4'],
+    ['A6','Total',true],['B6','=SUM(B2:B4)'],['C6','=SUM(C2:C4)'],['D6','=SUM(D2:D4)']
+  ]) ], active:0 }),
+  'To-do list': ()=> ({ sheets:[ tplSheet('Tasks', [
+    ['A1','Task',true],['B1','Status',true],['C1','Due Date',true],['D1','Priority',true],
+    ['A2','Draft proposal'],['B2','In progress'],['C2',''],['D2','High'],
+    ['A3','Review budget'],['B3','Not started'],['C3',''],['D3','Medium'],
+    ['A4','Send invoices'],['B4','Done'],['C4',''],['D4','Low']
+  ]) ], active:0 }),
+  'Grade tracker': ()=> ({ sheets:[ tplSheet('Grades', [
+    ['A1','Student',true],['B1','Test 1',true],['C1','Test 2',true],['D1','Test 3',true],['E1','Average',true],
+    ['A2','Alex'],['B2','88'],['C2','92'],['D2','79'],['E2','=AVERAGE(B2:D2)'],
+    ['A3','Sam'],['B3','75'],['C3','81'],['D3','90'],['E3','=AVERAGE(B3:D3)'],
+    ['A4','Jordan'],['B4','95'],['C4','89'],['D4','93'],['E4','=AVERAGE(B4:D4)']
+  ]) ], active:0 }),
+};
+function openTemplates(){
+  const listEl = document.getElementById('templateList');
+  listEl.innerHTML = '';
+  Object.keys(SHEET_TEMPLATES).forEach(name=>{
+    const item = document.createElement('div');
+    item.className = 'template-item';
+    item.textContent = name;
+    item.onclick = ()=>{
+      if(confirm('Replace current workbook with the "'+name+'" template?')){
+        workbook = SHEET_TEMPLATES[name]();
+        buildGrid(); recalcAll(); renderSheetTabs(); selectSingle(0,0,false);
+        scheduleAutosave();
+        closeTemplates();
+      }
+    };
+    listEl.appendChild(item);
+  });
+  document.getElementById('templateModal').style.display = 'flex';
+}
+function closeTemplates(){ document.getElementById('templateModal').style.display = 'none'; }
+
+// ---- Import (.xlsx / .xls / .csv) ----
+function importFile(){
+  const inp = document.getElementById('fileInput');
+  inp.onchange = async e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    try{
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data, { type:'array' });
+      const sheets = wb.SheetNames.map(name=>{
+        const ws = wb.Sheets[name];
+        const cells = {};
+        let maxR = -1, maxC = -1;
+        const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+        for(let r=range.s.r; r<=range.e.r; r++){
+          for(let c=range.s.c; c<=range.e.c; c++){
+            const cell = ws[XLSX.utils.encode_cell({ r, c })];
+            if(!cell) continue;
+            const ref = refFor(r,c);
+            let raw = '';
+            if(cell.f){
+              raw = '=' + cell.f.replace(/\$/g,'');
+            } else if(cell.t==='d'){
+              raw = new Date(cell.v).toLocaleDateString();
+            } else if(cell.t==='b'){
+              raw = cell.v ? 'TRUE' : 'FALSE';
+            } else if(cell.t==='s' || cell.t==='str' || cell.t==='n' || cell.v !== undefined){
+              raw = String(cell.v ?? '');
+            } else if(cell.w !== undefined){
+              raw = String(cell.w);
+            }
+            if(raw === '') continue;
+            cells[ref] = { raw, bold:false, italic:false, underline:false, color:'#202124', fill:'#ffffff', align:'left', format:'general' };
+            if(r>maxR) maxR=r;
+            if(c>maxC) maxC=c;
+          }
+        }
+        const merges = (ws['!merges']||[]).map(m=>({ r1:m.s.r, c1:m.s.c, r2:m.e.r, c2:m.e.c }));
+        return { name, cells, merges, maxR, maxC };
+      });
+      if(!sheets.length || sheets.every(s=>Object.keys(s.cells).length===0)){
+        throw new Error('No data found in this file.');
+      }
+      let maxR = 59, maxC = 17;
+      sheets.forEach(s=>{
+        if(s.maxR>maxR) maxR=s.maxR;
+        if(s.maxC>maxC) maxC=s.maxC;
+      });
+      NUM_ROWS = Math.min(500, maxR+2);
+      NUM_COLS = Math.min(52, maxC+2);
+      workbook = { sheets, active:0 };
+      buildGrid(); recalcAll(); renderSheetTabs(); selectSingle(0,0,false);
+      document.getElementById('docName').value = file.name.replace(/\.[^.]+$/,'');
+      document.title = file.name.replace(/\.[^.]+$/,'') + ' — Sheets';
+      scheduleAutosave();
+    }catch(err){
+      alert('Could not import "' + file.name + '". ' + err.message);
+    }
+    e.target.value = '';
+  };
+  inp.click();
+}
+
+</script>
+</body>
+</html>

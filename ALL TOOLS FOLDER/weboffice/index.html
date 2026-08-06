@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WebOffice  Writer, Sheets & Slides in your browser</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --google-blue:#4285F4;
+    --google-red:#EA4335;
+    --google-yellow:#FBBC04;
+    --google-green:#34A853;
+    --ink:#202124;
+    --ink-soft:#5f6368;
+    --paper:#ffffff;
+    --canvas:#f8fafd;
+    --line:#e8eaed;
+    --shadow-sm:0 1px 2px rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    --shadow-md:0 1px 3px rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+    --shadow-lg:0 2px 6px rgba(60,64,67,.3), 0 8px 16px 4px rgba(60,64,67,.15);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Inter',-apple-system,sans-serif; color:var(--ink);
+    background:
+      radial-gradient(ellipse 900px 400px at 12% -6%, rgba(66,133,244,.08), transparent 60%),
+      radial-gradient(ellipse 700px 340px at 88% -4%, rgba(234,67,53,.07), transparent 60%),
+      radial-gradient(ellipse 800px 380px at 50% 108%, rgba(52,168,83,.07), transparent 60%),
+      var(--canvas);
+    min-height:100vh; overflow-x:hidden;
+  }
+
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:10px;
+    padding:14px 28px;
+    background:rgba(248,250,253,.82); backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(232,234,237,.9);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+    font-weight:700; font-size:17px; color:#fff; letter-spacing:-.02em;
+    background:linear-gradient(135deg, var(--google-blue), #1a73e8);
+    box-shadow:0 2px 6px rgba(66,133,244,.4);
+  }
+  .brand-name{ font-family:'Poppins',sans-serif; font-weight:600; font-size:17px; letter-spacing:-.01em; color:var(--ink); }
+  .brand-name span{ color:var(--ink-soft); }
+  .topbar .spacer{flex:1;}
+
+  .scene{ max-width:1080px; margin:0 auto; padding:0 28px 72px; }
+
+  .hero{ text-align:center; padding:76px 0 56px; }
+  .hero .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft); background:var(--paper);
+    border:1px solid var(--line); border-radius:999px; padding:7px 16px;
+    box-shadow:var(--shadow-sm); margin-bottom:28px;
+  }
+  .eyebrow .dot{ width:8px; height:8px; border-radius:50%; background:var(--google-green); }
+  .hero h1{
+    font-family:'Poppins',sans-serif; font-weight:700; letter-spacing:-.03em;
+    font-size:clamp(42px,7.5vw,72px); margin:0 0 14px; line-height:1.05;
+  }
+  .hero h1 .four{
+    background:linear-gradient(100deg, var(--google-blue) 0%, var(--google-red) 30%, var(--google-yellow) 60%, var(--google-green) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{
+    font-size:17px; line-height:1.6; color:var(--ink-soft); max-width:560px; margin:0 auto 34px;
+  }
+  .hero .badges{ display:flex; justify-content:center; flex-wrap:wrap; gap:12px; }
+  .hero .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:500; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:9px 16px; box-shadow:var(--shadow-sm);
+  }
+  .badge .ic{ width:18px; height:18px; border-radius:5px; display:grid; place-items:center; color:#fff; font-size:11px; font-weight:700; }
+  .badge .ic.b{ background:var(--google-blue); }
+  .badge .ic.g{ background:var(--google-green); }
+  .badge .ic.r{ background:var(--google-red); }
+
+  .exhibits{
+    display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:28px;
+  }
+  .card{
+    display:flex; flex-direction:column; align-items:flex-start;
+    background:var(--paper); border:1px solid var(--line); border-radius:18px;
+    padding:28px; text-decoration:none; color:inherit; position:relative;
+    box-shadow:var(--shadow-sm);
+    transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease, border-color .25s ease;
+  }
+  .card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); }
+  .card:hover .icon-wrap{ transform:scale(1.08) rotate(-4deg); }
+
+  .icon-wrap{
+    width:64px; height:64px; border-radius:16px; display:grid; place-items:center;
+    color:#fff; font-size:28px; font-weight:700; font-family:'Poppins',sans-serif;
+    box-shadow:0 4px 10px rgba(60,64,67,.22);
+    margin-bottom:20px; transition:transform .25s ease;
+  }
+  .icon-wrap.writer{ background:linear-gradient(145deg,#4285F4,#1a73e8); }
+  .icon-wrap.sheets{ background:linear-gradient(145deg,#34A853,#188038); }
+  .icon-wrap.slides{ background:linear-gradient(145deg,#EA4335,#c5221f); }
+
+  .card h2{ font-family:'Poppins',sans-serif; font-weight:600; font-size:21px; margin:0 0 4px; letter-spacing:-.01em; }
+  .card .meta{
+    display:inline-block; font-family:'Inter',sans-serif; font-size:12px; font-weight:500;
+    color:var(--ink-soft); margin-bottom:12px;
+  }
+  .card .meta::before{ content:'â— '; font-size:9px; vertical-align:1px; }
+  .card.writer .meta::before{ color:var(--google-blue); }
+  .card.sheets .meta::before{ color:var(--google-green); }
+  .card.slides .meta::before{ color:var(--google-red); }
+  .card p{ font-size:13.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 22px; flex:1; }
+  .card .open{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:14px; font-weight:600; color:var(--ink);
+    padding:9px 18px; border-radius:999px;
+    background:var(--canvas); border:1px solid var(--line);
+    transition:background .2s, box-shadow .2s;
+  }
+  .card .open .arrow{ transition:transform .2s; }
+  .card:hover .open{ box-shadow:var(--shadow-sm); }
+  .card:hover .open .arrow{ transform:translateX(4px); }
+  .card.writer .open:hover{ background:#e8f0fe; border-color:#aecbfa; color:#1a73e8; }
+  .card.sheets .open:hover{ background:#e6f4ea; border-color:#a8dab5; color:#188038; }
+  .card.slides .open:hover{ background:#fce8e6; border-color:#f6aea9; color:#c5221f; }
+
+  .footer{
+    display:flex; flex-direction:column; align-items:center; gap:18px; padding:56px 0 24px;
+  }
+  .footer .line{ width:56px; height:3px; border-radius:2px; background:linear-gradient(90deg,var(--google-blue),var(--google-red),var(--google-yellow),var(--google-green)); }
+  .footer .stamp{
+    font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink-soft);
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:11px 22px; box-shadow:var(--shadow-sm);
+  }
+  .footer .footnote{ font-size:12.5px; color:var(--ink-soft); margin:0; }
+
+  @media (max-width:900px){
+    .exhibits{ grid-template-columns:1fr; gap:20px; }
+    .hero{ padding:56px 0 44px; }
+  }
+  @media (max-width:480px){
+    .scene{ padding:0 18px 56px; }
+    .topbar{ padding:12px 18px; }
+    .hero h1{ font-size:44px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .card, .icon-wrap, .card .open .arrow{ transition:none; }
+    .card:hover{ transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <div class="brand-mark">W</div>
+    <div class="brand-name">Web<span>Office</span></div>
+  </a>
+  <div class="spacer"></div>
+</header>
+
+<div class="scene">
+
+  <div class="hero">
+    <div class="eyebrow"><span class="dot"></span> Everything you need. One tab.</div>
+    <h1>Create, edit &amp; share<br>with <span class="four">WebOffice</span></h1>
+    <p>Three powerful tools that run entirely in your browser ” no install, no sign-up, no data leaving your machine.</p>
+    <div class="badges">
+      <div class="badge"><span class="ic b">W</span> Documents</div>
+      <div class="badge"><span class="ic g">S</span> Spreadsheets</div>
+      <div class="badge"><span class="ic r">S</span> Presentations</div>
+      <div class="badge"><span class="ic g">â†³</span> Export to .docx, .xlsx &amp; .pptx</div>
+    </div>
+  </div>
+
+  <div class="exhibits">
+    <a class="card writer" href="writer.html">
+      <div class="icon-wrap writer">W</div>
+      <h2>Writer</h2>
+      <span class="meta">untitled.docx</span>
+      <p>Rich text, tables, images and find &amp; replace. Write with confidence and export real Word files.</p>
+      <span class="open">Open document <span class="arrow"></span></span>
+    </a>
+
+    <a class="card sheets" href="sheets.html">
+      <div class="icon-wrap sheets">S</div>
+      <h2>Sheets</h2>
+      <span class="meta">untitled.xlsx</span>
+      <p>Formulas, multiple tabs, merged cells and sorting. Crunch numbers and download real Excel files.</p>
+      <span class="open">Open spreadsheet <span class="arrow"></span></span>
+    </a>
+
+    <a class="card slides" href="slides.html">
+      <div class="icon-wrap slides">S</div>
+      <h2>Slides</h2>
+      <span class="meta">untitled.pptx</span>
+      <p>Shapes, images and a presenter mode. Design decks that ship as real PowerPoint files.</p>
+      <span class="open">Open deck <span class="arrow"></span></span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <div class="line"></div>
+    <div class="stamp">Runs entirely in your browser</div>
+    <p class="footnote">No install· No account· Your files never leave your device</p>
+  </div>
+</div>
+
+</body>
+</html>
