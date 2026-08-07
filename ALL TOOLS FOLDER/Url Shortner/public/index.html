@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LinkShrink - free, fast and pretty URL shortener." />
+  <title>LinkShrink — URL Shortener</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>" />
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+
+  <main class="app">
+    <header class="brand">
+      <div class="logo" aria-hidden="true">
+        <span class="logo-ring"></span>
+        <span class="logo-link">⛓</span>
+      </div>
+      <div>
+        <h1>Link<span>Shrink</span></h1>
+        <p class="tagline">Paste a long link, get a short one. Free forever.</p>
+      </div>
+    </header>
+
+    <section class="card" id="shrink-card">
+      <form id="shrink-form" autocomplete="off" novalidate>
+        <div class="input-wrap" id="input-wrap">
+          <span class="field-icon">🔗</span>
+          <input
+            type="text"
+            id="url-input"
+            placeholder="Paste a long URL here… e.g. https://example.com/a-very-long-link"
+            spellcheck="false"
+            aria-label="URL to shorten"
+          />
+          <button type="button" id="clear-btn" class="clear-btn" title="Clear" aria-label="Clear input">&times;</button>
+        </div>
+        <p class="hint" id="url-hint">Press <kbd>Enter</kbd> to shrink</p>
+
+        <button type="submit" id="shrink-btn" class="shrink-btn">
+          <span class="btn-text">Shrink it</span>
+          <span class="btn-loader" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <div id="result" class="result" hidden>
+        <div class="result-header">
+          <span class="result-label">✨ Your short link is ready</span>
+          <span id="provider-badge" class="provider-badge"></span>
+        </div>
+        <div class="short-link" id="short-link"></div>
+        <div class="result-actions">
+          <button class="action-btn primary" id="copy-btn">
+            <span class="copy-ico">📋</span><span id="copy-label">Copy</span>
+          </button>
+          <a class="action-btn" id="open-btn" target="_blank" rel="noopener noreferrer">
+            <span class="copy-ico">↗</span> Open
+          </a>
+          <button class="action-btn" id="qr-btn">
+            <span class="copy-ico">▦</span> QR
+          </button>
+        </div>
+        <div id="qr" class="qr" hidden></div>
+        <p class="original-url" id="original-url" title=""></p>
+      </div>
+    </section>
+
+    <section class="stats" id="stats" hidden>
+      <div class="stat">
+        <span class="stat-num" id="stat-total">0</span>
+        <span class="stat-label">Links shrunk</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="stat-today">0</span>
+        <span class="stat-label">Today</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="stat-provider">—</span>
+        <span class="stat-label">Provider</span>
+      </div>
+    </section>
+
+    <section class="history" id="history-section" hidden>
+      <div class="history-head">
+        <h2>Recent links</h2>
+        <button class="text-btn" id="clear-history">Clear all</button>
+      </div>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
+
+    <footer class="footer">
+      <p>Powered by free shortener API · <span id="footer-provider">loading…</span></p>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

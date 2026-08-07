@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quill &amp; Frame — Essay &amp; YouTube Description Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-night:#0B1120;
+    --ink-night-2:#0E1526;
+    --paper:#EAE6DA;
+    --paper-dim:#B9B4A6;
+    --muted:#8891A6;
+    --gold:#F2C879;
+    --gold-soft:rgba(242,200,121,0.14);
+    --coral:#FF6B5B;
+    --coral-soft:rgba(255,107,91,0.14);
+    --line:rgba(234,230,218,0.10);
+    --glass:rgba(255,255,255,0.045);
+    --glass-strong:rgba(255,255,255,0.07);
+    --accent:var(--gold);
+    --accent-soft:var(--gold-soft);
+    --radius:18px;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 70% 55% at 18% 8%, rgba(242,200,121,0.10), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 88% 92%, rgba(255,107,91,0.10), transparent 60%),
+      linear-gradient(180deg, var(--ink-night) 0%, var(--ink-night-2) 100%);
+    color:var(--paper);
+    font-family:'Space Grotesk', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  #bg-canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    display:block;
+    pointer-events:none;
+  }
+
+  .noise-veil{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:radial-gradient(ellipse 90% 70% at 50% 30%, transparent 40%, rgba(11,17,32,0.55) 100%);
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:920px;
+    margin:0 auto;
+    padding:64px 24px 90px;
+  }
+
+  header.top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:52px;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand-mark{
+    width:38px;height:38px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--gold), var(--coral));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Newsreader', serif;
+    font-weight:600;
+    font-size:18px;
+    color:var(--ink-night);
+    flex-shrink:0;
+  }
+  .brand-name{
+    font-family:'Newsreader', serif;
+    font-size:19px;
+    letter-spacing:0.01em;
+    font-weight:500;
+  }
+  .brand-name em{
+    font-style:italic;
+    color:var(--accent);
+    transition:color .5s var(--ease);
+  }
+  .brand-sub{
+    font-size:11.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:2px;
+  }
+
+  .status-pill{
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    border:1px solid var(--line);
+    padding:7px 13px;
+    border-radius:100px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--glass);
+  }
+  .status-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:#5EE6A0;
+    box-shadow:0 0 8px #5EE6A0;
+  }
+  .status-dot.warn{ background:#F2C879; box-shadow:0 0 8px #F2C879; }
+  .status-dot.off{ background:#8891A6; box-shadow:none; }
+
+  .header-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .gear-btn{
+    width:34px;height:34px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--glass);
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all .2s var(--ease);
+    flex-shrink:0;
+  }
+  .gear-btn:hover, .gear-btn.active{ color:var(--accent); border-color:var(--accent); }
+
+  .settings-panel{
+    display:none;
+    max-width:920px;
+    margin:0 auto 28px;
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+  }
+  .settings-panel.visible{display:block;}
+  .settings-panel-title{
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .settings-panel-sub{
+    font-size:12.5px;
+    color:var(--paper-dim);
+    line-height:1.5;
+    margin-bottom:0;
+  }
+  .settings-panel-sub a{ color:var(--accent); text-decoration:none; }
+  .settings-panel-sub a:hover{ text-decoration:underline; }
+  .settings-panel-sub code{
+    background:rgba(255,255,255,0.06);
+    padding:1px 6px;
+    border-radius:5px;
+    font-size:12px;
+  }
+  .key-status{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .key-status.active{ color:#5EE6A0; }
+  .key-status.warn{ color:var(--gold); }
+
+  .hero{
+    margin-bottom:44px;
+  }
+  .hero h1{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    font-size:clamp(34px, 5.4vw, 54px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 18px;
+  }
+  .hero h1 .accent-word{
+    font-style:italic;
+    color:var(--accent);
+    transition:color .5s var(--ease);
+  }
+  .hero p{
+    font-size:16px;
+    line-height:1.65;
+    color:var(--paper-dim);
+    max-width:560px;
+    margin:0;
+  }
+
+  /* Mode tabs */
+  .tabs{
+    display:inline-flex;
+    padding:5px;
+    border-radius:14px;
+    background:var(--glass);
+    border:1px solid var(--line);
+    margin-bottom:28px;
+    gap:4px;
+  }
+  .tab{
+    appearance:none;
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    padding:11px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:all .35s var(--ease);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    letter-spacing:0.01em;
+  }
+  .tab svg{width:15px;height:15px;opacity:0.8;}
+  .tab.active{
+    color:var(--ink-night);
+    background:var(--accent);
+  }
+  .tab:not(.active):hover{
+    color:var(--paper);
+    background:var(--glass-strong);
+  }
+
+  /* Card */
+  .card{
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:34px;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 30px 60px -30px rgba(0,0,0,0.55);
+  }
+
+  .field{
+    margin-bottom:22px;
+  }
+  .field:last-child{margin-bottom:0;}
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  @media (max-width:640px){
+    .field-row{grid-template-columns:1fr;}
+  }
+
+  label{
+    display:block;
+    font-size:12px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:9px;
+    font-weight:500;
+  }
+
+  input[type="text"], textarea, select{
+    width:100%;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--line);
+    color:var(--paper);
+    border-radius:11px;
+    padding:13px 15px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14.5px;
+    outline:none;
+    transition:border-color .25s var(--ease), background .25s var(--ease);
+    resize:vertical;
+  }
+  input[type="text"]::placeholder, textarea::placeholder{color:#5D6478;}
+  input[type="text"]:focus, textarea:focus, select:focus{
+    border-color:var(--accent);
+    background:rgba(255,255,255,0.05);
+  }
+  select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891A6' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 15px center;
+    cursor:pointer;
+  }
+  textarea{min-height:78px; line-height:1.5;}
+
+  .toggle-row{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+  }
+  .toggle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .switch{
+    width:38px;height:22px;
+    border-radius:100px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--line);
+    position:relative;
+    transition:background .25s var(--ease);
+    flex-shrink:0;
+  }
+  .switch::after{
+    content:'';
+    position:absolute;
+    top:2px;left:2px;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--muted);
+    transition:transform .25s var(--ease), background .25s var(--ease);
+  }
+  .toggle input{display:none;}
+  .toggle input:checked + .switch{background:var(--accent-soft); border-color:var(--accent);}
+  .toggle input:checked + .switch::after{
+    transform:translateX(16px);
+    background:var(--accent);
+  }
+  .toggle span.label-text{font-size:13.5px; color:var(--paper-dim);}
+
+  .generate-btn{
+    width:100%;
+    margin-top:30px;
+    background:linear-gradient(135deg, var(--gold), var(--coral));
+    color:var(--ink-night);
+    border:none;
+    border-radius:13px;
+    padding:16px 20px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:0.01em;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    transition:transform .2s var(--ease), box-shadow .2s var(--ease), opacity .2s var(--ease);
+    box-shadow:0 14px 30px -12px rgba(242,200,121,0.35);
+  }
+  .generate-btn:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 18px 36px -12px rgba(242,200,121,0.45);}
+  .generate-btn:active:not(:disabled){transform:translateY(0);}
+  .generate-btn:disabled{opacity:0.6; cursor:progress;}
+
+  .spinner{
+    width:15px;height:15px;
+    border-radius:50%;
+    border:2px solid rgba(11,17,32,0.25);
+    border-top-color:var(--ink-night);
+    animation:spin 0.75s linear infinite;
+    display:none;
+  }
+  .generate-btn.loading .spinner{display:inline-block;}
+  .generate-btn.loading .btn-label{opacity:0.85;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* Output */
+  .output-wrap{
+    margin-top:26px;
+    display:none;
+  }
+  .output-wrap.visible{display:block;}
+  .output-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .output-head label{margin:0;}
+  .output-meta{
+    font-size:12px;
+    color:var(--muted);
+  }
+  .output-box{
+    background:rgba(0,0,0,0.22);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px;
+    font-family:'Newsreader', serif;
+    font-size:15.5px;
+    line-height:1.75;
+    color:var(--paper);
+    white-space:pre-wrap;
+    max-height:480px;
+    overflow-y:auto;
+  }
+  .output-box:empty::before{
+    content:'Your draft will appear here.';
+    color:var(--muted);
+    font-style:italic;
+  }
+  .output-actions{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  .ghost-btn{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--paper-dim);
+    padding:9px 16px;
+    border-radius:10px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:13px;
+    cursor:pointer;
+    transition:all .2s var(--ease);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .ghost-btn:hover{border-color:var(--accent); color:var(--accent);}
+
+  .error-box{
+    display:none;
+    margin-top:18px;
+    padding:14px 16px;
+    border-radius:11px;
+    background:var(--coral-soft);
+    border:1px solid rgba(255,107,91,0.35);
+    color:#FFB3A9;
+    font-size:13.5px;
+    line-height:1.5;
+  }
+  .error-box.visible{display:block;}
+
+  footer{
+    text-align:center;
+    margin-top:56px;
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="noise-veil"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">Q</div>
+      <div>
+        <div class="brand-name">Quill <em>&amp;</em> Frame</div>
+        <div class="brand-sub">Essay &amp; Video Copy, Drafted</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="status-pill" id="statusPill"><span class="status-dot" id="statusDot"></span> <span id="statusText">Checking server…</span></div>
+      <button class="gear-btn" id="settingsToggle" title="About / status">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-panel-title">Server-side Gemini key</div>
+    <div class="settings-panel-sub">
+      This app calls Google's free Gemini API through its own backend (<code>/api/generate</code>). The API key lives only
+      in Vercel's environment variables (as <code>GEMINI_API_KEY</code>) and is never sent to the browser — nothing to
+      paste here. To set it up, get a free key at
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>,
+      add it in your Vercel project under Settings → Environment Variables, and redeploy.
+    </div>
+    <div class="key-status" id="geminiKeyStatus"><span id="statusDot2" class="status-dot"></span> Checking server status…</div>
+  </div>
+
+  <section class="hero">
+    <h1>Turn a rough idea into a<br class="hide-mobile"> finished <span class="accent-word" id="heroAccent">essay</span>.</h1>
+    <p id="heroSub">Give it a topic and a few constraints — Quill &amp; Frame drafts a full academic essay you can revise and submit.</p>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" id="tabEssay" role="tab" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Essay
+    </button>
+    <button class="tab" id="tabYoutube" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l5 3-5 3V9z" fill="currentColor" stroke="none"/></svg>
+      YouTube Description
+    </button>
+  </div>
+
+  <div class="card">
+
+    <!-- ESSAY FORM -->
+    <div id="formEssay">
+      <div class="field">
+        <label for="essayTopic">Essay topic / prompt</label>
+        <input type="text" id="essayTopic" placeholder="e.g. The impact of climate change on coastal agriculture">
+      </div>
+      <div class="field field-row">
+        <div>
+          <label for="essayLevel">Academic level</label>
+          <select id="essayLevel">
+            <option>High School</option>
+            <option selected>Undergraduate</option>
+            <option>Graduate</option>
+          </select>
+        </div>
+        <div>
+          <label for="essayTone">Tone</label>
+          <select id="essayTone">
+            <option selected>Formal &amp; Analytical</option>
+            <option>Persuasive</option>
+            <option>Narrative</option>
+            <option>Explanatory</option>
+          </select>
+        </div>
+      </div>
+      <div class="field field-row">
+        <div>
+          <label for="essayLength">Word count</label>
+          <select id="essayLength">
+            <option value="300">~300 words</option>
+            <option value="500" selected>~500 words</option>
+            <option value="800">~800 words</option>
+            <option value="1200">~1200 words</option>
+          </select>
+        </div>
+        <div>
+          <label for="essayCitations">Citation style</label>
+          <select id="essayCitations">
+            <option>None</option>
+            <option>APA</option>
+            <option>MLA</option>
+            <option>Chicago</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="essayNotes">Extra instructions <span style="text-transform:none; letter-spacing:0; color:#5D6478;">(optional)</span></label>
+        <textarea id="essayNotes" placeholder="Any specific points, thesis direction, or sources to include..."></textarea>
+      </div>
+    </div>
+
+    <!-- YOUTUBE FORM -->
+    <div id="formYoutube" style="display:none;">
+      <div class="field">
+        <label for="ytTopic">Video title / topic</label>
+        <input type="text" id="ytTopic" placeholder="e.g. I built an IoT weather station with Arduino">
+      </div>
+      <div class="field field-row">
+        <div>
+          <label for="ytCategory">Category</label>
+          <select id="ytCategory">
+            <option selected>Tech / Tutorial</option>
+            <option>Vlog</option>
+            <option>Education</option>
+            <option>Gaming</option>
+            <option>Product Review</option>
+            <option>Music</option>
+          </select>
+        </div>
+        <div>
+          <label for="ytLength">Description length</label>
+          <select id="ytLength">
+            <option value="short">Short (2-3 lines)</option>
+            <option value="standard" selected>Standard</option>
+            <option value="detailed">Detailed</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="ytKeywords">Keywords <span style="text-transform:none; letter-spacing:0; color:#5D6478;">(comma separated, optional)</span></label>
+        <input type="text" id="ytKeywords" placeholder="e.g. arduino, iot, weather station, diy electronics">
+      </div>
+      <div class="field toggle-row">
+        <label class="toggle">
+          <input type="checkbox" id="ytTimestamps">
+          <span class="switch"></span>
+          <span class="label-text">Include timestamp placeholders</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="ytHashtags" checked>
+          <span class="switch"></span>
+          <span class="label-text">Include hashtags</span>
+        </label>
+      </div>
+      <div class="field" style="margin-top:22px;">
+        <label for="ytNotes">Extra instructions <span style="text-transform:none; letter-spacing:0; color:#5D6478;">(optional)</span></label>
+        <textarea id="ytNotes" placeholder="Mention a sponsor, a call to action, links to include..."></textarea>
+      </div>
+    </div>
+
+    <button class="generate-btn" id="generateBtn">
+      <span class="spinner"></span>
+      <span class="btn-label" id="btnLabel">Generate Essay</span>
+    </button>
+    <p style="font-size:12px; color:var(--muted); text-align:center; margin:10px 0 0; line-height:1.5;">
+      Generation runs through this app's own server using a free Google Gemini key stored in <code style="background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:5px;">.env</code> — never in your browser.
+    </p>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="output-wrap" id="outputWrap">
+      <div class="output-head">
+        <label>Draft</label>
+        <span class="output-meta" id="outputMeta"></span>
+      </div>
+      <div class="output-box" id="outputBox"></div>
+      <div class="output-actions">
+        <button class="ghost-btn" id="copyBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button>
+        <button class="ghost-btn" id="regenBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Regenerate
+        </button>
+        <button class="ghost-btn" id="pdfBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h1.5a1.5 1.5 0 0 0 0-3H9v5"/><path d="M13.5 12v5h1a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2h-1z"/></svg>
+          Download PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Quill &amp; Frame — draft written by Gemini via a secure server-side proxy. No key ever leaves the server.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module">
+  // Optional on-device fallback (WebLLM) used only if the backend is unreachable
+  // or not yet configured with a key. Runs fully in the browser via WebGPU.
+  import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
+
+  var MODEL_ID = "Llama-3.2-1B-Instruct-q4f16_1-MLC"; // ~880MB, cached after first load
+  var enginePromise = null;
+
+  window.__quillAI = {
+    supported: function(){
+      return typeof navigator !== 'undefined' && !!navigator.gpu;
+    },
+    generate: async function(prompt, onProgress){
+      if(!enginePromise){
+        enginePromise = CreateMLCEngine(MODEL_ID, {
+          initProgressCallback: function(p){
+            if(onProgress) onProgress(p);
+          }
+        });
+      }
+      var engine = await enginePromise;
+      var response = await engine.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.85,
+        max_tokens: 1400
+      });
+      return response.choices[0].message.content;
+    }
+  };
+</script>
+<script>
+/* ============================= 3D BACKGROUND ============================= */
+(function(){
+  var canvas = document.getElementById('bg-canvas');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, alpha: true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 14);
+
+  var COLOR_GOLD = new THREE.Color(0xF2C879);
+  var COLOR_CORAL = new THREE.Color(0xFF6B5B);
+  var currentAccent = COLOR_GOLD.clone();
+  var targetAccent = COLOR_GOLD.clone();
+
+  // ---- Particle field (ink dust / light dust) ----
+  var PARTICLE_COUNT = 900;
+  var positions = new Float32Array(PARTICLE_COUNT * 3);
+  for(var i=0;i<PARTICLE_COUNT;i++){
+    var r = 9 + Math.random()*10;
+    var theta = Math.random()*Math.PI*2;
+    var phi = Math.acos((Math.random()*2)-1);
+    positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta) * 0.6;
+    positions[i*3+2] = r * Math.cos(phi) - 4;
+  }
+  var particleGeo = new THREE.BufferGeometry();
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  var particleMat = new THREE.PointsMaterial({
+    color: 0xEAE6DA,
+    size: 0.045,
+    transparent: true,
+    opacity: 0.55,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  var particles = new THREE.Points(particleGeo, particleMat);
+  scene.add(particles);
+
+  // ---- Floating "idea" shapes: torus knots (essay/ink) + octahedra (frame/play) ----
+  var shapes = [];
+
+  function makeWireShape(geometry, color, pos, scale){
+    var mat = new THREE.MeshBasicMaterial({color: color, wireframe: true, transparent:true, opacity:0.55});
+    var mesh = new THREE.Mesh(geometry, mat);
+    mesh.position.set(pos[0], pos[1], pos[2]);
+    mesh.scale.setScalar(scale);
+    mesh.userData.baseY = pos[1];
+    mesh.userData.speed = 0.15 + Math.random()*0.25;
+    mesh.userData.phase = Math.random()*Math.PI*2;
+    mesh.userData.rotSpeed = (0.05 + Math.random()*0.08) * (Math.random()<0.5?-1:1);
+    scene.add(mesh);
+    shapes.push(mesh);
+    return mesh;
+  }
+
+  makeWireShape(new THREE.IcosahedronGeometry(1.6, 0), 0xF2C879, [-4.4, 1.6, -3], 1);
+  makeWireShape(new THREE.TorusKnotGeometry(1, 0.32, 90, 12), 0xF2C879, [4.6, -1.2, -6], 0.85);
+  makeWireShape(new THREE.OctahedronGeometry(1.3, 0), 0xFF6B5B, [3.6, 2.6, -4], 0.9);
+  makeWireShape(new THREE.TorusGeometry(1.1, 0.28, 10, 32), 0xFF6B5B, [-4.8, -2.2, -5], 0.8);
+  makeWireShape(new THREE.IcosahedronGeometry(0.9, 0), 0xEAE6DA, [0.4, 3.4, -8], 0.6);
+  makeWireShape(new THREE.OctahedronGeometry(0.8, 0), 0xEAE6DA, [-1, -3.4, -7], 0.55);
+
+  // subtle glow sprite behind shapes
+  function makeGlow(color, pos, size){
+    var canvasG = document.createElement('canvas');
+    canvasG.width = 128; canvasG.height = 128;
+    var ctx = canvasG.getContext('2d');
+    var grd = ctx.createRadialGradient(64,64,0,64,64,64);
+    var c = new THREE.Color(color);
+    var cs = c.getStyle();
+    grd.addColorStop(0, cs.replace(')', ', 0.55)').replace('rgb','rgba'));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0,0,128,128);
+    var tex = new THREE.CanvasTexture(canvasG);
+    var mat = new THREE.SpriteMaterial({map:tex, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false});
+    var sprite = new THREE.Sprite(mat);
+    sprite.position.set(pos[0],pos[1],pos[2]);
+    sprite.scale.set(size,size,1);
+    scene.add(sprite);
+    return sprite;
+  }
+  makeGlow(0xF2C879, [-4.4, 1.6, -3.2], 9);
+  makeGlow(0xFF6B5B, [3.6, 2.6, -4.2], 8);
+  makeGlow(0xF2C879, [4.6, -1.2, -6.2], 7);
+  makeGlow(0xFF6B5B, [-4.8, -2.2, -5.2], 7);
+
+  // ---- Mouse parallax ----
+  var mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+  window.addEventListener('mousemove', function(e){
+    mouseX = (e.clientX / window.innerWidth) - 0.5;
+    mouseY = (e.clientY / window.innerHeight) - 0.5;
+  }, {passive:true});
+  window.addEventListener('touchmove', function(e){
+    if(e.touches && e.touches[0]){
+      mouseX = (e.touches[0].clientX / window.innerWidth) - 0.5;
+      mouseY = (e.touches[0].clientY / window.innerHeight) - 0.5;
+    }
+  }, {passive:true});
+
+  window.addEventListener('resize', function(){
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  window.__setBgAccent = function(mode){
+    targetAccent = mode === 'youtube' ? COLOR_CORAL.clone() : COLOR_GOLD.clone();
+  };
+
+  var clock = new THREE.Clock();
+
+  function animate(){
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+
+    targetX = mouseX * 1.1;
+    targetY = mouseY * 0.7;
+    camera.position.x += (targetX - camera.position.x) * 0.03;
+    camera.position.y += (-targetY - camera.position.y) * 0.03;
+    camera.lookAt(0,0,-3);
+
+    currentAccent.lerp(targetAccent, 0.02);
+
+    if(!reduceMotion){
+      particles.rotation.y = t * 0.012;
+      particles.rotation.x = t * 0.004;
+
+      for(var i=0;i<shapes.length;i++){
+        var s = shapes[i];
+        s.rotation.x += s.userData.rotSpeed * 0.01;
+        s.rotation.y += s.userData.rotSpeed * 0.014;
+        s.position.y = s.userData.baseY + Math.sin(t*s.userData.speed + s.userData.phase) * 0.4;
+      }
+    }
+
+    shapes[0].material.color.lerp(currentAccent, 0.0);
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ============================= APP LOGIC ============================= */
+(function(){
+  var mode = 'essay';
+  var tabEssay = document.getElementById('tabEssay');
+  var tabYoutube = document.getElementById('tabYoutube');
+  var formEssay = document.getElementById('formEssay');
+  var formYoutube = document.getElementById('formYoutube');
+  var heroAccent = document.getElementById('heroAccent');
+  var heroSub = document.getElementById('heroSub');
+  var btnLabel = document.getElementById('btnLabel');
+  var generateBtn = document.getElementById('generateBtn');
+  var outputWrap = document.getElementById('outputWrap');
+  var outputBox = document.getElementById('outputBox');
+  var outputMeta = document.getElementById('outputMeta');
+  var errorBox = document.getElementById('errorBox');
+  var copyBtn = document.getElementById('copyBtn');
+  var regenBtn = document.getElementById('regenBtn');
+  var pdfBtn = document.getElementById('pdfBtn');
+  var settingsToggle = document.getElementById('settingsToggle');
+  var settingsPanel = document.getElementById('settingsPanel');
+  var geminiKeyStatus = document.getElementById('geminiKeyStatus');
+  var statusDot = document.getElementById('statusDot');
+  var statusDot2 = document.getElementById('statusDot2');
+  var statusText = document.getElementById('statusText');
+
+  // Server-side key status only — the key itself is NEVER present in this file.
+  var serverHasKey = null; // null = unknown yet, true/false once checked
+
+  async function refreshServerStatus(){
+    try{
+      var res = await fetch('/api/status');
+      var data = await res.json();
+      serverHasKey = Boolean(data && data.hasKey);
+    }catch(e){
+      serverHasKey = false; // couldn't reach backend at all (e.g. opened as a static file)
+    }
+
+    if(serverHasKey){
+      statusDot.className = 'status-dot';
+      statusDot2.className = 'status-dot';
+      statusText.textContent = 'Server key active';
+      geminiKeyStatus.innerHTML = '<span class="status-dot" style="background:#5EE6A0;box-shadow:0 0 8px #5EE6A0;"></span> GEMINI_API_KEY found on the server — generating with Gemini.';
+      geminiKeyStatus.className = 'key-status active';
+    }else{
+      statusDot.className = 'status-dot warn';
+      statusDot2.className = 'status-dot warn';
+      statusText.textContent = 'No server key — using fallback';
+      geminiKeyStatus.innerHTML = '<span class="status-dot warn"></span> No GEMINI_API_KEY set (or server not reachable). Falling back to on-device / backup generation. Add the key in Vercel Project Settings → Environment Variables and redeploy.';
+      geminiKeyStatus.className = 'key-status warn';
+    }
+  }
+  refreshServerStatus();
+
+  settingsToggle.addEventListener('click', function(){
+    settingsPanel.classList.toggle('visible');
+    settingsToggle.classList.toggle('active');
+  });
+
+  async function generateWithServer(prompt){
+    var res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    });
+    var data = await res.json().catch(function(){ return {}; });
+    if(!res.ok){
+      throw new Error((data && data.error) || ('Server request failed (status ' + res.status + ').'));
+    }
+    if(!data.text){
+      throw new Error('Server returned an empty response.');
+    }
+    return data.text;
+  }
+
+  function setMode(next){
+    mode = next;
+    var isEssay = mode === 'essay';
+    tabEssay.classList.toggle('active', isEssay);
+    tabYoutube.classList.toggle('active', !isEssay);
+    tabEssay.setAttribute('aria-selected', isEssay);
+    tabYoutube.setAttribute('aria-selected', !isEssay);
+    formEssay.style.display = isEssay ? 'block' : 'none';
+    formYoutube.style.display = isEssay ? 'none' : 'block';
+    heroAccent.textContent = isEssay ? 'essay' : 'video';
+    heroSub.textContent = isEssay
+      ? 'Give it a topic and a few constraints — Quill & Frame drafts a full academic essay you can revise and submit.'
+      : 'Give it a video topic and a few details — Quill & Frame drafts a ready-to-paste YouTube description.';
+    btnLabel.textContent = isEssay ? 'Generate Essay' : 'Generate Description';
+    document.documentElement.style.setProperty('--accent', isEssay ? 'var(--gold)' : 'var(--coral)');
+    document.documentElement.style.setProperty('--accent-soft', isEssay ? 'var(--gold-soft)' : 'var(--coral-soft)');
+    if(window.__setBgAccent) window.__setBgAccent(isEssay ? 'essay' : 'youtube');
+    errorBox.classList.remove('visible');
+  }
+
+  tabEssay.addEventListener('click', function(){ setMode('essay'); });
+  tabYoutube.addEventListener('click', function(){ setMode('youtube'); });
+
+  function buildEssayPrompt(){
+    var topic = document.getElementById('essayTopic').value.trim();
+    var level = document.getElementById('essayLevel').value;
+    var tone = document.getElementById('essayTone').value;
+    var length = document.getElementById('essayLength').value;
+    var citations = document.getElementById('essayCitations').value;
+    var notes = document.getElementById('essayNotes').value.trim();
+
+    if(!topic){ return {error:'Please enter an essay topic.'}; }
+
+    var prompt = 'Write a complete, well-structured essay for a ' + level + ' audience on the following topic: "' + topic + '". ' +
+      'Tone: ' + tone + '. Target length: approximately ' + length + ' words. ' +
+      'Include a clear introduction with a thesis statement, body paragraphs with topic sentences and supporting evidence or reasoning, and a conclusion. ' +
+      (citations !== 'None' ? ('Use ' + citations + ' style in-text citations with plausible illustrative references, and note that sources should be verified by the student. ') : 'Do not include citations or a references list. ') +
+      (notes ? ('Additional instructions from the student: ' + notes + '. ') : '') +
+      'Return only the essay text itself, with no preamble, no markdown headers, and no meta-commentary before or after it.';
+    return {prompt: prompt};
+  }
+
+  function buildYoutubePrompt(){
+    var topic = document.getElementById('ytTopic').value.trim();
+    var category = document.getElementById('ytCategory').value;
+    var length = document.getElementById('ytLength').value;
+    var keywords = document.getElementById('ytKeywords').value.trim();
+    var timestamps = document.getElementById('ytTimestamps').checked;
+    var hashtags = document.getElementById('ytHashtags').checked;
+    var notes = document.getElementById('ytNotes').value.trim();
+
+    if(!topic){ return {error:'Please enter a video title or topic.'}; }
+
+    var lengthMap = {
+      short: 'very short, 2-3 punchy lines',
+      standard: 'a standard YouTube description length, around 120-180 words, with a short hook paragraph followed by more detail',
+      detailed: 'a detailed, thorough description, around 250-350 words, covering the hook, what the video covers, and a closing call to action'
+    };
+
+    var prompt = 'Write a YouTube video description for a ' + category + ' video titled or about: "' + topic + '". ' +
+      'Length and style: ' + lengthMap[length] + '. ' +
+      'Start with an engaging hook sentence. ' +
+      (timestamps ? 'Include a placeholder timestamps section formatted like "00:00 Intro" with 4-6 generic placeholder chapter labels relevant to the topic. ' : '') +
+      (keywords ? ('Naturally weave in these keywords where relevant: ' + keywords + '. ') : '') +
+      (hashtags ? 'End with 3-5 relevant hashtags on a new line. ' : 'Do not include hashtags. ') +
+      (notes ? ('Additional instructions from the creator: ' + notes + '. ') : '') +
+      'Return only the description text itself, with no preamble, no markdown headers, and no meta-commentary before or after it.';
+    return {prompt: prompt};
+  }
+
+  function countWords(str){
+    var t = str.trim();
+    if(!t) return 0;
+    return t.split(/\s+/).length;
+  }
+
+  function showError(msg){
+    errorBox.textContent = msg;
+    errorBox.classList.add('visible');
+  }
+
+  function setLoading(isLoading){
+    generateBtn.disabled = isLoading;
+    generateBtn.classList.toggle('loading', isLoading);
+  }
+
+  async function generate(){
+    errorBox.classList.remove('visible');
+    var built = mode === 'essay' ? buildEssayPrompt() : buildYoutubePrompt();
+    if(built.error){ showError(built.error); return; }
+
+    setLoading(true);
+    outputWrap.classList.remove('visible');
+    outputBox.textContent = '';
+
+    var defaultLabel = mode === 'essay' ? 'Generate Essay' : 'Generate Description';
+
+    async function viaRemoteFallback(){
+      var seed = Math.floor(Math.random()*100000);
+      var primaryUrl = 'https://gen.pollinations.ai/text/' + encodeURIComponent(built.prompt) + '?seed=' + seed;
+      var fallbackUrl = 'https://text.pollinations.ai/' + encodeURIComponent(built.prompt) + '?seed=' + seed;
+      async function tryFetch(u){
+        var res = await fetch(u);
+        if(!res.ok){ throw new Error('status ' + res.status); }
+        var raw = await res.text();
+        var text = raw.trim();
+        if(text.startsWith('{') || text.startsWith('[')){
+          try{
+            var parsed = JSON.parse(text);
+            text = (parsed && (parsed.response || (parsed.choices && parsed.choices[0] && parsed.choices[0].message && parsed.choices[0].message.content))) || text;
+            text = String(text).trim();
+          }catch(parseErr){ /* not JSON, keep raw text */ }
+        }
+        if(!text){ throw new Error('empty response'); }
+        return text;
+      }
+      try{
+        return await tryFetch(primaryUrl);
+      }catch(primaryErr){
+        return await tryFetch(fallbackUrl);
+      }
+    }
+
+    try{
+      var text;
+      if(serverHasKey === null){
+        await refreshServerStatus();
+      }
+
+      if(serverHasKey){
+        try{
+          btnLabel.textContent = 'Writing…';
+          text = await generateWithServer(built.prompt);
+        }catch(serverErr){
+          // Server call failed for some reason — fall back rather than dead-ending the user.
+          if(window.__quillAI && window.__quillAI.supported()){
+            text = await window.__quillAI.generate(built.prompt, function(p){
+              var pct = Math.round((p && p.progress || 0) * 100);
+              btnLabel.textContent = pct > 0 && pct < 100 ? ('Loading on-device model… ' + pct + '%') : 'Writing…';
+            });
+          }else{
+            text = await viaRemoteFallback();
+          }
+        }
+      }else if(window.__quillAI && window.__quillAI.supported()){
+        try{
+          text = await window.__quillAI.generate(built.prompt, function(p){
+            var pct = Math.round((p && p.progress || 0) * 100);
+            btnLabel.textContent = pct > 0 && pct < 100 ? ('Loading on-device model… ' + pct + '%') : 'Writing…';
+          });
+        }catch(webllmErr){
+          text = await viaRemoteFallback();
+        }
+      }else{
+        text = await viaRemoteFallback();
+      }
+
+      outputBox.textContent = text;
+      outputMeta.textContent = countWords(text) + ' words';
+      outputWrap.classList.add('visible');
+      outputWrap.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }catch(err){
+      var msg = window.__quillAI && window.__quillAI.supported()
+        ? 'Something went wrong generating your draft. Please try again.'
+        : 'Something went wrong generating your draft (the free backup generator may be busy). Please wait a moment and try again, or use a Chrome/Edge browser for reliable on-device generation.';
+      showError(msg);
+    }finally{
+      btnLabel.textContent = defaultLabel;
+      setLoading(false);
+    }
+  }
+
+  generateBtn.addEventListener('click', generate);
+  regenBtn.addEventListener('click', generate);
+
+  copyBtn.addEventListener('click', function(){
+    var text = outputBox.textContent;
+    if(!text) return;
+    navigator.clipboard.writeText(text).then(function(){
+      var original = copyBtn.innerHTML;
+      copyBtn.innerHTML = 'Copied';
+      setTimeout(function(){ copyBtn.innerHTML = original; }, 1600);
+    }).catch(function(){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try{ document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(ta);
+      var original2 = copyBtn.innerHTML;
+      copyBtn.innerHTML = 'Copied';
+      setTimeout(function(){ copyBtn.innerHTML = original2; }, 1600);
+    });
+  });
+
+  function slugify(str){
+    return (str || '').toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+      .slice(0, 60) || (mode === 'essay' ? 'essay' : 'youtube-description');
+  }
+
+  pdfBtn.addEventListener('click', function(){
+    var text = outputBox.textContent;
+    if(!text) return;
+
+    if(!window.jspdf || !window.jspdf.jsPDF){
+      showError('The PDF library did not load — check your connection and try again.');
+      return;
+    }
+
+    var original = pdfBtn.innerHTML;
+    pdfBtn.innerHTML = 'Preparing…';
+    pdfBtn.disabled = true;
+
+    try{
+      var JsPDF = window.jspdf.jsPDF;
+      var doc = new JsPDF({ unit: 'pt', format: 'a4' });
+      var margin = 56;
+      var pageWidth = doc.internal.pageSize.getWidth();
+      var pageHeight = doc.internal.pageSize.getHeight();
+      var maxWidth = pageWidth - margin * 2;
+
+      var titleSource = mode === 'essay'
+        ? (document.getElementById('essayTopic').value.trim() || 'Essay Draft')
+        : (document.getElementById('ytTopic').value.trim() || 'YouTube Description');
+
+      var kicker = mode === 'essay' ? 'ESSAY DRAFT — QUILL & FRAME' : 'YOUTUBE DESCRIPTION — QUILL & FRAME';
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(140, 140, 140);
+      doc.text(kicker, margin, margin - 20);
+
+      doc.setFont('times', 'bold');
+      doc.setFontSize(18);
+      doc.setTextColor(20, 20, 20);
+      var titleLines = doc.splitTextToSize(titleSource, maxWidth);
+      doc.text(titleLines, margin, margin);
+
+      var y = margin + titleLines.length * 22 + 14;
+      doc.setDrawColor(210, 210, 210);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 24;
+
+      doc.setFont('times', 'normal');
+      doc.setFontSize(12);
+      doc.setTextColor(30, 30, 30);
+      var lineHeight = 17;
+      var paragraphs = text.split(/\n+/);
+
+      for(var p = 0; p < paragraphs.length; p++){
+        var lines = doc.splitTextToSize(paragraphs[p], maxWidth);
+        for(var i = 0; i < lines.length; i++){
+          if(y > pageHeight - margin){
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(lines[i], margin, y);
+          y += lineHeight;
+        }
+        y += lineHeight * 0.5;
+      }
+
+      doc.save(slugify(titleSource) + '.pdf');
+    }catch(e){
+      showError('Could not create the PDF: ' + e.message);
+    }finally{
+      pdfBtn.innerHTML = original;
+      pdfBtn.disabled = false;
+    }
+  });
+
+  setMode('essay');
+})();
+</script>
+</body>
+</html>

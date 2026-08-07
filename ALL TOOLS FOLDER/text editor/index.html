@@ -29,8 +29,40 @@
     Refresh
   </button>
 
+  <div class="toolbar-sep"></div>
+
+  <div class="fw-select-wrap" title="Load a framework into the preview">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+    <select id="fwSelect">
+      <option value="vanilla">Vanilla</option>
+      <option value="react">React (JSX)</option>
+      <option value="vue">Vue 3</option>
+      <option value="tailwind">Tailwind CSS</option>
+    </select>
+  </div>
+
+  <button class="tb-btn tb-btn-ai" id="aiToggleBtn" title="Toggle AI-assisted code suggestions">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 14l.9 2.7L22 17.6l-2.1.9L19 21l-.9-2.5-2.1-.9 2.1-.9L19 14z" opacity=".7"/></svg>
+    AI Suggest <span class="ai-state" id="aiState">Off</span>
+  </button>
+
   <div class="toolbar-right">
     <div class="status-dot"></div>
+
+    <div class="dl-wrap">
+      <button class="tb-btn tb-btn-ghost" id="downloadBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </button>
+      <div class="dl-menu" id="dlMenu" hidden>
+        <button data-dl="html">HTML file <span>.html</span></button>
+        <button data-dl="css">CSS file <span>.css</span></button>
+        <button data-dl="js">JavaScript file <span>.js</span></button>
+        <div class="dl-sep"></div>
+        <button data-dl="zip">Full project <span>.zip</span></button>
+      </div>
+    </div>
+
     <button class="tb-btn tb-btn-ghost" id="fullBtn">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
       Fullscreen
@@ -137,7 +169,13 @@
 </div>
 
 <div id="toast"></div>
+<div id="acBox" class="ac-box" hidden></div>
+<div id="aiStrip" class="ai-strip" hidden>
+  <span class="ai-strip-dot"></span>
+  <span id="aiStripText">Thinking of a suggestion…</span>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

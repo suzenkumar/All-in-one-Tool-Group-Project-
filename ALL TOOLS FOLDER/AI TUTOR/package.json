@@ -1,0 +1,10 @@
+{
+  "name": "margdarshak",
+  "version": "1.0.0",
+  "description": "AI student mentor — study help, career guidance, interview prep, parent counseling. Gemini API key stays server-side via a Vercel Serverless Function.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}
