@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://studentaitools.com/sitemap.xml

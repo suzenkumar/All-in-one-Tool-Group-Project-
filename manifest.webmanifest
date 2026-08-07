@@ -1,0 +1,15 @@
+{
+  "name": "StudentAI Tools - 26+ Free AI Tools for Students",
+  "short_name": "StudentAI",
+  "description": "26+ free AI tools for students: writing, coding, math, documents and study tools, all in one dashboard.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080618",
+  "theme_color": "#0f0c29",
+  "lang": "en",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
