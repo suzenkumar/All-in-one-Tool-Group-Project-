@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Terms &amp; Conditions - All In One AI Student Tools</title>
+  <meta name="description" content="Terms and conditions for All In One AI Student Tools. Understand the rules for using our free AI-powered academic tools.">
+  <meta name="theme-color" content="#0f0c29">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --cyan: #00fff0;
+      --purple: #6a00ff;
+      --pink: #ff0080;
+      --bg-dark: #080618;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 255, 240, 0.35);
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --glow-sm: 0 0 20px rgba(0, 255, 240, 0.4);
+      --glow-md: 0 0 40px rgba(0, 255, 240, 0.5);
+      --radius: 18px;
+      --radius-lg: 28px;
+      --ff-display: 'Syne', sans-serif;
+      --ff-body: 'Space Grotesk', sans-serif;
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--ff-body);
+      background: var(--bg-dark);
+      color: #fff;
+      min-height: 100vh;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(106, 0, 255, 0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(0, 255, 240, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 40% at 50% 50%, rgba(255, 0, 128, 0.08) 0%, transparent 60%),
+        #080618;
+      z-index: -2;
+      animation: meshShift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes meshShift {
+      0% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(30deg); }
+      100% { filter: hue-rotate(-15deg); }
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 240, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 240, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 6%;
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      backdrop-filter: blur(24px);
+      background: rgba(8, 6, 24, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar.scrolled {
+      padding: 13px 6%;
+      background: rgba(8, 6, 24, 0.95);
+      border-color: var(--border-glow);
+    }
+
+    .logo {
+      font-family: var(--ff-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo span {
+      color: var(--cyan);
+      text-shadow: var(--glow-sm);
+    }
+
+    .logo em {
+      font-style: normal;
+      font-size: 0.5rem;
+      font-weight: 500;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-left: 8px;
+      vertical-align: middle;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      box-shadow: var(--glow-sm);
+      transition: var(--transition);
+    }
+
+    .nav-back:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glow-md);
+    }
+
+    main {
+      padding: 130px 6% 60px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-hero {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .page-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .page-hero h1 {
+      font-family: var(--ff-display);
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+
+    .page-hero h1 .grad {
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-hero p {
+      color: var(--text-muted);
+      font-size: 0.97rem;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .last-updated {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 16px;
+      padding: 6px 16px;
+      background: rgba(0, 255, 240, 0.08);
+      border: 1px solid rgba(0, 255, 240, 0.2);
+      border-radius: 50px;
+      font-size: 0.78rem;
+      color: var(--cyan);
+    }
+
+    .policy-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 32px;
+      margin-bottom: 18px;
+      transition: var(--transition);
+    }
+
+    .policy-section:hover {
+      border-color: var(--border-glow);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .policy-section h2 {
+      font-family: var(--ff-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .policy-section p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    .policy-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .policy-section ul {
+      list-style: none;
+      margin: 0 0 12px;
+    }
+
+    .policy-section ul li {
+      position: relative;
+      padding-left: 22px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.9rem;
+      line-height: 1.75;
+      margin-bottom: 7px;
+    }
+
+    .policy-section ul li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    .policy-section strong {
+      color: #fff;
+    }
+
+    .policy-section a {
+      color: var(--cyan);
+      text-decoration: underline;
+    }
+
+    .notice-box {
+      background: linear-gradient(135deg, rgba(106, 0, 255, 0.15), rgba(0, 255, 240, 0.1));
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      margin-bottom: 18px;
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.7;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 1px solid var(--border);
+      padding: 30px 6%;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .footer-inner a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    .footer-inner a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 120px 5% 50px;
+      }
+
+      .page-hero h1 {
+        font-size: 2rem;
+      }
+
+      .navbar {
+        padding: 16px 5%;
+      }
+
+      .policy-section {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-hero h1 {
+        font-size: 1.7rem;
+      }
+
+      .logo {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-mesh" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header>
+    <nav class="navbar" id="navbar">
+      <a class="logo" href="index.html"><span>All</span>IN<span>One</span> <em>AI</em></a>
+      <a class="nav-back" href="index.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-hero">
+      <div class="page-label">📜 Terms &amp; Conditions</div>
+      <h1>Terms &amp; <span class="grad">Conditions</span></h1>
+      <p>Please read these terms carefully before using our platform. By accessing or using All In One AI Student Tools, you agree to be bound by these Terms &amp; Conditions.</p>
+      <div class="last-updated"><i class="fas fa-calendar-alt"></i> Last Updated: August 7, 2026</div>
+    </div>
+
+    <div class="notice-box">
+      <strong>Short version:</strong> All tools are free for students, our tools are learning aids (not shortcuts), and your work belongs to you. Use the platform responsibly and in line with your institution's academic integrity policies.
+    </div>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-info-circle"></i> 1. Acceptance of Terms</h2>
+      <p>By creating an account, accessing, or using our website and tools, you confirm that you have read, understood, and agree to these Terms &amp; Conditions, along with our <a href="privacy-policy.html">Privacy Policy</a>. If you do not agree, please do not use our services.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-graduation-cap"></i> 2. Eligibility &amp; Account</h2>
+      <p>Our platform is intended for students and academic users. To use certain features, you must register an account with accurate information.</p>
+      <ul>
+        <li>You must be at least 13 years old to use our services.</li>
+        <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
+        <li>You must provide accurate and complete information during registration.</li>
+        <li>We may suspend or terminate accounts that violate these terms.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-tools"></i> 3. Use of Tools</h2>
+      <p>Our tools are provided as <strong>learning aids</strong>, not shortcuts. You agree to use them responsibly:</p>
+      <ul>
+        <li>Use generated content as reference, guidance, or study material — not as a replacement for your own work.</li>
+        <li>Follow your educational institution's policies on AI-assisted work.</li>
+        <li>Do not attempt to reverse-engineer, misuse, or abuse the tools.</li>
+        <li>Do not submit content that is illegal, harmful, or infringes on others' rights.</li>
+      </ul>
+      <p>We are not responsible for how you use the content generated by our tools.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-ban"></i> 4. Prohibited Activities</h2>
+      <p>You agree not to engage in any of the following:</p>
+      <ul>
+        <li>Using the platform for any unlawful purpose.</li>
+        <li>Attempting to gain unauthorized access to the platform, servers, or other users' accounts.</li>
+        <li>Submitting viruses, malware, or any harmful code.</li>
+        <li>Plagiarizing or misrepresenting AI-generated content as your own original work in a way that violates your institution's policies.</li>
+        <li>Interfering with the normal operation of the platform.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-copyright"></i> 5. Intellectual Property</h2>
+      <p>The platform, including its design, branding, code, and content, is the property of All In One AI Student Tools. You may not copy, modify, distribute, or reproduce any part of the platform without our prior written consent.</p>
+      <p>However, <strong>the content you create</strong> using our tools (essays, notes, resumes, images, etc.) belongs to <strong>you</strong>.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-user-shield"></i> 6. Privacy &amp; Data</h2>
+      <p>Your privacy matters to us. Please review our <a href="privacy-policy.html">Privacy Policy</a> to understand how we collect, use, and protect your personal information.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-gift"></i> 7. Free Service &amp; Changes</h2>
+      <p>All tools are currently provided <strong>free of charge</strong> for students. We may update, modify, or discontinue features at any time. We are not liable for any disruption to the service.</p>
+      <p>We may also introduce new features, tools, or plans in the future. Any pricing changes will be communicated clearly before taking effect.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-exclamation-triangle"></i> 8. Disclaimer of Warranties</h2>
+      <p>Our platform and tools are provided "as is" and "as available" without warranties of any kind, whether express or implied. While we strive for accuracy, AI-generated content may occasionally contain errors — always review and verify results.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-balance-scale"></i> 9. Limitation of Liability</h2>
+      <p>To the maximum extent permitted by law, All In One AI Student Tools shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the platform, including academic outcomes resulting from the use of our tools.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-gavel"></i> 10. Governing Law</h2>
+      <p>These Terms &amp; Conditions are governed by and construed in accordance with applicable laws. Any disputes arising from these terms will be resolved under the jurisdiction of the relevant courts.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-sync-alt"></i> 11. Changes to These Terms</h2>
+      <p>We may update these Terms &amp; Conditions from time to time. Any changes will be posted on this page with an updated "Last Updated" date. Continued use of the platform after changes constitutes acceptance of the revised terms.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2><i class="fas fa-envelope"></i> 12. Contact Us</h2>
+      <p>If you have any questions about these Terms &amp; Conditions, please contact us:</p>
+      <ul>
+        <li>Email: <a href="mailto:groupprojectdrive0@gmail.com">groupprojectdrive0@gmail.com</a></li>
+        <li>Via our <a href="index.html#customer-care">Customer Care</a> section</li>
+        <li>Or use the live chat assistant on our website</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 All In One AI Student Tools · All rights reserved</span>
+      <span><a href="index.html">Home</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="terms-conditions.html">Terms &amp; Conditions</a></span>
+    </div>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+  </script>
+</body>
+
+</html>
