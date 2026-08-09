@@ -120,8 +120,11 @@
     flex:1; display:flex; align-items:center; justify-content:center; background:var(--canvas);
     overflow:auto; padding:28px;
   }
+  #canvasScale{
+    position:relative; width:960px; height:540px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
   #slideCanvas{
-    width:960px; height:540px; max-width:100%; max-height:100%; aspect-ratio:16/9;
+    width:960px; height:540px; transform-origin:center;
     background:#ffffff; position:relative; box-shadow:var(--shadow-lg);
     overflow:hidden; flex-shrink:0; border-radius:2px;
   }
@@ -198,6 +201,53 @@
   .version-item .meta{ color:var(--ink-soft); font-size:11px; }
   .template-item{ cursor:pointer; }
   .small-btn{ padding:5px 11px !important; font-size:11px !important; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1100px){
+    .ribbon{ flex-wrap:nowrap; overflow-x:auto; padding:6px 8px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .ribbon::-webkit-scrollbar{ display:none; }
+    .ribbon .grp{ flex:0 0 auto; }
+  }
+  @media (max-width:900px){
+    body{ height:100dvh; }
+    .main{ flex-direction:column; min-height:0; }
+    .thumbs{
+      width:100%; height:auto; flex-direction:row; display:flex; gap:10px;
+      overflow-x:auto; overflow-y:hidden; padding:10px 12px; flex-shrink:0;
+      border-right:none; border-bottom:1px solid var(--line);
+      scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    }
+    .thumbs::-webkit-scrollbar{ display:none; }
+    .thumb{ width:132px; flex:0 0 auto; margin-bottom:0; }
+    .thumb .num{ font-size:9px; }
+    .addSlideBtn{ width:auto; flex:0 0 auto; padding:0 16px; margin-top:0; align-self:center; }
+    .center-col{ min-width:0; }
+    .canvas-area{ flex:1 1 auto; min-height:0; padding:12px; }
+    .notes-bar{ flex-shrink:0; }
+    #presentSlide{ width:960px; height:540px; max-width:none; transform-origin:center; }
+  }
+  @media (max-width:860px){
+    .titlebar{ flex-wrap:wrap; padding:8px 10px; }
+    .titlebar .actions{ width:100%; justify-content:flex-end; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    .titlebar .actions::-webkit-scrollbar{ display:none; }
+    .autosave span:last-child{ display:none; }
+  }
+  @media (max-width:640px){
+    .brand-name span{ display:none; }
+    .titlebar input.docname{ font-size:14px; padding:6px 8px; min-width:60px; }
+    .tb-btn{ padding:8px 9px; font-size:12px; }
+    .thumb{ width:116px; }
+    .canvas-area{ padding:8px; }
+    .notes-bar{ padding:8px 12px; }
+    .notes-bar textarea{ height:38px; }
+  }
+  @media (max-width:480px){
+    .brand-name{ display:none; }
+    .titlebar .actions{ gap:3px; }
+    .tb-btn{ padding:7px 8px; font-size:11.5px; }
+    .tb-btn.primary{ padding:7px 10px; }
+    .thumb{ width:104px; }
+  }
 </style>
 </head>
 <body>
@@ -268,7 +318,7 @@
         <button onclick="restoreAutosave()">Restore</button>
         <button onclick="dismissAutosave()">Discard</button>
       </div>
-      <div id="slideCanvas"></div>
+      <div id="canvasScale"><div id="slideCanvas"></div></div>
     </div>
     <div class="notes-bar">
       <label>Speaker notes</label>
@@ -580,12 +630,38 @@ document.addEventListener('keydown', e=>{
 
 renderAll();
 
+// ---- Responsive canvas scaling ----
+function fitCanvas(){
+  const wrap = document.getElementById('canvasScale');
+  if(!wrap) return;
+  const area = document.querySelector('.canvas-area');
+  let aw = innerWidth, ah = innerHeight;
+  if(area){
+    const cs = getComputedStyle(area);
+    aw = area.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    ah = area.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  }
+  const fit = Math.max(0.1, Math.min(1, aw/960, ah/540));
+  wrap.style.width = (960*fit)+'px';
+  wrap.style.height = (540*fit)+'px';
+  canvas.style.transform = fit<1 ? 'scale('+fit+')' : '';
+}
+function fitPresent(){
+  const ps = document.getElementById('presentSlide');
+  if(!ps) return;
+  const fit = Math.max(0.1, Math.min(1, innerWidth/960, innerHeight/540));
+  ps.style.transform = fit<1 ? 'scale('+fit+')' : '';
+}
+fitCanvas();
+addEventListener('resize', ()=>{ fitCanvas(); if(presentActive) fitPresent(); });
+
 // ---- Present mode ----
 let presentActive = false;
 function startPresent(){
   presentActive = true;
   document.getElementById('presentOverlay').style.display = 'flex';
   renderPresentSlide();
+  fitPresent();
 }
 function exitPresent(){
   presentActive = false;

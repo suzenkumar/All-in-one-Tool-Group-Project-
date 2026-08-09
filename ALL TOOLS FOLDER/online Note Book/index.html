@@ -3,36 +3,72 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Notes(All In One Tool)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
- <link rel="stylesheet" href="style.css">
+  <title>NoteVerse — 3D Digital Notebook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-   
-    <span class="header-eyebrow">✦ My Journal</span>
-     <h1>All In One</h1>
-    <h1>Notes</h1>
-    <p class="header-sub">Write it down, keep it close.</p>
+  <!-- 3D background scene -->
+  <div class="scene-3d" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="cube cube-2"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="grid-floor"></div>
   </div>
-  <button class="btn-create" id="createBtn">
-    <span class="icon">+</span>
-    New Note
-  </button>
-</div>
 
-<hr class="divider"/>
+  <!-- Hero / header -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">
+        <div class="logo">✎</div>
+        <div class="brand-text">
+          <div class="eyebrow">✦ 3D Digital Notebook</div>
+          <h1>All In One Notes</h1>
+          <p class="sub">Write it down, keep it close — in 3D.</p>
+        </div>
+      </div>
 
-<div class="notes-container" id="notesContainer">
-  <div class="empty-state" id="emptyState">
-    <div class="empty-icon">📝</div>
-    <p>Your notes will appear here.</p>
-    <span>Click "New Note" to get started</span>
-  </div>
-</div>
+      <div class="hero-actions">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" width="15" height="15"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
+          <input class="search" id="searchInput" placeholder="Search notes…" autocomplete="off"/>
+        </div>
+        <button class="btn btn-ghost" id="downloadAllBtn" title="Download the whole notebook as PDF">
+          <svg viewBox="0 0 24 24" width="15" height="15"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+          Download PDF
+        </button>
+        <button class="btn btn-primary" id="createBtn">
+          <span class="plus">+</span> New Note
+        </button>
+      </div>
+    </div>
 
-<script src="script.js"></script>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="statCount">0</span><span class="stat-label">Notes</span></div>
+      <div class="stat"><span class="stat-num" id="statWords">0</span><span class="stat-label">Words</span></div>
+      <div class="stat"><span class="stat-num" id="statSaved">—</span><span class="stat-label">Last saved</span></div>
+    </div>
+  </header>
+
+  <!-- Autosave indicator -->
+  <div class="autosave-chip" id="autosaveChip"><span class="dot"></span><span id="autosaveText">Ready</span></div>
+
+  <!-- Notes -->
+  <main class="notes-container" id="notesContainer">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">✎</div>
+      <p>Your notes will appear here.</p>
+      <span>Click "New Note" to get started</span>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>

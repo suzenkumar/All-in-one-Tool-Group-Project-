@@ -2,10 +2,16 @@ const API_URL = 'https://api.languagetool.org/v2/check';
 let lastMatches = [], lastText = '', fixedText = '';
 
 const inputEl = document.getElementById('inputText');
-inputEl.addEventListener('input', () => {
-  const w = inputEl.value.trim().split(/\s+/).filter(Boolean).length;
-  document.getElementById('wcLabel').textContent = w + ' word' + (w !== 1 ? 's' : '');
-});
+inputEl.addEventListener('input', updateCounts);
+
+function updateCounts() {
+  const t = inputEl.value;
+  const words = t.trim().split(/\s+/).filter(Boolean).length;
+  const chars = t.length;
+  document.getElementById('wcLabel').textContent =
+    words + ' word' + (words !== 1 ? 's' : '') + '  ·  ' + chars + ' char' + (chars !== 1 ? 's' : '');
+}
+updateCounts();
 
 document.getElementById('checkBtn').addEventListener('click', checkGrammar);
 inputEl.addEventListener('keydown', e => {
@@ -14,7 +20,7 @@ inputEl.addEventListener('keydown', e => {
 
 async function checkGrammar() {
   const text = inputEl.value.trim();
-  if (!text) { toast('⚠️ Please enter some text first'); return; }
+  if (!text) { toast('Please enter some text first'); return; }
   const btn = document.getElementById('checkBtn');
   btn.disabled = true;
   btn.classList.add('checking');
@@ -36,9 +42,9 @@ async function checkGrammar() {
     renderResults(text, lastMatches);
   } catch (e) {
     const banner = document.getElementById('errBanner');
-    banner.textContent = '❌ Could not reach LanguageTool API. Please check your internet connection and try again. Error: ' + e.message;
+    banner.textContent = 'Could not reach LanguageTool API. Please check your internet connection and try again. Error: ' + e.message;
     banner.style.display = 'block';
-    toast('❌ API error — check connection');
+    toast('API error — check connection');
   }
   btn.disabled = false;
   btn.classList.remove('checking');
@@ -49,7 +55,7 @@ function renderResults(text, matches) {
   ob.className = 'active';
   if (matches.length === 0) {
     ob.textContent = text;
-    toast('✅ Perfect! No issues found.');
+    toast('Perfect! No issues found.');
   } else {
     ob.innerHTML = buildHighlighted(text, matches);
     toast(`Found ${matches.length} issue${matches.length !== 1 ? 's' : ''}`);
@@ -69,6 +75,7 @@ function renderResults(text, matches) {
   document.getElementById('sv2').textContent = warnings;
   document.getElementById('sv3').textContent = style;
   document.getElementById('sv4').textContent = score + '%';
+  document.getElementById('scoreRing').style.setProperty('--p', score + '%');
   document.getElementById('statsGrid').style.display = 'grid';
   document.getElementById('actionBar').style.display = 'flex';
 
@@ -135,19 +142,18 @@ function applyFixes(text, matches) {
 document.getElementById('applyBtn').addEventListener('click', () => {
   if (fixedText) {
     inputEl.value = fixedText;
-    const w = fixedText.trim().split(/\s+/).filter(Boolean).length;
-    document.getElementById('wcLabel').textContent = w + ' word' + (w !== 1 ? 's' : '');
+    updateCounts();
     document.getElementById('outputBox').textContent = fixedText;
     document.getElementById('issuesCard').style.display = 'none';
     document.getElementById('statsGrid').style.display = 'none';
     document.getElementById('actionBar').style.display = 'none';
-    toast('✅ All fixes applied!');
+    toast('All fixes applied!');
   }
 });
 
 document.getElementById('clearBtn').addEventListener('click', () => {
   inputEl.value = '';
-  document.getElementById('wcLabel').textContent = '0 words';
+  updateCounts();
   document.getElementById('outputBox').className = '';
   document.getElementById('outputBox').innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Results will appear here after checking</span></div>`;
   document.getElementById('statsGrid').style.display = 'none';
@@ -155,6 +161,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   document.getElementById('actionBar').style.display = 'none';
   document.getElementById('copyBtn').style.display = 'none';
   document.getElementById('errBanner').style.display = 'none';
+  document.getElementById('scoreRing').style.setProperty('--p', '0%');
   lastMatches = []; fixedText = '';
   toast('Cleared!');
 });

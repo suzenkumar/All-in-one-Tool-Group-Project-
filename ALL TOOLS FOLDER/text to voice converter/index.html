@@ -52,9 +52,10 @@ header{background:linear-gradient(135deg,#141728,#1a1f38);border-bottom:1px soli
 .b-green{background:rgba(0,229,160,.15);color:var(--success);border:1px solid var(--success);}
 
 /* ── MAIN LAYOUT ── */
-.main{display:grid;grid-template-columns:1fr 320px 300px;gap:18px;padding:20px 24px;max-width:1600px;margin:0 auto;}
-@media(max-width:1200px){.main{grid-template-columns:1fr 300px;}}
-@media(max-width:800px){.main{grid-template-columns:1fr;}}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px 300px;gap:18px;padding:20px 24px;max-width:1600px;margin:0 auto;}
+.main > div{min-width:0;}
+@media(max-width:1200px){.main{grid-template-columns:minmax(0,1fr) 300px;}}
+@media(max-width:800px){.main{grid-template-columns:minmax(0,1fr);}}
 
 /* ── PANELS ── */
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
@@ -103,35 +104,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:8px;}
 
 /* ── VOICE SELECT ── */
-select{width:100%;padding:9px 12px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238892b0' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
-select:focus{outline:none;border-color:var(--accent);
-const voiceSelect = document.querySelector('select'); // Your dropdown
-let voices = [];
-
-function populateVoiceList() {
-  // Get the available voices from the browser
-  voices = window.speechSynthesis.getVoices();
-  
-  // Clear the existing options
-  voiceSelect.innerHTML = '';
-
-  voices.forEach((voice) => {
-    const option = document.createElement('option');
-    
-    // THE FIX: Use the specific tag format you requested
-    option.textContent = `${voice.name} (${voice.lang})`;
-    
-    // Optional: Add attributes to help the code find the voice later
-    option.setAttribute('data-lang', voice.lang);
-    option.setAttribute('data-name', voice.name);
-    
-    voiceSelect.appendChild(option);
-  });
-}
-
-// Execute when voices are loaded
-window.speechSynthesis.onvoiceschanged = populateVoiceList;
-}}
+select{width:100%;min-width:0;max-width:100%;padding:9px 12px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238892b0' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+select:focus{outline:none;border-color:var(--accent);}
 
 /* ── PRESETS ── */
 .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
@@ -240,6 +214,50 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:4px 0;}
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:900px){
+  header{flex-wrap:wrap;padding:14px 18px;gap:10px;}
+  .logo-icon{width:36px;height:36px;font-size:16px;}
+  .logo-text h1{font-size:16px;}
+  .logo-text p{font-size:10px;}
+  .header-badges{width:100%;margin-left:0;}
+  .main{padding:14px 14px;}
+  .panel{padding:14px;}
+  #focusBox{padding:24px 16px;}
+}
+@media(max-width:800px){
+  .main{grid-template-columns:1fr;}
+  .col-gap,.col-gap-16{gap:12px;}
+  .btn-row .btn{flex:1 1 auto;justify-content:center;}
+}
+@media(max-width:600px){
+  .logo-text p{display:none;}
+  .badge{font-size:9px;padding:2px 7px;}
+  #waveCanvas{height:62px;}
+  #textInput{min-height:120px;font-size:14px;}
+  #etrStrip{gap:12px;padding:10px 12px;}
+  #langBadge{margin-left:0;}
+  .etr-value{font-size:17px;}
+  .queue-controls .btn{flex:1 1 auto;justify-content:center;}
+  .add-row{flex-wrap:wrap;}
+  .add-row .btn{width:100%;justify-content:center;}
+  .queue-stats{flex-wrap:wrap;gap:6px;}
+  .q-item-actions{opacity:1;}
+  #focusTextScroll{font-size:17px;max-height:200px;}
+  #highlightBox{font-size:13px;max-height:150px;}
+}
+@media(max-width:400px){
+  .btn-row{flex-direction:column;}
+  .btn-row .btn{width:100%;}
+  .queue-controls{display:grid;grid-template-columns:1fr 1fr;}
+  .preset-grid{grid-template-columns:1fr;}
+  .header-badges{flex-direction:column;align-items:flex-start;}
+}
+@media(hover:none){
+  .q-item-actions{opacity:1;}
+  .q-item{box-shadow:none;}
+}
 </style>
 </head>
 <body>

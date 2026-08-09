@@ -3,114 +3,141 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>All in One —  Grammar Checker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css">
+  <title>All in One — Grammar Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<div class="bg-mesh"><span></span><span></span><span></span></div>
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-<header>
-  <div class="chip"><span class="live"></span> Powered by LanguageTool API</div>
-    <h1><span class="g1"> All in One</span></h1>
-  <h1><span class="g1"> Grammar<br>Checker</span></h1>
-  <p class="tagline">Detect and fix grammar, spelling & style error.</p>
-  <div class="api-info">⚡Open Source</div>
-</header>
-
-<div class="wrap">
-
-  <div class="toolbar">
-    <div class="lang-select-wrap">
-      <label>Language:</label>
-      <select id="langSelect">
-        <option value="en-US">English (US)</option>
-        <option value="en-GB">English (UK)</option>
-        <option value="en-AU">English (Australia)</option>
-        <option value="de-DE">German</option>
-        <option value="fr">French</option>
-        <option value="es">Spanish</option>
-        <option value="it">Italian</option>
-        <option value="pt-BR">Portuguese (Brazil)</option>
-        <option value="nl">Dutch</option>
-        <option value="pl-PL">Polish</option>
-        <option value="ru-RU">Russian</option>
-      </select>
+  <header class="site-head">
+    <div class="pill"><span class="pulse-dot"></span> Powered by LanguageTool API</div>
+    <h1 class="title">All in One <span class="grad-text">Grammar&nbsp;Checker</span></h1>
+    <p class="tagline">Detect and fix grammar, spelling &amp; style errors in seconds.</p>
+    <div class="feature-chips">
+      <span class="fchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>30+ Languages</span>
+      <span class="fchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v2m0 14v2M5.6 5.6l1.4 1.4m9.9 9.9l1.4 1.4M3 12h2m14 0h2M5.6 18.4l1.4-1.4m9.9-9.9l1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg>Style Tips</span>
+      <span class="fchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Instant Check</span>
+      <span class="fchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Open Source</span>
     </div>
-    <button class="btn-check" id="checkBtn">
-      <div class="spinner"></div>
-      <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-      Check Grammar
-    </button>
-  </div>
+  </header>
 
-  <div class="editors">
-    <div class="card">
-      <div class="card-head">
-        <span class="card-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          Input Text
-        </span>
-        <span class="wc" id="wcLabel">0 words</span>
-      </div>
-      <textarea id="inputText" placeholder="Paste or type your text here...&#10;&#10;Try: She dont know nothing about the project and me and her is working on it since monday."></textarea>
-    </div>
+  <main class="wrap">
 
-    <div class="card">
-      <div class="card-head">
-        <span class="card-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          Highlighted Result
-        </span>
-        <button class="btn-sm" id="copyBtn" style="padding:6px 13px;font-size:12px;display:none;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          Copy Fixed
-        </button>
-      </div>
-      <div id="outputBox">
-        <div class="empty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          <span>Results will appear here after checking</span>
+    <div class="toolbar glass">
+      <div class="lang-field">
+        <label for="langSelect">Language</label>
+        <div class="select-wrap">
+          <select id="langSelect">
+            <option value="en-US">English (US)</option>
+            <option value="en-GB">English (UK)</option>
+            <option value="en-AU">English (Australia)</option>
+            <option value="de-DE">German</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="it">Italian</option>
+            <option value="pt-BR">Portuguese (Brazil)</option>
+            <option value="nl">Dutch</option>
+            <option value="pl-PL">Polish</option>
+            <option value="ru-RU">Russian</option>
+          </select>
         </div>
       </div>
+      <button class="btn-check" id="checkBtn">
+        <span class="spinner"></span>
+        <svg class="check-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        Check Grammar
+      </button>
     </div>
-  </div>
 
-  <div class="err-banner" id="errBanner"></div>
+    <div class="editors">
+      <section class="card">
+        <div class="card-head">
+          <span class="card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Input Text
+          </span>
+          <span class="wc" id="wcLabel">0 words</span>
+        </div>
+        <textarea id="inputText" spellcheck="false" placeholder="Paste or type your text here...&#10;&#10;Try: She dont know nothing about the project and me and her is working on it since monday."></textarea>
+      </section>
 
-  <div class="stats-grid" id="statsGrid" style="display:none;">
-    <div class="stat"><div class="stat-val" id="sv1">0</div><div class="stat-lbl">Errors</div></div>
-    <div class="stat"><div class="stat-val" id="sv2">0</div><div class="stat-lbl">Warnings</div></div>
-    <div class="stat"><div class="stat-val" id="sv3">0</div><div class="stat-lbl">Style Tips</div></div>
-    <div class="stat"><div class="stat-val" id="sv4">—</div><div class="stat-lbl">Score</div></div>
-  </div>
-
-  <div class="action-bar" id="actionBar" style="display:none;">
-    <button class="btn-sm" id="applyBtn">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      Apply All Fixes
-    </button>
-    <button class="btn-sm del" id="clearBtn">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
-      Clear All
-    </button>
-  </div>
-
-  <div class="issues-card" id="issuesCard" style="display:none;">
-    <div class="issues-head">
-      <span class="issues-head-left">Issues Found</span>
-      <span class="badge" id="issuesBadge">0</span>
+      <section class="card">
+        <div class="card-head">
+          <span class="card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Highlighted Result
+          </span>
+          <button class="btn-sm" id="copyBtn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy Fixed
+          </button>
+        </div>
+        <div id="outputBox">
+          <div class="empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Results will appear here after checking</span>
+          </div>
+        </div>
+      </section>
     </div>
-    <div id="issuesList"></div>
-  </div>
 
-  <div class="powered">
-    Grammar Checker Build By All In One Tools Team
-  </div>
-</div>
+    <div class="err-banner" id="errBanner"></div>
 
-<div class="toast" id="toast"></div>
-<script src="script.js"></script>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat">
+        <div class="stat-icon i-red">✕</div>
+        <div class="stat-val" id="sv1">0</div>
+        <div class="stat-lbl">Errors</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon i-amber">!</div>
+        <div class="stat-val" id="sv2">0</div>
+        <div class="stat-lbl">Warnings</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon i-blue">✦</div>
+        <div class="stat-val" id="sv3">0</div>
+        <div class="stat-lbl">Style Tips</div>
+      </div>
+      <div class="stat">
+        <div class="score-ring" id="scoreRing">
+          <div class="score-val" id="sv4">—</div>
+        </div>
+        <div class="stat-lbl">Grammar Score</div>
+      </div>
+    </div>
+
+    <div class="action-bar" id="actionBar">
+      <button class="btn-sm primary" id="applyBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Apply All Fixes
+      </button>
+      <button class="btn-sm del" id="clearBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        Clear All
+      </button>
+    </div>
+
+    <section class="issues-card glass" id="issuesCard">
+      <div class="issues-head">
+        <span class="issues-head-left">Issues Found</span>
+        <span class="badge" id="issuesBadge">0</span>
+      </div>
+      <div id="issuesList"></div>
+    </section>
+
+    <footer class="powered">
+      <div class="divider"><span>✦</span></div>
+      Grammar Checker · Built by <strong>All In One Tools Team</strong>
+    </footer>
+
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -6,12 +6,15 @@
 const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 // Google renames/retires Gemini model IDs fairly often. If the requested model
-// comes back "no longer available", automatically retry with the next model
-// in its fallback chain instead of just failing.
+// comes back "not found"/"no longer available", automatically retry with the
+// next model in its fallback chain instead of just failing.
 const FALLBACK_CHAINS = {
   "gemini-3.6-flash": ["gemini-3.6-flash", "gemini-flash-latest", "gemini-2.5-flash"],
   "gemini-3.5-flash-lite": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash"]
 };
+
+const MODEL_NOT_FOUND = /not found|no longer available|invalid model|does not exist|unknown model/i;
+const ATTEMPT_TIMEOUT_MS = 40000;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -37,11 +40,14 @@ export default async function handler(req, res) {
   let lastErrText = '';
 
   for (const modelId of chain) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ATTEMPT_TIMEOUT_MS);
     try {
       const url = `${GEMINI_BASE}/${modelId}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           contents,
           systemInstruction,
@@ -57,10 +63,14 @@ export default async function handler(req, res) {
 
       const errBody = await response.json().catch(() => ({}));
       lastErrText = errBody?.error?.message || `Request failed (status ${response.status})`;
-      if (response.status !== 404 && !/no longer available/i.test(lastErrText)) break;
+      if (!MODEL_NOT_FOUND.test(lastErrText)) break;
     } catch (err) {
-      lastErrText = err.message;
+      lastErrText = err.name === 'AbortError'
+        ? `Gemini request timed out after ${ATTEMPT_TIMEOUT_MS / 1000}s.`
+        : err.message;
       break;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
