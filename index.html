@@ -171,7 +171,7 @@
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Grammar Checker", "url": "./ALL TOOLS FOLDER/grammer Checker/index.html" },
     { "@type": "ListItem", "position": 2, "name": "Resume Builder", "url": "https://resume-bulider-student.vercel.app/" },
-    { "@type": "ListItem", "position": 3, "name": "AI Tutor", "url": "https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/" },
+    { "@type": "ListItem", "position": 3, "name": "AI Tutor", "url": "https://ai-tutor-three-khaki.vercel.app/" },
     { "@type": "ListItem", "position": 4, "name": "Plagiarism Checker", "url": "https://piligrim-checker.vercel.app/" },
     { "@type": "ListItem", "position": 5, "name": "PortFolio Builder", "url": "https://portfolio-maker-9dzg.vercel.app/" },
     { "@type": "ListItem", "position": 6, "name": "WebOffice", "url": "./ALL TOOLS FOLDER/weboffice/index.html" },
@@ -185,7 +185,7 @@
     { "@type": "ListItem", "position": 14, "name": "Text To Speech", "url": "./ALL TOOLS FOLDER/text to voice converter/index.html" },
     { "@type": "ListItem", "position": 15, "name": "Math Solver", "url": "./ALL TOOLS FOLDER/Math solver/chalksolve.html" },
     { "@type": "ListItem", "position": 16, "name": "GPA Calculator", "url": "./ALL TOOLS FOLDER/gpa calculator/gpa-calculator.html" },
-    { "@type": "ListItem", "position": 17, "name": "Essay & Youtube Description Generator", "url": "https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/" },
+    { "@type": "ListItem", "position": 17, "name": "Essay & Youtube Description Generator", "url": "https://essay-and-youtube-description-gener-ten.vercel.app/" },
     { "@type": "ListItem", "position": 18, "name": "Typing Speed Test", "url": "https://typing-speed-lovat.vercel.app/" },
     { "@type": "ListItem", "position": 19, "name": "Puzzle Game", "url": "https://3-d-game-flax.vercel.app/" },
     { "@type": "ListItem", "position": 20, "name": "Image To Text", "url": "https://image-to-text-jet.vercel.app/" },
@@ -193,7 +193,7 @@
     { "@type": "ListItem", "position": 22, "name": "Quiz Maker", "url": "https://pn-quiz-start.vercel.app/" },
     { "@type": "ListItem", "position": 23, "name": "To Do List", "url": "https://to-do-list-app-lovat-ten-65.vercel.app/" },
     { "@type": "ListItem", "position": 24, "name": "Online Calculator", "url": "https://modern-calculator-kohl.vercel.app/" },
-    { "@type": "ListItem", "position": 25, "name": "Online Code Editor", "url": "https://code-editor-xjzd.vercel.app/" },
+    { "@type": "ListItem", "position": 25, "name": "Online Code Editor", "url": "https://allinone-live-editor-kcrzoow7a-suzenkumars-projects.vercel.app/" },
     { "@type": "ListItem", "position": 26, "name": "Study Schedule Planner", "url": "https://study-planner-flax-gamma.vercel.app/" }
   ]
 }
@@ -3161,6 +3161,167 @@
       max-width: 260px;
     }
 
+    .app-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 22px;
+      padding: 14px 24px 14px 16px;
+      border-radius: 20px;
+      border: 2px solid transparent;
+      background:
+        linear-gradient(135deg, rgba(12, 16, 40, 0.92), rgba(40, 8, 60, 0.92)) padding-box,
+        linear-gradient(90deg, var(--cyan), var(--purple), var(--pink), var(--cyan), var(--purple), var(--pink), var(--cyan)) border-box;
+      background-size: 100% 100%, 300% 100%;
+      animation: appBorderSlide 5s linear infinite;
+      text-decoration: none;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: 0 8px 30px rgba(0, 255, 240, 0.22);
+    }
+
+    @keyframes appBorderSlide {
+      to { background-position: 0 0, 300% 0; }
+    }
+
+    .app-download-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -70%;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+      transform: skewX(-25deg);
+      transition: left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .app-download-btn:hover::after {
+      left: 160%;
+    }
+
+    .app-download-btn:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 16px 46px rgba(0, 255, 240, 0.4), 0 0 0 6px rgba(0, 255, 240, 0.08);
+    }
+
+    .app-download-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .app-download-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
+      background-size: 200% 200%;
+      animation: appGradientShift 4s ease infinite, appIconFloat 3.2s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.55rem;
+      color: #080618;
+      box-shadow: 0 0 24px rgba(0, 255, 240, 0.55);
+      position: relative;
+    }
+
+    @keyframes appGradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .app-download-icon::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 18px;
+      border: 2px dashed rgba(0, 255, 240, 0.45);
+      animation: appSpin 9s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes appSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes appIconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .app-download-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      position: relative;
+      z-index: 1;
+    }
+
+    .app-download-text strong {
+      font-size: 0.94rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      background: linear-gradient(90deg, var(--cyan), #fff, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .app-download-text span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .app-download-arrow {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan);
+      font-size: 0.9rem;
+      margin-left: auto;
+      animation: appArrowBounce 2s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes appArrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    .app-download-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      font-size: 0.66rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(255, 0, 128, 0.75);
+      animation: appPulse 1.8s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes appPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
     .footer-col h5 {
       font-weight: 700;
       font-size: 0.82rem;
@@ -4173,6 +4334,31 @@
         grid-template-columns: 1fr;
       }
 
+      .app-download-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px 12px 12px;
+        gap: 12px;
+      }
+
+      .app-download-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.35rem;
+      }
+
+      .app-download-text strong {
+        font-size: 0.86rem;
+      }
+
+      .app-download-text span {
+        font-size: 0.68rem;
+      }
+
+      .app-download-arrow {
+        margin-left: 0;
+      }
+
 
       .tools-grid {
         grid-template-columns: 1fr;
@@ -4835,6 +5021,37 @@
       .auth-demo-note {
         font-size: 0.75rem;
       }
+
+      .app-download-btn {
+        gap: 10px;
+        padding: 11px 12px 11px 10px;
+      }
+
+      .app-download-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+      }
+
+      .app-download-text strong {
+        font-size: 0.8rem;
+      }
+
+      .app-download-text span {
+        font-size: 0.64rem;
+      }
+
+      .app-download-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+      }
+
+      .app-download-badge {
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+      }
     }
 
     @media (max-width: 768px) and (orientation: landscape) {
@@ -5187,7 +5404,7 @@
           </div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.9 (5.2k)</span></div>
-            <button class="tool-use-btn" onclick="handleToolClick(event, 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/')">Use Now →</button>
+            <button class="tool-use-btn" onclick="handleToolClick(event, 'https://ai-tutor-three-khaki.vercel.app/')">Use Now →</button>
           </div>
         </article>
 
@@ -5381,7 +5598,7 @@
           <div class="tool-tags"><span class="tool-tag">Thesis Builder</span><span class="tool-tag">Structure</span></div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (1.6k)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/')">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://essay-and-youtube-description-gener-ten.vercel.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -5497,7 +5714,7 @@
           </div>
           <div class="tool-footer">
             <div class="tool-rating"><i class="fas fa-star"></i><span>4.8 (840)</span></div>
-            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://code-editor-xjzd.vercel.app/')">Use Now →</a></button>
+            <button class="tool-use-btn"><a href="#" onclick="handleToolClick(event, 'https://allinone-live-editor-kcrzoow7a-suzenkumars-projects.vercel.app/')">Use Now →</a></button>
           </div>
         </article>
 
@@ -5966,7 +6183,7 @@
           </div>
 
           <!-- 14. Online Code Editor -->
-          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://code-editor-xjzd.vercel.app/')" style="cursor:pointer">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://allinone-live-editor-kcrzoow7a-suzenkumars-projects.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">💻</div>
             <h3>Online Code Editor</h3>
             <p>Write, run, and test HTML, CSS, and JavaScript code right in your browser with a live preview. Syntax highlighting, auto-completion, and error detection built in. No setup required — just open and start coding.</p>
@@ -5975,7 +6192,7 @@
           </div>
 
           <!-- 15. AI Tutor -->
-          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/')" style="cursor:pointer">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://ai-tutor-three-khaki.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">🧠</div>
             <h3>AI Tutor</h3>
             <p>Ask any question in any subject and get an instant, clear explanation. Uses Socratic method to help you understand concepts deeply, not just memorize answers. Covers all academic subjects and 50+ programming languages.</p>
@@ -5984,7 +6201,7 @@
           </div>
 
           <!-- 18. Essay Outliner -->
-          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/')" style="cursor:pointer">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://essay-and-youtube-description-gener-ten.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">📝</div>
             <h3>Essay & YouTube Description Generator</h3>
             <p>Generate a complete structured essay outline with thesis statement, introduction hook, body paragraphs with evidence placeholders, and conclusion in seconds. Start writing with a clear roadmap instead of a blank page.</p>
@@ -5993,7 +6210,7 @@
           </div>
 
           <!-- 19. Plagiarism Checker -->
-          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://www.duplichecker.com/')" style="cursor:pointer">
+          <div class="resource-card reveal" onclick="handleToolClick(event, 'https://piligrim-checker.vercel.app/')" style="cursor:pointer">
             <div class="resource-emoji">🔍</div>
             <h3>Plagiarism Checker</h3>
             <p>Scan your essays, reports, and assignments for originality before submission. Get a detailed similarity report showing exact matches, paraphrased content, and proper citation checks. Protect your academic reputation.</p>
@@ -6268,12 +6485,21 @@
       <div class="footer-brand">
         <div class="logo"><span>All</span>IN<span>One</span> <em>AI</em></div>
         <p>The most comprehensive AI-powered academic tools platform. Built for students who refuse to be average.</p>
+        <a class="app-download-btn" href="https://student-ai-tools.vercel.app/StudentAITools.apk" download aria-label="Download our Android app">
+          <div class="app-download-icon"><i class="fab fa-android"></i></div>
+          <div class="app-download-text">
+            <strong>Download Our Android App</strong>
+            <span>Get all tools on the go · Free</span>
+          </div>
+          <div class="app-download-arrow"><i class="fas fa-download"></i></div>
+          <div class="app-download-badge">!</div>
+        </a>
       </div>
       <div class="footer-col">
         <h5>Tools</h5>
         <a href="#tools" onclick="handleToolClick(event, './ALL TOOLS FOLDER/grammer Checker/index.html')">Grammar Checker</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://resume-bulider-student.vercel.app/')">Resume Builder</a>
-        <a href="#tools" onclick="handleToolClick(event, 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/')">AI Tutor</a>
+        <a href="#tools" onclick="handleToolClick(event, 'https://ai-tutor-three-khaki.vercel.app/')">AI Tutor</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://piligrim-checker.vercel.app/')">Plagiarism Checker</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://portfolio-maker-9dzg.vercel.app/')">Portfolio Builder</a>
         <a href="#tools" onclick="handleToolClick(event, './ALL TOOLS FOLDER/weboffice/index.html')">WebOffice</a>
@@ -6287,7 +6513,7 @@
         <a href="#tools" onclick="handleToolClick(event, './ALL TOOLS FOLDER/text to voice converter/index.html')">Text To Speech</a>
         <a href="#tools" onclick="handleToolClick(event, './ALL TOOLS FOLDER/Math solver/chalksolve.html')">Math Solver</a>
         <a href="#tools" onclick="handleToolClick(event, './ALL TOOLS FOLDER/gpa calculator/gpa-calculator.html')">GPA Calculator</a>
-        <a href="#tools" onclick="handleToolClick(event, 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/')">Essay &amp; YouTube Description Generator</a>
+        <a href="#tools" onclick="handleToolClick(event, 'https://essay-and-youtube-description-gener-ten.vercel.app/')">Essay &amp; YouTube Description Generator</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://typing-speed-lovat.vercel.app/')">Typing Speed Test</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://3-d-game-flax.vercel.app/')">Puzzle Game</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://image-to-text-jet.vercel.app/')">Image To Text</a>
@@ -6295,12 +6521,12 @@
         <a href="#tools" onclick="handleToolClick(event, 'https://pn-quiz-start.vercel.app/')">Quiz Maker</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://to-do-list-app-lovat-ten-65.vercel.app/')">To Do List</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://modern-calculator-kohl.vercel.app/')">Online Calculator</a>
-        <a href="#tools" onclick="handleToolClick(event, 'https://code-editor-xjzd.vercel.app/')">Online Code Editor</a>
+        <a href="#tools" onclick="handleToolClick(event, 'https://allinone-live-editor-kcrzoow7a-suzenkumars-projects.vercel.app/')">Online Code Editor</a>
         <a href="#tools" onclick="handleToolClick(event, 'https://study-planner-flax-gamma.vercel.app/')">Study Schedule Planner</a>
       </div>
       <div class="footer-col">
         <h5>Platform</h5><a href="#features">Features</a><a href="#all-tools-detail">All Tools</a><a href="#demo">Live
-          Demo</a><a href="#">Mobile App</a><a href="#">API Access</a>
+          Demo</a><a href="https://student-ai-tools.vercel.app/StudentAITools.apk" download>Mobile App</a><a href="#">API Access</a>
       </div>
       <div class="footer-col">
         <h5>Company</h5><a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a><a href="#customer-care">Customer Care</a>
@@ -7049,7 +7275,7 @@
     const toolsData = [
       { emoji: '✅', name: 'Grammar Checker', link: './ALL TOOLS FOLDER/grammer Checker/index.html', keywords: ['grammar', 'grammer', 'spell', 'spelling', 'punctuation', 'writing score'], desc: 'Instantly fix grammar, spelling, punctuation and style errors in your writing. The AI rates your writing and suggests improvements for clarity, tone, and flow. Perfect for polishing assignments before submission.' },
       { emoji: '📄', name: 'Resume Builder', link: 'https://resume-bulider-student.vercel.app/', keywords: ['resume', 'cv', 'job', 'internship', 'career'], desc: 'Build an ATS-optimized resume with AI suggestions for every section. Choose from professional templates, add your education and experience, and export as PDF to apply for internships and jobs.' },
-      { emoji: '🧠', name: 'AI Tutor', link: 'https://ai-tutor-jgr5-ndi9osvho-suzenkumars-projects.vercel.app/', keywords: ['ai tutor', 'tutor', 'socratic', 'explain concept', 'doubt'], desc: 'Get instant AI-powered explanations for any concept in any subject. Uses the Socratic method to help you understand topics deeply, available 24/7 like a personal tutor.' },
+      { emoji: '🧠', name: 'AI Tutor', link: 'https://ai-tutor-three-khaki.vercel.app/', keywords: ['ai tutor', 'tutor', 'socratic', 'explain concept', 'doubt'], desc: 'Get instant AI-powered explanations for any concept in any subject. Uses the Socratic method to help you understand topics deeply, available 24/7 like a personal tutor.' },
       { emoji: '🔍', name: 'Plagiarism Checker', link: 'https://piligrim-checker.vercel.app/', keywords: ['plagiarism', 'plagiarism checker', 'originality', 'similarity', 'academic integrity'], desc: 'Check your essays, assignments and reports for originality before submission. Get a detailed similarity report to ensure academic integrity.' },
       { emoji: '📁', name: 'Portfolio Builder', link: 'https://portfolio-maker-9dzg.vercel.app/', keywords: ['portfolio', 'portfolio builder', 'showcase', 'projects showcase'], desc: 'Create a polished student portfolio in minutes. Add projects, achievements, skills and personal stories with AI-powered layout guidance so your work stands out.' },
       { emoji: '🗂️', name: 'WebOffice', link: './ALL TOOLS FOLDER/weboffice/index.html', keywords: ['weboffice', 'office suite', 'spreadsheet', 'docs', 'presentations'], desc: 'A full browser-based office suite for editing documents, spreadsheets and presentations. Create, export and collaborate on school work quickly without installing software.' },
@@ -7063,7 +7289,7 @@
       { emoji: '🔊', name: 'Text To Speech', link: './ALL TOOLS FOLDER/text to voice converter/index.html', keywords: ['text to speech', 'speech', 'voice', 'audio', 'tts'], desc: 'Convert any text into natural-sounding audio in 50+ languages. Choose from multiple AI voices and playback speeds, and export as MP3 for listening anywhere.' },
       { emoji: '🧮', name: 'Math Solver', link: './ALL TOOLS FOLDER/Math solver/chalksolve.html', keywords: ['math solver', 'math', 'calculus', 'algebra', 'statistics', 'equation', 'solve math'], desc: 'Solve calculus, algebra, statistics and more with detailed step-by-step explanations. Understand every solution, not just the answer.' },
       { emoji: '🎓', name: 'GPA Calculator', link: './ALL TOOLS FOLDER/gpa calculator/gpa-calculator.html', keywords: ['gpa', 'gpa calculator', 'grade point'], desc: 'Calculate your semester or cumulative GPA instantly. Add courses, credits and grades to track your academic performance.' },
-      { emoji: '📝', name: 'Essay & YouTube Description Generator', link: 'https://essay-and-youtube-description-generator-2erm-1pedywpjh.vercel.app/', keywords: ['essay', 'essay outline', 'outliner', 'youtube description', 'youtube'], desc: 'Generate a structured essay outline with thesis statement, body paragraphs and conclusion — or YouTube descriptions — in seconds. Start writing with a clear roadmap.' },
+      { emoji: '📝', name: 'Essay & YouTube Description Generator', link: 'https://essay-and-youtube-description-gener-ten.vercel.app/', keywords: ['essay', 'essay outline', 'outliner', 'youtube description', 'youtube'], desc: 'Generate a structured essay outline with thesis statement, body paragraphs and conclusion — or YouTube descriptions — in seconds. Start writing with a clear roadmap.' },
       { emoji: '⌨️', name: 'Typing Speed Test', link: 'https://typing-speed-lovat.vercel.app/', keywords: ['typing', 'wpm', 'typing speed', 'keyboard'], desc: 'Measure your typing speed in WPM and accuracy with real-time feedback. Track your progress and improve your keyboard skills.' },
       { emoji: '🧩', name: 'Puzzle Game', link: 'https://3-d-game-flax.vercel.app/', keywords: ['puzzle', 'game', '3d game'], desc: 'A fun 3D puzzle game that challenges your puzzle-solving skills. Play a series of puzzles to progress and sharpen your brain during study breaks.' },
       { emoji: '🖼️', name: 'Image To Text', link: 'https://image-to-text-jet.vercel.app/', keywords: ['image to text', 'ocr', 'extract text', 'scan', 'digitize'], desc: 'Extract editable text from images, screenshots or scanned documents instantly. Ideal for digitizing notes and pulling text from photos.' },
@@ -7071,7 +7297,7 @@
       { emoji: '📝', name: 'Quiz Maker', link: 'https://pn-quiz-start.vercel.app/', keywords: ['quiz', 'quiz maker', 'test', 'practice exam', 'mcq', 'question'], desc: 'Generate custom practice quizzes on any topic with instant grading and performance analytics to ace your exams.' },
       { emoji: '✅', name: 'To Do List', link: 'https://to-do-list-app-lovat-ten-65.vercel.app/', keywords: ['to do', 'todo', 'task', 'deadline', 'productivity'], desc: 'Manage your daily tasks, assignments and deadlines in one place. Set priorities and never miss a submission deadline.' },
       { emoji: '🔢', name: 'Online Calculator', link: 'https://modern-calculator-kohl.vercel.app/', keywords: ['calculator', 'calculation', 'scientific calculator'], desc: 'Perform basic and scientific calculations instantly in your browser. Fast, accurate and works without any installation.' },
-      { emoji: '💻', name: 'Online Code Editor', link: 'https://code-editor-xjzd.vercel.app/', keywords: ['code editor', 'code', 'programming', 'html', 'css', 'javascript', 'python'], desc: 'Write, run and test HTML, CSS and JavaScript code right in your browser with live preview. No installation needed — just open and start coding.' },
+      { emoji: '💻', name: 'Online Code Editor', link: 'https://allinone-live-editor-kcrzoow7a-suzenkumars-projects.vercel.app/', keywords: ['code editor', 'code', 'programming', 'html', 'css', 'javascript', 'python'], desc: 'Write, run and test HTML, CSS and JavaScript code right in your browser with live preview. No installation needed — just open and start coding.' },
       { emoji: '📅', name: 'Study Schedule Planner', link: 'https://study-planner-flax-gamma.vercel.app/', keywords: ['study schedule', 'study planner', 'timetable', 'planner', 'schedule'], desc: 'Plan your weekly study timetable with AI. Set goals, track progress and never miss a deadline. Perfect for exam season preparation.' }
     ];
 
